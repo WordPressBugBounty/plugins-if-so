@@ -64,7 +64,7 @@ class TriggerImportService{
             $ret['post_type'] = 'ifso_triggers';
             foreach($data['meta'] as $fieldname => $field){
                 if(is_string($field) && $field!='ifso_trigger_version'){
-                    $field = $fieldname==='ifso_trigger_rules' ? $this->remove_all_quad_backslashes($field) : $field;
+                    $field = $fieldname==='ifso_trigger_rules' ? $this->remove_all_octo_backslashes($field) : $field;
                     $ret['meta_input'][$fieldname] = trim($field,'\"');
                 }
                 else{
@@ -78,9 +78,8 @@ class TriggerImportService{
         return false;
     }
 
-    function remove_all_quad_backslashes($string) {
-        $string = implode("",explode("\\\\",$string));
-        return stripslashes(trim($string));
+    function remove_all_octo_backslashes($string) {
+        return implode("",explode("\\\\\\\\",$string));
     }
 
     private function add_missing_metas($postid,$metas){

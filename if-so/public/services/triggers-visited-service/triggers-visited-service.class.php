@@ -31,7 +31,7 @@ class TriggersVisitedService {
 
         $cookie_content = (!empty($_COOKIE[$this->cookie_name])) ? $_COOKIE[$this->cookie_name] : '';
         $visited_triggers = (json_decode($cookie_content)) ? json_decode($cookie_content) : [];
-        $last_visited_triggers = (!empty($_COOKIE[$this->analytics_cookie_name]) && json_decode(stripslashes($_COOKIE[$this->analytics_cookie_name]))) ? array_keys(json_decode(stripslashes($_COOKIE[$this->analytics_cookie_name]),true)) : [];
+        $last_visited_triggers = ( !empty($_COOKIE[$this->analytics_cookie_name]) && is_array(json_decode(stripslashes($_COOKIE[$this->analytics_cookie_name]),true)) ) ? array_keys(json_decode(stripslashes($_COOKIE[$this->analytics_cookie_name]),true)) : [];
 
         $this->visited_triggers = array_merge($visited_triggers,array_filter($last_visited_triggers,function($tid) use ($visited_triggers) { return (!in_array($tid,$visited_triggers));   }));
         $this->visited_triggers = array_slice($this->visited_triggers,-$this->max_saved_triggers);

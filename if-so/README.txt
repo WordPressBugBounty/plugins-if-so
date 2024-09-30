@@ -4,7 +4,7 @@ Donate link: https://www.if-so.com/?utm_source=WordPress&utm_medium=Readme&utm_c
 Tags: Dynamic content, personalization, conditional, geolocatargeting, location
 Requires at least: 4.0.1
 Tested up to: 6.6
-Stable tag: 1.8.0.4
+Stable tag: 1.9
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -293,6 +293,15 @@ You sure can! So far, we have not come across any WordPress themes that If-So Dy
 
 
 == Changelog ==
+
+
+= 1.9.1 =
+
+* Audience Standalone Condition – Added an option to target users who are either inside or outside any audience
+* Updated the "Mobile Detect" library (the new version requires PHP 7.4 or higher)
+* Bug Fixes
+
+
 
 = 1.9 =
 

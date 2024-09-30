@@ -460,6 +460,7 @@ class DataRulesUiModel{
                             $options_list = array_map(function ($groupName) {
                                 return new ConditionUIOption($groupName);
                             }, $groups_list);
+                            $options_list = array_merge([new ConditionUIOption('___ANY___','Any Audience')],$options_list);
                             $ret->$rule = new ConditionUIElement('group-name', 'Audience Name', 'select', true, array_values($options_list));
                         }
 

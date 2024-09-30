@@ -40,7 +40,7 @@ class RecurrenceHandler extends ChainHandlerBase {
 			$recurrence_data_json = stripslashes($_COOKIE['ifso_recurrence_data']);
 			$recurrence_data = json_decode($recurrence_data_json, true);
 			// pull out the data for the current trigger (if exists)
-			if (array_key_exists($trigger_id, $recurrence_data)) {
+			if (!empty($recurrence_data) && array_key_exists($trigger_id, $recurrence_data)) {
 				$trigger_recurrence_data = $recurrence_data[$trigger_id];
 
 				/* recurrence structure:

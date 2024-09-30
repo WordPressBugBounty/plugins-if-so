@@ -131,7 +131,7 @@ class ExtendedShortcodes {
                 $languages);
 
 
-            if ($languages && is_array($languages[0]))
+            if ($languages && is_array($languages[0]) && !empty($languages[0]))
                 $languages = $languages[0];
             else
                 return new DKIFallback($fallback);

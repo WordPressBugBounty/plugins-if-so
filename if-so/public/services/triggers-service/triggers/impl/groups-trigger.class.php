@@ -20,9 +20,12 @@ class GroupTrigger extends TriggerBase{
             $group_name = $rule['group-name'];
             $group_relation = $rule['user-group-relation'];
 
-            if(($group_relation == 'in' &&  $groups_service->is_user_in_group($group_name)) || ($group_relation =='out' && !$groups_service->is_user_in_group($group_name)) )
+            if($group_name==='___ANY___'){
+                if(($group_relation==='in' && !empty($groups_service->get_user_groups())) || ($group_relation==='out' && empty($groups_service->get_user_groups())))
+                    return $content;
+            }
+            elseif(($group_relation === 'in' &&  $groups_service->is_user_in_group($group_name)) || ($group_relation ==='out' && !$groups_service->is_user_in_group($group_name)))
                 return $content;
-
         }
         return false;
     }

@@ -1,12 +1,12 @@
 <?php
 	
 	namespace IfSo\PublicFace\Services\DeviceDetectionService;
-	require_once('IfSo_Mobile_Detector.php');
+	require_once(__DIR__ . '/MobileDetect.php');
 	class DeviceDetectionService {
 		private static $instance;
 		private $detector;
 		private function __construct() {
-			$this->detector = new \IfSo_Mobile_Detect;
+			$this->detector = new \IfSo\Libs\Detection\MobileDetect();
 		}
 		public static function get_instance() {
 			if ( NULL == self::$instance )
