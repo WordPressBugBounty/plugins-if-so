@@ -82,25 +82,26 @@
 
 			<table class="form-table ifso-settings-tbl">
 				<tbody>
-					<tr class="ifso-settings-title" valign="top">
-						<th class="ifso-settings-td" scope="row" valign="top">
-							<?php _e('GENERAL', 'if-so'); ?>
-						</th>
-					</tr>
-					<tr valign="top">
-						<td class="ifso-settings-td" scope="row" valign="baseline">
-							<b><?php _e('Page caching compatibility', 'if-so'); ?></b>
-						</td>
-						<td valign="baseline" style="vertical-align:baseline;">
-							<input
-								type="checkbox"
-								<?php echo ($renderTriggersViaAjax ? "CHECKED" : ""); ?>
-								name="ifso_settings_page_render_triggers_via_ajax"
-								type="text"
-								class="ifso_settings_page_option"
-                                value="render_triggers_via_ajax" /><i><?php _e('Check this box to set Ajax as the default way to render triggers. Dynamic content will be loaded in a separate request after the cached content is loaded.', 'if-so');?> <a target="_blank" href="https://www.if-so.com/help/documentation/ajax-loading/?utm_source=Plugin&utm_medium=settings&utm_campaign=AjaxLoading-learnMore"><?php _e('Learn more.','if-so') ?></a> </i>
-						</td>
-					</tr>
+                    <tr class="ifso-settings-title" valign="top">
+                        <th class="ifso-settings-td" scope="row" valign="top">
+                            <?php _e('PAGE CACHING COMPATIBILITY', 'if-so'); ?>
+                        </th>
+                    </tr>
+                    <tr valign="top">
+                        <td class="ifso-settings-td" scope="row" valign="baseline">
+                            <b><?php _e('Page caching compatibility', 'if-so'); ?></b>
+                        </td>
+                        <td valign="baseline" style="vertical-align:baseline;">
+                            <input
+                                    type="checkbox"
+                                <?php echo ($renderTriggersViaAjax ? "CHECKED" : ""); ?>
+                                    name="ifso_settings_page_render_triggers_via_ajax"
+                                    type="text"
+                                    class="ifso_settings_page_option"
+                                    value="render_triggers_via_ajax" /><i><?php _e('Check this box to set Ajax as the default way to render triggers. Dynamic content will be loaded in a separate request after the cached content is loaded.', 'if-so');?> <a target="_blank" href="https://www.if-so.com/help/documentation/ajax-loading/?utm_source=Plugin&utm_medium=settings&utm_campaign=AjaxLoading-learnMore"><?php _e('Learn more.','if-so') ?></a> </i>
+                        </td>
+                    </tr>
+                    <?php do_action('ifso_extra_settings_display_ui_page_caching_compat'); ?>
                     <tr valign="top">
                         <td class="ifso-settings-td" scope="row" valign="baseline">
                             <b><?php _e('Ajax Loading Placeholder', 'if-so'); ?></b>
@@ -111,17 +112,25 @@
                                     class="ifso_settings_page_option"
                                     style="width:20%;">
                                 <?php
-                                    $loader_iter = 0;//compat stuff
-                                    foreach ($ajax_loaders as $key=>$name){
-                                        $selected = ($ajaxLoaderType===$key || $ajaxLoaderType===$loader_iter) ? 'SELECTED' : '';
-                                        echo "<option value='{$key}' {$selected}>{$name}</option>";
-                                        $loader_iter++;
-                                    }
+                                $loader_iter = 0;//compat stuff
+                                foreach ($ajax_loaders as $key=>$name){
+                                    $selected = ($ajaxLoaderType===$key || $ajaxLoaderType===$loader_iter) ? 'SELECTED' : '';
+                                    echo "<option value='{$key}' {$selected}>{$name}</option>";
+                                    $loader_iter++;
+                                }
                                 ?>
                             </select>
                             <i><?php _e('Select one of the options if you want the default content or a loader animation to be displayed before dynamic content is loaded via Ajax.','if-so'); ?></i>
                         </td>
                     </tr>
+                    <?php do_action('ifso_extra_settings_display_ui_page_caching_compat_after'); ?>
+
+
+					<tr class="ifso-settings-title" valign="top">
+						<th class="ifso-settings-td" scope="row" valign="top">
+							<?php _e('GENERAL', 'if-so'); ?>
+						</th>
+					</tr>
 					<tr valign="top">
 						<td class="ifso-settings-td" scope="row" valign="baseline">
 							<b><?php _e('Allow shortcodes in titles and menus', 'if-so'); ?></b>
@@ -195,6 +204,7 @@
                             <i><?php _e("Check to allow the TinyMCE editor to wrap text nodes in &lt;p&gt; tags",'if-so'); ?></i>
                         </td>
                     </tr>
+
 
 					<tr class="ifso-settings-title" valign="top">
 						<th class="ifso-settings-td" scope="row" valign="top">

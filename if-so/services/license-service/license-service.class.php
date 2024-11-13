@@ -31,8 +31,7 @@ class LicenseService extends LicenseServiceBase {
 		$message = false;
         if(!is_object($license_data)) return false;
 		if ( false === $license_data->success ) {
-			if ( isset($license_data->error_message) &&
-				 !empty($license_data->error_message) ) {
+			if ( !empty($license_data->error_message) ) {
 				return $license_data->error_message;
 			}
 			switch( $license_data->error ) {

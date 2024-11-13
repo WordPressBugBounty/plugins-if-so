@@ -115,3 +115,7 @@
 .elementor-element i.icon-ifso-logo {
     font-size: 18px;
 }
+
+.elementor-navigator__item i.icon-ifso-logo{
+    font-size: 10px;
+}

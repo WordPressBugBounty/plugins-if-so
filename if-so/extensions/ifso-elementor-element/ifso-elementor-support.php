@@ -75,8 +75,8 @@ class IFSO_Elementor_Widgets {
 	}
 
 	public function ifso_enqueue_styles() {
-		wp_enqueue_style( 'ifso-font', plugin_dir_url(__FILE__)  . 'assets/css/ifso-font.css' );
-		wp_enqueue_style( 'ifso-editor-css', plugin_dir_url(__FILE__)  . 'assets/css/ifso-editor.css' );
+		wp_enqueue_style( 'ifso-font', plugin_dir_url(__FILE__)  . 'assets/css/ifso-font.css',[],IFSO_WP_VERSION);
+		wp_enqueue_style( 'ifso-editor-css', plugin_dir_url(__FILE__)  . 'assets/css/ifso-editor.css',[],IFSO_WP_VERSION);
 	}
 
     public function register_elementor_category() {

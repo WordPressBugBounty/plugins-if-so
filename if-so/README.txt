@@ -3,8 +3,8 @@ Contributors: ifso
 Donate link: https://www.if-so.com/?utm_source=WordPress&utm_medium=Readme&utm_campaign=Donate%20link
 Tags: Dynamic content, personalization, conditional, geolocatargeting, location
 Requires at least: 4.0.1
-Tested up to: 6.6
-Stable tag: 1.9
+Tested up to: 6.7
+Stable tag: 1.9.1
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -294,6 +294,13 @@ You sure can! So far, we have not come across any WordPress themes that If-So Dy
 
 == Changelog ==
 
+= 1.9.2 =
+
+* Compatibility with the upcoming If-So & Elementor integration (version 1.5)
+* Fixed information disclosure vulnerability in the [ifso-show-post] shortcode
+* UI and microcopy improvements
+* Bug fixes
+
 
 = 1.9.1 =
 
@@ -553,7 +560,7 @@ Ex. [ifsoDKI type='geo' show='flag' width='50px' classname='class-you-choose']
 * Added new option to disable the number of visit count cookie to the settings
 * Bugsfix - import triggers  - fixed  newlines being replaced  with "rn"
 * bugsfix - TinyMCE ediotr was reverted to HTML mode while dragging a version
-* Security fix (Ajax vulnerability)
+* (1) Security fix (Ajax vulnerability)
 
 
 

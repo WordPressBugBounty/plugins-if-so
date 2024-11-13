@@ -293,7 +293,7 @@ abstract class LicenseServiceBase {
         $license_key = $this->license_data->get_license_key();
         $item_id = $this->license_data->get_field_value('item_id');
         if(!empty($license_key) && !empty($item_id))
-            $this->deactivate_license_request($license_key,$item_id);
+            $this->edd_api_deactivate_item($license_key,$item_id);
         $this->license_data->delete_all_fields_values(false);
     }
 

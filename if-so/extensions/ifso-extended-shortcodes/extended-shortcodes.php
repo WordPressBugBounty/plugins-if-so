@@ -356,13 +356,16 @@ class ExtendedShortcodes {
                 $show = !empty($atts['show']) ? strtolower($atts['show']) : 'content';
                 $raw = (isset($atts['the_content']) && (strtolower($atts['the_content']) === 'no' || strtolower($atts['the_content']) === 'false'));
                 $type = (!empty($atts['type'])) ? strtolower($atts['type']) : 'default';
-                $extra_content = '';
+                $post = get_post($pid);
+                if(empty($post) || !is_object($post)) return;
+
                 if($type==='wpb' && $show!=='title'){
                     if (method_exists('WPBMap', 'addAllMappedShortcodes')) \WPBMap::addAllMappedShortcodes();
                     $vccss = get_post_meta($pid, '_wpb_shortcodes_custom_css', true);
                     if(!empty($vccss)){
                         $vccss = strip_tags($vccss);
-                        $extra_content .="<style type=\"text/css\" data-type=\"vc_shortcodes-custom-css\">{$vccss}</style>";
+                        $extra_content ="<style type=\"text/css\" data-type=\"vc_shortcodes-custom-css\">{$vccss}</style>";
+                        $post->post_content .= $extra_content;
                     }
                 }
                 if(($type==='divi' || $type==='etbuilder') && $show!=='title'){
@@ -371,23 +374,21 @@ class ExtendedShortcodes {
                         $content = do_shortcode("[et_pb_section global_module='{$pid}'][/et_pb_section]");
                         if(!empty($content) && method_exists(\ET_Builder_Element::class,'get_style')){
                             $extra_style_content = "<style class='extra-divi-styles'>" . \ET_Builder_Element::get_style() . "</style>";
-                            $post = (object)['post_content'=>$extra_style_content . $content,'post_status'=>'publish'];
+                            $post->post_content = $extra_style_content . $content;
                         }
                     }
                 }
                 if($type==='elementor' && $show!=='title' && class_exists('\Elementor\Plugin') &&  isset(\Elementor\Plugin::$instance)){
                     $with_css = !(!empty($atts['without_css']) && $atts['without_css']==='yes');
                     $content = \Elementor\Plugin::$instance->frontend->get_builder_content_for_display( $pid, $with_css );
-                    $post = (object)['post_content'=>$content,'post_status'=>'publish'];
+                    $post->post_content = $content;
                 }
-                $post = !empty($post) ? $post : get_post($pid);
-                if(!empty($post) && is_object($post)){
-                    if(!empty($post->post_status) && $post->post_status==='publish'){
-                        if($show === 'title')
-                            return $post->post_title;
-                        else
-                            return $raw ? $post->post_content : apply_filters('the_content',$post->post_content.$extra_content);
-                    }
+
+                if(!empty($post->post_status) && $post->post_status==='publish' && empty($post->post_password)){
+                    if($show === 'title')
+                        return $post->post_title;
+                    else
+                        return $raw ? $post->post_content : apply_filters('the_content',$post->post_content);
                 }
             }
         });

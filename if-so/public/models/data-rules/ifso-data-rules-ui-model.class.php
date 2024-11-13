@@ -516,7 +516,7 @@ class DataRulesUiModel{
                         }
 
                         if($rule==='post-category-compare'){
-                            $cats_opts = array_map(function($term){return new ConditionUIOption($term->term_taxonomy_id,"{$term->name} (Taxonomy: {$term->taxonomy} ; ID: {$term->term_taxonomy_id})");},array_values(get_terms(['orderby'=>'id'])));
+                            $cats_opts = array_map(function($term){return new ConditionUIOption($term->term_taxonomy_id,"{$term->name} (Taxonomy: {$term->taxonomy} ; ID: {$term->term_taxonomy_id})");},array_values(get_terms(['taxonomy'=>[],'orderby'=>'id'])));
                             $ret->$rule = new ConditionUIElement($rule,'','select',true,$cats_opts);
                         }
                         break;

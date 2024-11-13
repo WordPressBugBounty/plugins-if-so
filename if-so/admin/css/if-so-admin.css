@@ -88,6 +88,7 @@ box-shadow: none;
 .ifso-settings-td {
     padding: 20px 10px 20px 20px !important;   
     vertical-align:baseline !important;
+    width:220px!important;
 }
 
 .approved_license_message {
@@ -187,13 +188,14 @@ box-shadow: none;
 }
 
 .get-license-btn_red {
-background: none;color: #D25133;border: 1px solid;padding: 5px;margin-top: 4px;
+background: none;color: #D25133;border: 1px solid;padding: 6px 4px 4px;margin-top: 4px;
 text-align: center;
     margin-left: 20px;
     font-size: 0.9em;
-	min-width: 210px;
+min-width: 210px;
     line-height: 1.2em;
     float: right;
+    font-weight: bold;
 }
 
 .get-license-btn_red:focus {

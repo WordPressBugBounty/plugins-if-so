@@ -341,7 +341,7 @@
         var get_license_url = 'https://www.if-so.com/plans/?utm_source=Plugin&utm_medium=direct&utm_campaign=getFree&utm_term=lockedConditon&utm_content=Gutenberg';
         if(!license_status_object['is_license_valid'] && !in_array(license_status_object['free_conditions'],condition)){
             ret = el('div',{key:'license-error-message',error_message:'1',className:'ifso-stantalone-error-message'},null,[
-                el('a',{href:get_license_url, target:'_blank'},'This condition is only available upon license activation. Click here to get a free license if you do not have one.')
+                el('a',{href:get_license_url, target:'_blank'},'License activation is required to use this condition. Click here to get one')
             ]);
         }
         return ret;
@@ -398,7 +398,8 @@
             };
 
             var create_addrm_form = function(type='add'){
-                var checkSelects = groupsList.map( function(val){return [el('input',{key:'aud-'+val['value'],type:'checkbox',checked : (props.attributes.ifso_aud_addrm && props.attributes.ifso_aud_addrm !== null && !is_empty(props.attributes.ifso_aud_addrm) && Object.prototype.toString.call(props.attributes.ifso_aud_addrm[type])==='[object Array]' && in_array(props.attributes.ifso_aud_addrm[type],val['value'])), name:'ifso-aud-'+type,value:val['value'],onChange:updateStatus}),el('label',{key:'label'},null,val['display_value']),el('br',{key:'br'})] });
+                var checkSelects = groupsList.filter(function(grp){return grp.value!=='___ANY___'})
+                    .map( function(val){return [el('input',{key:'aud-'+val['value'],type:'checkbox',checked : (props.attributes.ifso_aud_addrm && props.attributes.ifso_aud_addrm !== null && !is_empty(props.attributes.ifso_aud_addrm) && Object.prototype.toString.call(props.attributes.ifso_aud_addrm[type])==='[object Array]' && in_array(props.attributes.ifso_aud_addrm[type],val['value'])), name:'ifso-aud-'+type,value:val['value'],onChange:updateStatus}),el('label',{key:'label'},null,val['display_value']),el('br',{key:'br'})] });
                 return el('form',{key:type+'-aud-form',className:'ifso-aud-addrm-form'},checkSelects);
             };
 

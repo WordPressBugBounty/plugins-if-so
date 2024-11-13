@@ -1380,7 +1380,7 @@ function get_rule_item($index, $rule=array(), $is_template = false) {
                 <div class="ifso-form-group">
                     <select name="repeater[<?php echo $current_version_index; ?>][post-category-compare]" class="form-control referrer-custom url-custom ifso-page-visit-operator <?php echo (isset($rule['trigger_type']) && $rule['trigger_type'] == 'PostCategory') ? 'show-selection' : ''; ?>" data-field="post-category-compare">
                         <?php
-                        $cat_terms = array_values(get_terms(['orderby'=>'id']));
+                        $cat_terms = array_values(get_terms(['taxonomy'=>[],'orderby'=>'id']));
                         foreach($cat_terms as $cat){
                             $selected = (!empty($rule['post-category-compare']) && (int) $rule['post-category-compare'] === $cat->term_taxonomy_id) ? 'SELECTED' : '';
                             $option =  "<option value='{$cat->term_taxonomy_id}' {$selected}>{$cat->name} (Taxonomy: {$cat->taxonomy} ; ID: {$cat->term_taxonomy_id})</option>";

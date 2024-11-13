@@ -66,82 +66,46 @@ class LicenseAjaxService {
 
     public function triggerPage_message_action(){
         $message_license_expired = $this->return_license_data();
+        $lockedConditionBox_message = function($link,$text){
+            return '
+                <a style="color:#d25134" href="' . $link . '" target="_blank">
+                <div class="get-license clearfix" style="margin-top: 0;background: #f8f8f8;padding: 8px 10px;border-top: 1px solid #e5e5e5;color: #d66249;">
+                    <div class="text">
+                        '.$text.'
+                    </div>
+                    <a href="'. $link . '" class="get-license-btn_red" target="_blank">'.__("CONTINUE", 'if-so').'<i class="fa fa-play" style="margin-left:10px;" aria-hidden="true"></i>
+                    </a>
+                </div>
+                </a>';
+        };
+        $lockedVersionBox_message = function($link,$text){
+            return '
+                <a style="color:white" href="'. $link . '" target="_blank">
+                <div class="get-license clearfix">
+                    <div class="text">
+                        '.$text.'
+                    </div>
+                    <a href="' . $link . '" class="get-license-btn" target="_blank" >'.__('CONTINUE', 'if-so').'<i class="fa fa-play" style="margin-left:10px;" aria-hidden="true"></i>
+                    </a>
+                </div>
+                </a>';
+        };
         if ($message_license_expired) {
-
-            $lockedConditionBox = '
-    <a style="color:red" href="https://www.if-so.com/free-license?utm_source=Plugin&utm_medium=FreeTrial&utm_campaign=wordpessorg&utm_term=lockedCondition" target="_blank">
-        <div class="get-license clearfix" style="margin-top: 0;background: transparent;padding: 8px 10px;border-top: 1px solid #e5e5e5;color: #d66249;">
-            <div class="text">
-                '.__($message_license_expired .  'Click here to get a free license if you do not have one.', 'if-so').'
-            </div>
-            <a href="https://www.if-so.com/free-license?utm_source=Plugin&utm_medium=FreeTrial&utm_campaign=wordpessorg&utm_term=lockedCondition" class="get-license-btn" style="background: none;color: #d25134;border: 1px solid;padding: 5px;margin-top: 4px;" target="_blank">'.__("UNLOCK ALL FEATURES", 'if-so').'<i class="fa fa-play" style="margin-left:10px;" aria-hidden="true"></i>
-            </a>
-        </div>
-        </a>
-    ';
-
-            $lockedVersionBox = '
-    <a style="color:white" href="https://www.if-so.com/free-license?utm_source=Plugin&utm_medium=direct&utm_campaign=getFree&utm_term=triggerTop&utm_content=a" target="_blank">
-		<div class="get-license clearfix">
-		    <div class="text">
-		        '.__($message_license_expired . 'Click here to get a free license if you do not have one.', 'if-so').'
-		    </div>
-            <a href="https://www.if-so.com/free-license?utm_source=Plugin&utm_medium=direct&utm_campaign=getFree&utm_term=triggerTop&utm_content=a" class="get-license-btn" target="_blank" >'.__('GET A LICENSE KEY', 'if-so').'<i class="fa fa-play" style="margin-left:10px;" aria-hidden="true"></i>
-            </a>
-        </div>
-        </a>
-	';
+            $lockedConditionBox = $lockedConditionBox_message('https://www.if-so.com/plans?utm_source=Plugin&utm_medium=FreeTrial&utm_campaign=wordpessorg&utm_term=lockedCondition',
+                                                                __($message_license_expired .  'Click here to get a new license if you do not have one.', 'if-so'));
+            $lockedVersionBox = $lockedVersionBox_message('https://www.if-so.com/plans?utm_source=Plugin&utm_medium=direct&utm_campaign=getFree&utm_term=triggerTop&utm_content=a',
+                                                                __($message_license_expired . 'Click here to get a new license if you do not have one.', 'if-so'));
         }
-        else if ( true == get_option( 'edd_ifso_user_deactivated_license' ) ) {
-            $lockedConditionBox = '
-    <a style="color:#d25134" href="https://www.if-so.com/free-license?utm_source=Plugin&utm_medium=direct&utm_campaign=getFree&utm_term=lockedConditon&utm_content=b" target="_blank">
-    <div class="get-license clearfix" style="margin-top: 0;background: #f8f8f8;padding: 8px 10px;border-top: 1px solid #e5e5e5;color: #d66249;">
-        <div class="text">
-            '.__('This condition is only available upon license activation. Click here to get a free license if you do not have one.', 'if-so').'
-        </div>
-        <a href="https://www.if-so.com/free-license?utm_source=Plugin&utm_medium=direct&utm_campaign=getFree&utm_term=lockedConditon&utm_content=b" class="get-license-btn" style="background: none;color: #d25134;border: 1px solid;padding: 5px;margin-top: 3px;" target="_blank">'.__("CONTINUE", 'if-so').'<i class="fa fa-play" style="margin-left:10px;" aria-hidden="true"></i>
-        </a>
-    </div>
-    </a>
-';
-
-            $lockedVersionBox = '
-    <a style="color:white" href="https://www.if-so.com/free-license?utm_source=Plugin&utm_medium=direct&utm_campaign=getFree&utm_term=lockedConditon&utm_content=b" target="_blank">
-    <div class="get-license clearfix">
-        <div class="text">
-            '.__('Activate your license key to unlock the full power of If-So. Don`t have a license? Click here to get one.', 'if-so').'
-        </div>
-        <a href="https://www.if-so.com/free-license?utm_source=Plugin&utm_medium=direct&utm_campaign=getFree&utm_term=triggerTop&utm_content=b" class="get-license-btn" target="_blank" >'.__('START YOUR FREE TRIAL', 'if-so').'<i class="fa fa-play" style="margin-left:10px;" aria-hidden="true"></i>
-        </a>
-    </div>
-    </a>
-';
-
+        else if (true == get_option( 'edd_ifso_user_deactivated_license') ) {
+            $lockedConditionBox = $lockedConditionBox_message('https://www.if-so.com/free-license?utm_source=Plugin&utm_medium=direct&utm_campaign=getFree&utm_term=lockedConditon&utm_content=b',
+                                                                __('License activation is required to use this condition.', 'if-so'));
+            $lockedVersionBox = $lockedVersionBox_message('https://www.if-so.com/free-license?utm_source=Plugin&utm_medium=direct&utm_campaign=getFree&utm_term=lockedConditon&utm_content=b',
+                                                            __('Activate your license key to unlock the full power of If-So. Don`t have a license? Click here to get one', 'if-so'));
         }  else {
-
-            $lockedConditionBox = '
-    <a style="color:#d25134" href="https://www.if-so.com/free-license?utm_source=Plugin&utm_medium=direct&utm_campaign=getFree&utm_term=lockedConditon&utm_content=a" target="_blank">
-        <div class="get-license clearfix" style="margin-top: 0;background: #f8f8f8;padding: 8px 10px;border-top: 1px solid #e5e5e5;color: #d66249;">
-            <div class="text">
-                '.__('This condition is only available upon license activation. Click here to get a free license if you do not have one.', 'if-so').'
-            </div>
-            <a href="https://www.if-so.com/free-license?utm_source=Plugin&utm_medium=direct&utm_campaign=getFree&utm_term=lockedConditon&utm_content=a" class="get-license-btn_red" target="_blank">'.__("CONTINUE >>", 'if-so').'
-            </a>
-        </div>
-        </a>
-    ';
-
-            $lockedVersionBox = '
-    <a style="color:white" href="https://www.if-so.com/free-license?utm_source=Plugin&utm_medium=direct&utm_campaign=getFree&utm_term=lockedConditon&utm_content=a" target="_blank">
-    <div class="get-license clearfix">
-        <div class="text">
-            '.__('Activate your license key to unlock the full power of If-So. Don`t have a license? Click here to get one.', 'if-so').'
-        </div>
-        <a href="https://www.if-so.com/free-license?utm_source=Plugin&utm_medium=direct&utm_campaign=getFree&utm_term=triggerTop&utm_content=a" class="get-license-btn" target="_blank" >'.__('START YOUR FREE TRIAL', 'if-so').'<i class="fa fa-play" style="margin-left:10px;" aria-hidden="true"></i>
-        </a>
-    </div>
-    </a>
-    ';
+            $lockedConditionBox = $lockedConditionBox_message('https://www.if-so.com/free-license?utm_source=Plugin&utm_medium=direct&utm_campaign=getFree&utm_term=lockedConditon&utm_content=a',
+                                                                __('License activation is required to use this condition.', 'if-so') );
+            $lockedVersionBox = $lockedVersionBox_message('https://www.if-so.com/free-license?utm_source=Plugin&utm_medium=direct&utm_campaign=getFree&utm_term=lockedConditon&utm_content=a',
+                                                                __('Activate your license key to unlock the full power of If-So. Don`t have a license? Click here to get one.', 'if-so'));
         }
 
         $ret = [
@@ -155,7 +119,7 @@ class LicenseAjaxService {
     public function licensePage_message_action(){
         $message_license_expired = $this->return_license_data();
         if ($message_license_expired) {
-            $noLicenseMessageBox = '<div class="no_license_message">'. __($message_license_expired , 'if-so') . '<a style="color:#fff;font-weight: 600;" href="https://www.if-so.com/plans?utm_source=Plugin&utm_medium=direct&utm_campaign=gopro&utm_term=licenseExpired&utm_content=b" target="_blank">'.__(" Click here to renew the license", 'if-so') .'</a>.</div>';
+            $noLicenseMessageBox = '<div class="no_license_message">'. __($message_license_expired , 'if-so') . '<a style="color:#fff;font-weight: 600;" href="https://www.if-so.com/plans?utm_source=Plugin&utm_medium=direct&utm_campaign=gopro&utm_term=licenseExpired&utm_content=b" target="_blank">'.__(" Click here to get a new license", 'if-so') .'</a>.</div>';
         }
 
         else if ( true == get_option( 'edd_ifso_user_deactivated_license' ) ) {

@@ -19,44 +19,17 @@ function get_queries($geoDatas) {
 	return 0;
 }
 
-global $wpdb;
-global $geo_monthly_queries;
-global $geo_queries_used;
-global $alert_values;
-global $local_user_table_name;
-global $daily_sessions_table_name;
-
-$db_prefix = $wpdb->prefix;
-$local_user_table_name = $db_prefix . 'ifso_local_user';
-$daily_sessions_table_name = $db_prefix . 'ifso_daily_sessions';
-
-if($wpdb->get_var("SHOW TABLES LIKE 'ifso_local_user'") || $wpdb->get_var("SHOW TABLES LIKE 'ifso_daily_sessions'"))        //If tables with the old table names still exist, rename them to the new names
-    $wpdb->query("RENAME TABLE ifso_local_user TO {$local_user_table_name}, ifso_daily_sessions TO {$daily_sessions_table_name}");
-
-
-$license = get_option( 'edd_ifso_geo_license_key' );
-$geoDatas = GeolocationService\GeolocationService::get_instance()->get_status($license,false);
-
-
-$geo_monthly_queries = get_monthly($geoDatas);
-$geo_queries_used = get_queries($geoDatas);
-$alert_values =$wpdb->get_var("SELECT alert_values FROM {$local_user_table_name}");
-if($alert_values==NULL) $alert_values = '100 95 75';
-$jal_db_version = '1.0';
-
 if(!function_exists('ifso_jal_install')){
     function ifso_jal_install() {
-        global $geo_monthly_queries; //jal_install function can't take these arguments
-        global $geo_queries_used;
         global $wpdb;
-        global $jal_db_version;
-        global $alert_values;
-        global $local_user_table_name;
-        global $daily_sessions_table_name;
-
-        $wp_user_email = get_option('admin_email');
+        $db_version = '1.0';
+        $db_prefix = $wpdb->prefix;
+        $local_user_table_name = $db_prefix . 'ifso_local_user';
+        $daily_sessions_table_name = $db_prefix . 'ifso_daily_sessions';
         $charset_collate = $wpdb->get_charset_collate();
 
+        if($wpdb->get_var("SHOW TABLES LIKE 'ifso_local_user'") || $wpdb->get_var("SHOW TABLES LIKE 'ifso_daily_sessions'"))    //If tables with the old table names still exist, rename them to the new names
+            $wpdb->query("RENAME TABLE ifso_local_user TO {$local_user_table_name}, ifso_daily_sessions TO {$daily_sessions_table_name}");
 
 
         $sql = "CREATE TABLE IF NOT EXISTS {$local_user_table_name} (
@@ -78,12 +51,18 @@ if(!function_exists('ifso_jal_install')){
         require_once( ABSPATH . 'wp-admin/includes/upgrade.php' );
         dbDelta( $sql );
 
-        //$sql = "UPDATE ifso_local_user SET (`user_email`, `user_bank`, `user_sessions`, `alert_values`) VALUES ('$wp_user_email', '$geo_monthly_queries', '$geo_queries_used', '100 90 75 60') WHERE `id` =  1";
+
+        $license = get_option( 'edd_ifso_geo_license_key' );
+        $geoDatas = GeolocationService\GeolocationService::get_instance()->get_status($license,false);
+        $geo_monthly_queries = get_monthly($geoDatas);
+        $geo_queries_used = get_queries($geoDatas);
+        $alert_values =$wpdb->get_var("SELECT alert_values FROM {$local_user_table_name}");
+        if($alert_values==NULL) $alert_values = '100 95 75';
+        $wp_user_email = get_option('admin_email');
+
         $sql = "INSERT IGNORE INTO {$local_user_table_name} (`id`, `user_email`, `user_bank`, `user_sessions`, `alert_values`) VALUES (1,'{$wp_user_email}', '{$geo_monthly_queries}', '{$geo_queries_used}', '{$alert_values}')";
-
-        //dbDelta( $sql );
-
         $wpdb->query($sql);
+
 
         $sql = "CREATE TABLE IF NOT EXISTS {$daily_sessions_table_name} (
 			`id` int(11) NOT NULL AUTO_INCREMENT,
@@ -94,6 +73,6 @@ if(!function_exists('ifso_jal_install')){
 			) $charset_collate;";
 
         dbDelta( $sql );
-        add_option( 'jal_db_version', $jal_db_version );
+        add_option( 'ifso_db_version', $db_version );
     }
 }
