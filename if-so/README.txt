@@ -4,7 +4,7 @@ Donate link: https://www.if-so.com/?utm_source=WordPress&utm_medium=Readme&utm_c
 Tags: Dynamic content, personalization, conditional, geolocatargeting, location
 Requires at least: 4.0.1
 Tested up to: 6.7
-Stable tag: 1.9.2.1
+Stable tag: 1.9.2.2
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -294,9 +294,15 @@ You sure can! So far, we have not come across any WordPress themes that If-So Dy
 
 == Changelog ==
 
-= 1.9.2 =
+= 1.9.3 =
 
-* Compatibility with the upcoming If-So & Elementor integration (version 1.5)
+* Compatibility with the <a href="https://wordpress.org/plugins/if-so-conditional-elementor-elements/" target="_blank">If-So & Elementor integration (version 1.4)</a>
+* UI and microcopy improvements
+* Bug fixes
+
+= 1.9.2.2 =
+
+* Compatibility with the upcoming If-So & Elementor integration (version 1.4)
 * Fixed information disclosure vulnerability in the [ifso-show-post] shortcode
 * UI and microcopy improvements
 * Bug fixes

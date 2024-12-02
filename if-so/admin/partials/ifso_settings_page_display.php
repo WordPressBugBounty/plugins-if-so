@@ -64,6 +64,8 @@
     $tmce_force_wrapper = $settingsServiceInstance->tmceForceWrapper->get();
 
     $enable_visit_count  = $settingsServiceInstance->enableVisitCount->get();
+
+    $renderStandaloneViaAjax = $settingsServiceInstance->renderStandaloneViaAjax->get();
 ?>
 <style>
     .ifso-settings-form .form-table tbody tr[valign] td+td{
@@ -97,8 +99,20 @@
                                 <?php echo ($renderTriggersViaAjax ? "CHECKED" : ""); ?>
                                     name="ifso_settings_page_render_triggers_via_ajax"
                                     type="text"
-                                    class="ifso_settings_page_option"
-                                    value="render_triggers_via_ajax" /><i><?php _e('Check this box to set Ajax as the default way to render triggers. Dynamic content will be loaded in a separate request after the cached content is loaded.', 'if-so');?> <a target="_blank" href="https://www.if-so.com/help/documentation/ajax-loading/?utm_source=Plugin&utm_medium=settings&utm_campaign=AjaxLoading-learnMore"><?php _e('Learn more.','if-so') ?></a> </i>
+                                    class="ifso_settings_page_option"/><i><?php _e('Check this box to set Ajax as the default way to render triggers. Dynamic content will be loaded in a separate request after the cached content is loaded.', 'if-so');?> <a target="_blank" href="https://www.if-so.com/help/documentation/ajax-loading/?utm_source=Plugin&utm_medium=settings&utm_campaign=AjaxLoading-learnMore"><?php _e('Learn more.','if-so') ?></a> </i>
+                        </td>
+                    </tr>
+                    <tr valign="top">
+                        <td class="ifso-settings-td" scope="row" valign="baseline">
+                            <b><?php _e('Gutenberg Blocks and Elementor elements', 'if-so'); ?></b>
+                        </td>
+                        <td valign="baseline" style="vertical-align:baseline;">
+                            <input
+                                    type="checkbox"
+                                <?php echo ($renderStandaloneViaAjax ? "CHECKED" : ""); ?>
+                                    name="ifso_settings_render_standalone_via_ajax"
+                                    type="text"
+                                    class="ifso_settings_page_option"/><i><?php _e('Set Ajax as the default method for rendering conditional elements and blocks. You can override this setting for specific blocks and elements when you set conditions.', 'if-so');?> </i>
                         </td>
                     </tr>
                     <?php do_action('ifso_extra_settings_display_ui_page_caching_compat'); ?>

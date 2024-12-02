@@ -50,6 +50,8 @@ class PluginSettingsService {
         'ifso_settings_tmce_force_wrapper_option';
     const ENABLE_VISIT_COUNT =
         'ifso_settings_enable_visit_count_option';
+    const RENDER_STANDALONE_VIA_AJAX =
+        'ifso_settings_render_standalone_via_ajax_option';
 
 	private static $instance;
 
@@ -76,6 +78,7 @@ class PluginSettingsService {
     public $tmceForceWrapper;
     public $enableVisitCount;
     public $extraOptions;
+    public $renderStandaloneViaAjax;
 
 	private function __construct() {
 		$this->pagesVisitedOption = 
@@ -122,6 +125,8 @@ class PluginSettingsService {
             $this->create_tmce_force_wrapper_option();
         $this->enableVisitCount =
             $this->create_enable_visit_count_option();
+        $this->renderStandaloneViaAjax =
+            $this->create_render_standalone_via_ajax_option();
 
         add_action('plugins_loaded',function (){
             $this->extraOptions = apply_filters("ifso_extra_settings_options",new \StdClass());
@@ -371,6 +376,18 @@ class PluginSettingsService {
         return  $option;
     }
 
+
+    private function create_render_standalone_via_ajax_option() {
+        $default  = false;
+        $postName =  "ifso_settings_render_standalone_via_ajax";
+        $option = new IfSoSettingsYesNoOption(
+            self::RENDER_STANDALONE_VIA_AJAX,
+            $default,
+            $postName
+        );
+        return  $option;
+    }
+
 	public static function get_instance() {
 		if ( NULL == self::$instance )
 			self::$instance = new PluginSettingsService();
@@ -407,6 +424,7 @@ class PluginSettingsService {
             $this->ajaxLoaderAnimationType->apply($_POST);
             $this->tmceForceWrapper->apply($_POST);
             $this->enableVisitCount->apply($_POST);
+            $this->renderStandaloneViaAjax->apply($_POST);
 
             foreach ($this->extraOptions as $extension){
                 foreach($extension as $option){

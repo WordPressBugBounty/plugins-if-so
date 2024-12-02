@@ -17,6 +17,7 @@ require_once(IFSO_PLUGIN_BASE_DIR . 'services/license-service/license-service.cl
 use IfSo\PublicFace\Models\DataRulesModel\DataRulesModel;
 use IfSo\PublicFace\Services\StandaloneConditionService\StandaloneConditionService;
 use IfSo\Services\LicenseService\LicenseService;
+use IfSo\Services\PluginSettingsService\PluginSettingsService;
 
 class IfsoGutenbergStandaloneConditionBlock extends IfSoGutenbergBlockBase{
     private $forbidden_blocks = ['core/legacy-widget','mailster-workflow','kadence/pane'];
@@ -81,7 +82,11 @@ class IfsoGutenbergStandaloneConditionBlock extends IfSoGutenbergBlockBase{
                 $params['rule']['remove_from_group'] = (array) $attrs['ifso_aud_addrm']['rm'];
             }
 
-            $ajax = (!empty($attrs['ifso_render_with_ajax']) && $attrs['ifso_render_with_ajax']);
+            if(empty($attrs['ifso_render_with_ajax']) || $attrs['ifso_render_with_ajax']==='same-as-global')
+                $ajax = PluginSettingsService::get_instance()::get_instance()->renderStandaloneViaAjax->get();
+            else
+                $ajax = ($attrs['ifso_render_with_ajax']===true || $attrs['ifso_render_with_ajax']==='yes');
+
             if($ajax && isset($attrs['ajax_loader_type']) && $attrs['ajax_loader_type']!=='same-as-global')
                 $params['loader'] = $attrs['ajax_loader_type'];
 
@@ -118,8 +123,8 @@ class IfsoGutenbergStandaloneConditionBlock extends IfSoGutenbergBlockBase{
                 'type'    => 'object',
             );
             $block->attributes['ifso_render_with_ajax'] = array(
-                'type'=>'boolean',
-                'default'=>false
+                'type'=>'string',
+                'default'=>'same-as-global'
             );
             $block->attributes['ajax_loader_type'] = array(
                 'type'    => 'string',

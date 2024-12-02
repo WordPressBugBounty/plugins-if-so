@@ -376,9 +376,10 @@ HTM;
         if(defined('ELEMENTOR_VERSION') && !defined('IFSO_ELEMENTOR_ON') && !$is_dismissed('install-ifso-elementor')){      //Elementor integration
             $notice_name = 'install-ifso-elementor';
             $ret .= <<<HTM
-<div class="notice notice-warning" ifso_notice="{$notice_name}" >
-    <p>Create conditional Elementor elements - Learn more and download the <a href='https://www.if-so.com/elementor-personalization/?utm_source=Plugin&utm_medium=suggestions&utm_campaign=elementor-top-notice' target='_blank'>If-So & Elementor integration</a></p>
-    <p><a class="ifso-neveragain button" href="#" onclick="ifso_never_show_notice('{$notice_name}');">Don't show again</a></p>
+<div class="notice notice-warning" style="position: relative;" ifso_notice="{$notice_name}" >
+    <p>Set up conditional Elementor elements using the If-So & Elementor Integration</p>
+    <p><a class="button button-primary" href='https://www.if-so.com/elementor-personalization/?utm_source=Plugin&utm_medium=suggestions&utm_campaign=elementor-top-notice' target='_blank'>Free download</a></p>
+    <button class="ifso-neveragain notice-dismiss" href="#" onclick="ifso_never_show_notice('{$notice_name}');"></button>
 </div>
 HTM;
 

@@ -624,9 +624,6 @@
             <div class="ifso-geo-page-tab-content ifso-geo-page-tab-dki">
                 <p class="geo-dki-description">
                     Save time with Dynamic Keyword Insertion (DKI) shortcodes! Automatically display personalized content instead of setting up multiple versions of dynamic content manually.
-                    <a href="https://www.if-so.com/help/documentation/dynamic-keyword-insertion/?utm_source=Plugin&utm_medium=Help&utm_campaign=PluginsPage&utm_term=dki" target="_blank">
-                        More available DKI shortcodes
-                    </a>
                 </p>
 
                 <table class="geo-dki-table">
@@ -822,7 +819,7 @@
                                 <?php echo number_format($geo_queries_left_send); ?>
                             </p>
                             <a class="geo-info-card-link" href="https://www.if-so.com/faq-items/how-do-we-define-a-geolocation-session/?utm_source=Plugin&utm_medium=message&utm_campaign=geolocation&utm_term=info-tab&utm_content=session" target="_blank">
-                                <?php _e('What is a session'); ?>
+                                <?php _e('What is a session?'); ?>
                             </a>
                         </div>
                         <div class="geo-info-card">

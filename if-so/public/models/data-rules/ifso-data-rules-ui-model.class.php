@@ -140,12 +140,14 @@ class DataRulesUiModel{
                             require_once('country_opts_variable.php');  //The large $country_opts variable declaration was moved to a separate file
                             $locaton_generator_link = function($type){
                                 $locaton_generator_url = admin_url("?page=wpcdd_admin_location_generator&type={$type}");
-                                return "<a href='{$locaton_generator_url}' title='Open Location Finder Helper' rel='permalink'  onclick=\"if(typeof(window.ifsoLocGenPipe)!=='undefined' && typeof (window.ifsoLocGenPipe.open)==='function')window.ifsoLocGenPipe.open('{$locaton_generator_url}',this);else window.open('{$locaton_generator_url}', 'newwindow', 'width=800,height=600'); return false;\">Click to select</a>";
+                                return "<button href='{$locaton_generator_url}' class='location-generator-btn' title='Open Location Finder Helper' rel='permalink'  onclick=\"if(typeof(window.ifsoLocGenPipe)!=='undefined' && typeof (window.ifsoLocGenPipe.open)==='function')window.ifsoLocGenPipe.open('{$locaton_generator_url}',this);else window.open('{$locaton_generator_url}', 'newwindow', 'width=800,height=600'); return false;\" style='padding:3px 8px 3px 5px;cursor:pointer;background:inherit;color:inherit;font-size:12px' ><span style='font-size:0.8em;vertical-align:text-top;position:relative;top:2px;'>+</span> Click to Select</button>";
                             };
                             $ret->geolocation_country_input = new ConditionUIElement('geolocation_country_input', 'Country', 'select', false, $country_opts, false,'country', 'countries-autocomplete', 'COUNTRY' );
-                            $ret->geolocation_city_input = new ConditionUIElement('geolocation_city_input', 'City (' . $locaton_generator_link('city') . ')', 'text', false, null, false,'city' ,'continents-autocomplete','CITY' );
+                            $ret->geolocation_city_input = new ConditionUIElement('geolocation_city_input', 'City ' . '&nbsp;' . $locaton_generator_link('city'), 'text', false, null, false,'city' ,'continents-autocomplete','CITY' );
+                            $ret->geolocation_city_input->placeholder = 'Manual Entry';
                             $ret->geolocation_continent_input = new ConditionUIElement('geolocation_continent_input', 'Continent', 'select', false, $continent_opts, false,'continent','continents-autocomplete','CONTINENT' );
-                            $ret->geolocation_state_input = new ConditionUIElement('geolocation_state_input', 'State (' . $locaton_generator_link('state') . ')', 'text', false, null, false,'state','states-autocomplete','STATE' );
+                            $ret->geolocation_state_input = new ConditionUIElement('geolocation_state_input', 'State ' . '&nbsp;' . $locaton_generator_link('state'), 'text', false, null, false,'state','states-autocomplete','STATE' );
+                            $ret->geolocation_state_input->placeholder = 'Manual Entry';
                             $ret->geolocation_timezone_input = new ConditionUIElement('geolocation_timezone_input', 'Time Zone', 'select',false, $tz_opts, false,'timezone', '','TIMEZONE' );
                         }
                         break;
@@ -535,7 +537,7 @@ class DataRulesUiModel{
             'advertising-platforms'=>["noticebox"=>new ConditionNoticebox( "noticebox",__("Paste the following string into the \"tracking template\" field (in Google Ads):<br> <div class='ifso-url-template'>{lpurl}?ifso=<span class='value-text'>your-query-value</span></div>", 'if-so'),'#6D7882','transparent',false)],
             'Cookie'=>[],
             'Device'=>[],
-            'url'=>["noticebox"=>new ConditionNoticebox("noticebox",__("Add the following string at the end of your page URL to display the content: <div class='ifso-url-template'>?ifso=<span class='value-text'>your-query-value</span></div>"), '#6D7882', 'transparent',false)],
+            'url'=>["noticebox"=>new ConditionNoticebox("noticebox",__("Add the query string <span class='ifso-url-template' style='white-space:nowrap'>?ifso=<span class='value-text'>your-query-value</span></span> to the page URL to display the content <p style='margin-top:5px;font-style:italic;font-weight:600;'>e.g. domain.com/?ifso=your-query-value</p>"), '#6D7882', 'transparent',false)],
             'UserIp'=>[],
             'Geolocation'=>[],
             'PageUrl'=>[],
@@ -616,10 +618,11 @@ class DataRulesUiModel{
         return $links;
     }
 
-    public function make_question_mark_link($url,$hash=''){
+    public function make_question_mark_link($url,$hash='',$title="Learn More"){
         $hashstr = empty($hash) ? '' : "#{$hash}";
         $editor = (isset($_REQUEST['action']) && $_REQUEST['action']==='elementor') ? "Elementor" : 'Gutenberg';
-        $html = "<a href=\"{$url}?utm_source=Plugin&utm_medium={$editor}&utm_campaign=inlineHelp{$hashstr}\" target=\"_blank\" class=\"ifso-question-mark\">?</a>";
+        $title_param = !empty($title) ? "title='{$title}'" : '';
+        $html = "<a href=\"{$url}?utm_source=Plugin&utm_medium={$editor}&utm_campaign=inlineHelp{$hashstr}\" target=\"_blank\" class=\"ifso-question-mark\" {$title_param}>?</a>";
         return $html;
     }
 

@@ -208,11 +208,14 @@
         var aud_add_rm_wrap = el('div',{key:'audience-wrap',className:'audiences-addrm-wrap'},[el('input',{key:'checkbox',type:'checkbox',className:'audiences-addrm-exists-input',checked:!(is_empty(props.attributes.ifso_aud_addrm)),onChange:function(e){var toSet = (e.target.checked) ? {add:[],rm:[]} : {}; props.setAttributes({ifso_aud_addrm : toSet})} }),
         el('label',{key:'label',className:(is_empty(props.attributes.ifso_aud_addrm)) ? 'ifso-gray' : ''},null,'Audiences'),create_audience_addrm_ui(props)]);
 
-        var render_with_ajax_wrap = el('div',{key:'render-with-ajax-ui-wrap',className:'ifso-render-with-ajax-wrap'},[el('input',{key:'checkbox',type:'checkbox',className:'ifso-render-with-ajax-input input-control',checked:props.attributes.ifso_render_with_ajax,onChange:function(e){props.setAttributes({ifso_render_with_ajax: e.target.checked,ajax_loader_type: ''});}}),el('label',{key:'label',className:(props.attributes.ifso_render_with_ajax) ? '' : 'ifso-gray'},null,'Load with Ajax')]);
+        var render_with_ajax_wrap = el('div',{key:'render-with-ajax-ui-wrap',className:'ifso-render-with-ajax-wrap'},[el('label',{key:'label'},null,'Load with Ajax'),el('select',{key:'select',className:'ifso-render-with-ajax-input input-control',value:props.attributes.ifso_render_with_ajax,onChange:function(e){props.setAttributes({ifso_render_with_ajax: e.target.value});}},null,
+            create_ifso_ui_select_options([{value:'same-as-global',display_value: 'Same as global'},{value:'yes',display_value: 'Yes'},{value:'no',display_value: 'No'}]))]);
 
-        var ajax_loader_wrap = props.attributes.ifso_render_with_ajax ? el('div',{key:'ajax-loader-wrap',className:'ifso-ajax-loader-type-wrap'},[el('label',{key:'label'},null,'Loader type'),el('select',{key:'select',className:'loader-type-select input-control',value:props.attributes.ajax_loader_type,onChange:function(e){props.setAttributes({ajax_loader_type: e.target.value});}},null,create_ifso_ui_select_options(ajax_loaders_names_opts,'ajax-ui'))]) : null
+        var ajax_loader_wrap = el('div',{key:'ajax-loader-wrap',className:'ifso-ajax-loader-type-wrap'},[el('label',{key:'label'},null,'Loader type'),el('select',{key:'select',className:'loader-type-select input-control',value:props.attributes.ajax_loader_type,onChange:function(e){props.setAttributes({ajax_loader_type: e.target.value});}},null,create_ifso_ui_select_options(ajax_loaders_names_opts,'ajax-ui'))]);
 
-        var base_div = el('div',{key:'ifso-widget-ui-base-div',className:'custom-condition-base-div'},[title,trigger_type_wrap,trigger_rules_form,default_content_wrap,aud_add_rm_wrap,render_with_ajax_wrap,ajax_loader_wrap]);
+        var separator = el('hr');
+
+        var base_div = el('div',{key:'ifso-widget-ui-base-div',className:'custom-condition-base-div'},[title,trigger_type_wrap,trigger_rules_form,separator,default_content_wrap,aud_add_rm_wrap,separator,render_with_ajax_wrap,ajax_loader_wrap]);
 
         return base_div;
     }
@@ -278,6 +281,8 @@
                 }
                 base_options = {...base_options,symbol:elObj['symbol'],title:'Press Enter to insert an entry'};
             }
+            if(elObj['placeholder'])
+                base_options.placeholder = elObj['placeholder'];
 
             if(elObj['type'] === 'noticebox'){
                 return create_noticebox(elObj,selectedSubgroup);
@@ -384,7 +389,7 @@
 
     function create_audience_addrm_ui(props){
         if(data_rules_model['Groups']['fields']['group-name']['options'] ){
-            var groupsList = data_rules_model['Groups']['fields']['group-name']['options'];
+            var groupsList = data_rules_model['Groups']['fields']['group-name']['options'].filter(function(grp){return grp.value!=='___ANY___'});
 
             var updateStatus = function(e){
                 var statusType = (e.target.name === 'ifso-aud-add') ? 'add' : 'rm' ;
@@ -398,8 +403,7 @@
             };
 
             var create_addrm_form = function(type='add'){
-                var checkSelects = groupsList.filter(function(grp){return grp.value!=='___ANY___'})
-                    .map( function(val){return [el('input',{key:'aud-'+val['value'],type:'checkbox',checked : (props.attributes.ifso_aud_addrm && props.attributes.ifso_aud_addrm !== null && !is_empty(props.attributes.ifso_aud_addrm) && Object.prototype.toString.call(props.attributes.ifso_aud_addrm[type])==='[object Array]' && in_array(props.attributes.ifso_aud_addrm[type],val['value'])), name:'ifso-aud-'+type,value:val['value'],onChange:updateStatus}),el('label',{key:'label'},null,val['display_value']),el('br',{key:'br'})] });
+                var checkSelects = groupsList.map( function(val){return [el('input',{key:'aud-'+val['value'],type:'checkbox',checked : (props.attributes.ifso_aud_addrm && props.attributes.ifso_aud_addrm !== null && !is_empty(props.attributes.ifso_aud_addrm) && Object.prototype.toString.call(props.attributes.ifso_aud_addrm[type])==='[object Array]' && in_array(props.attributes.ifso_aud_addrm[type],val['value'])), name:'ifso-aud-'+type,value:val['value'],onChange:updateStatus}),el('label',{key:'label'},null,val['display_value']),el('br',{key:'br'})] });
                 return el('form',{key:type+'-aud-form',className:'ifso-aud-addrm-form'},checkSelects);
             };
 
@@ -444,8 +448,8 @@
                 default: {}
             },
             ifso_render_with_ajax:{
-                type:'boolean',
-                default:false
+              type:'string',
+              default:'same-as-global'
             },
             ajax_loader_type:{
                 type:'string',
@@ -485,7 +489,7 @@
         return function( props ) {
             if(is_block_forbidden(props.name)) return el(BlockListBlock,props);
             var isOpen = (props.attributes.ifso_condition_type !== '');
-            var newProps = {...props,className: (isOpen) ? 'ifso-widget-inuse' : ''};
+            var newProps = {...props,className: (isOpen) ? props.className + ' ifso-widget-inuse' : props.className};
             return el( BlockListBlock, newProps );
         }
     }, 'withIfsoBorder' );

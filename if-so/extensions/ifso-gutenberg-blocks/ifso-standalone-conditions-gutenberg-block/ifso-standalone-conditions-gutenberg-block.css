@@ -28,9 +28,18 @@
     margin-bottom:10px;
 }
 
-.custom-condition-base-div .default-content-wrap label, .custom-condition-base-div .audiences-addrm-wrap label, .custom-condition-base-div .ifso-render-with-ajax-wrap label, .custom-condition-base-div .ifso-widget-checkbox label{
+.custom-condition-base-div .default-content-wrap label, .custom-condition-base-div .audiences-addrm-wrap label, .custom-condition-base-div .ifso-render-with-ajax-wrap label, .custom-condition-base-div .ifso-widget-checkbox label, .custom-condition-base-div .ifso-ajax-loader-type-wrap label{
     display: inline-block;
     vertical-align: top;
+}
+
+.custom-condition-base-div .ifso-render-with-ajax-wrap label, .custom-condition-base-div .ifso-ajax-loader-type-wrap label{
+    width: 38%;
+    vertical-align: middle;
+}
+
+.custom-condition-base-div .ifso-render-with-ajax-wrap select, .custom-condition-base-div .ifso-ajax-loader-type-wrap select{
+    width: 55%;
 }
 
 .custom-condition-base-div>*{
@@ -61,7 +70,8 @@
     margin:1vh 0;
 }
 .ifso-condition-sidebar-wrap .ifso-standalone-condition-form-wrap .ifso-standalone-condition-form .ifso-standalone-condition-control-wrap label{
-    margin:0;
+    margin:0 0 4px 0;
+    display: inline-block;
 }
 .ifso-condition-sidebar-wrap .ifso-standalone-condition-form-wrap .ifso-standalone-condition-form .ifso-standalone-condition-control-wrap input[type="text"], .ifso-condition-sidebar-wrap .ifso-standalone-condition-form-wrap .ifso-standalone-condition-form .ifso-standalone-condition-control-wrap select{
     min-width: 100%;
@@ -87,7 +97,7 @@
     border-radius: 3px;
     padding: 10px;
     min-height: 130px;
-    margin-bottom:0px;
+    margin: 8px 0 10px 0;
 }
 
 .ifso-condition-sidebar-wrap .ifso-standalone-condition-form-wrap .ifso-standalone-condition-form .ifso-standalone-condition-noticebox{
@@ -108,7 +118,7 @@
 
 .ifso-condition-sidebar-wrap .ifso-standalone-condition-form-wrap .ifso-standalone-condition-form .ifso-question-mark{
     border: 1px solid #929292 !important;
-    padding: 1px 3.8px 1px;
+    padding: 1px 5px;
     font-size: 0.7em;
     color: #929292 !important;
     border-radius: 50%;
@@ -127,7 +137,7 @@
 }
 
 .ifso-condition-sidebar-wrap .ifso-aud-addrm-ui-wrap>p{
-    margin-top:10px;
+    margin-top:4px;
     font-style:italic;
 }
 
@@ -214,4 +224,13 @@
     border: none;
     color: #d25134;
     cursor: pointer;
+}
+
+.location-generator-btn{
+    border: 1px solid #bebebe;
+    margin-bottom:5px;
+}
+
+.location-generator-btn:hover{
+    background: #ddd!important;
 }
