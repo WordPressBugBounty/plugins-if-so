@@ -18,10 +18,11 @@ No coding required!
 
 == FOUR WAYS TO CREATE DYNAMIC CONTENT ==
 
-* Condtional triggers - works with every page builder - <a heaf="https://www.if-so.com/help/documentation/how-to-create-dynamic-content-trigger/?utm_source=WordPress&utm_medium=Readme&utm_campaign=v2&utm_term=dynamic-triggerTop">Watch</a>
-* Condtional Gutenberg blocks - <a heaf="https://www.if-so.com/conditional-gutenberg-blocks/?utm_source=WordPress&utm_medium=Readme&utm_campaign=v2&utm_term=gutenbergTop" target="_blank">Watch</a>
-* Condtional Elementor elements - <a heaf="https://www.if-so.com/elementor-personalization/?utm_source=WordPress&utm_medium=Readme&utm_campaign=v2&utm_term=elementorTop" target="_blank">Watch</a>
-* Dynamic Keyword Insertion (DKI) shortcodes - <a heaf="https://www.if-so.com/help/documentation/dynamic-keyword-insertion/?utm_source=WordPress&utm_medium=Readme&utm_campaign=v2&utm_term=DKITop" target="_blank">Watch</a>
+* Conditional triggers - works with every page builder - <a href="https://www.if-so.com/help/documentation/how-to-create-dynamic-content-trigger/?utm_source=WordPress&utm_medium=Readme&utm_campaign=v2&utm_term=dynamic-triggerTop">Watch</a>
+* Conditional Gutenberg blocks - <a href="https://www.if-so.com/conditional-gutenberg-blocks/?utm_source=WordPress&utm_medium=Readme&utm_campaign=v2&utm_term=gutenbergTop" target="_blank">Watch</a>
+* Conditional Elementor elements - <a href="https://www.if-so.com/elementor-personalization" target="_blank">Watch</a>
+* Dynamic Keyword Insertion (DKI) shortcodes - <a href="https://www.if-so.com/help/documentation/dynamic-keyword-insertion/?utm_source=WordPress&utm_medium=Readme&utm_campaign=v2&utm_term=DKITop" target="_blank">Watch</a>
+
 
 Watch a short video (1:36):
 
@@ -55,7 +56,7 @@ Every time a page with the shortcode is loaded, one of the content versions will
 1. Select the block or element
 2. On the side menu, select the condition to display the block/element
 
-<a href="https://www.if-so.com/elementor-personalization/?utm_source=WordPress&utm_medium=Readme&utm_campaign=v2&utm_term=elementor" target="_blank"> - More about conditional  Elementor Elements >></a>
+<a href="https://www.if-so.com/elementor-personalization/" target="_blank"> - More about conditional  Elementor Elements >></a>
 <a href="https://www.if-so.com/conditional-gutenberg-blocks/?utm_source=WordPress&utm_medium=Readme&utm_campaign=v2&utm_term=gutenberg" target="_blank"> - More about conditional  Gutenberg Blocks >></a>
 
 
@@ -152,7 +153,7 @@ Assign users into predefined audiences based on the user’s interaction with th
 
 **User self-selection form:**
 Allow users to select the content they will see by assigning themselves to an audience (segment).
-<a href="https://www.if-so.com/dynamic-select-form/?utm_source=WordPress&utm_medium=Readme&utm_campaign=v2&utm_term=self-selection-form" target="_blank">Learn more >></a>
+<a href="https://www.if-so.com/dynamic-select-form/" target="_blank">Learn more >></a>
 
 **Conditional pop-ups**
 Create pop-ups that will be displayed based on any If-So condition.
@@ -160,11 +161,11 @@ Create pop-ups that will be displayed based on any If-So condition.
 
 **Custom user profile fields (for logged-in users)**
 Create a new field in the user’s profile, assign a value to that field, and show content based on the value.
-<a href="https://www.if-so.com/custom-user-profile-fields-dynamic-content/?utm_source=WordPress&utm_medium=Readme&utm_campaign=v2&utm_term=custom-profile-feilds" target="_blank">Learn more >></a>
+<a href="https://www.if-so.com/custom-user-profile-fields-dynamic-content/" target="_blank">Learn more >></a>
 
 **Dynamic content from CSV**
 Create and manage thousands of dynamic content versions directly from a CSV file.
-<a href="https://www.if-so.com/dynamic-content-from-csv/?utm_source=WordPress&utm_medium=Readme&utm_campaign=v2&utm_term=csv" target="_blank">Learn more >></a>
+<a href="https://www.if-so.com/dynamic-content-from-csv/" target="_blank">Learn more >></a>
 
 .....................................................................
 
