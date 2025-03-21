@@ -6,7 +6,7 @@ define( 'EDD_IFSO_PLUGIN_GEO_PAGE', 'wpcdd_admin_geo_license' );
 define( 'EDD_IFSO_PLUGIN_SETTINGS_PAGE', 'wpcdd_admin_menu_settings' );
 define( 'EDD_IFSO_PLUGIN_GROUPS_PAGE', 'wpcdd_admin_menu_groups_list' );
 define( 'EDD_IFSO_PLUGIN_DKI_PAGE', 'wpcdd_admin_dki_display' );
-define( 'IFSO_GMAPS_API_KEY', 'AIzaSyD_84lpDfAJL1Tee8nDHcATxb4QmSZjgTU' );
+define( 'IFSO_GMAPS_API_KEY', 'AIzaSyBDDK41tRpT0bHllZdEUkcorGfVHAPlxNc' );
 //define("IFSO_PLUGIN_MAIN_FILE_NAME", __FILE__);
 
 define("IFSO_PLUGIN_BASE_DIR",
@@ -20,7 +20,7 @@ define("IFSO_PLUGIN_SERVICES_BASE_DIR",
 define('IFSO_PLUGIN_DIR_URL',
     plugin_dir_url(dirname(__FILE__)));
 
-define("IFSO_WP_VERSION", '1.9.2.2');
+define("IFSO_WP_VERSION", '1.9.3.1');
 define("IFSO_API_VERSION", 'v3');
 
 define( 'W3TC_DYNAMIC_SECURITY', 'IFSO_W3TC_DYNAMIC_SECURITY' );
