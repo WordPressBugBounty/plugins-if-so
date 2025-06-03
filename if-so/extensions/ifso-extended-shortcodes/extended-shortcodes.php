@@ -1,10 +1,4 @@
 <?php
-/*
-Plugin Name: IfSo Extended Shortcodes
-Description: Shortcodes for if-so.com
-Version: 1.0
-Author: If So Plugin
-*/
 namespace IfSo\Extensions\IFSOExtendedShortcodes\ExtendedShortcodes;
 
 require_once(IFSO_PLUGIN_BASE_DIR . 'public/services/analytics-service/analytics-service.class.php');
@@ -58,7 +52,7 @@ class ExtendedShortcodes {
         $after = (!empty($atts['after'])) ? $atts['after'] : '';
         $ret = $this->render_dki($atts,$http_request);
         if($ret instanceof DKIFallback)
-            $ret = $ret->content;
+            $ret = esc_html($ret->content);
         elseif(!$ajax)
             $ret = $before . $ret . $after;
 
@@ -271,12 +265,12 @@ class ExtendedShortcodes {
                 $disallowed_triggers = (isset($atts['exclude'])) ? explode(',',$atts['exclude'])  : [];
                 if(isset($atts['do_once_per'])){
                     $once_per_time = strtolower($atts['do_once_per']) === 'session' ? 0 : intval($atts['do_once_per']);
-                    $name = !empty($atts['name']) ? $atts['name'] : 'default-conversion';
+                    $name = !empty($atts['name']) ? esc_attr($atts['name']) : 'default-conversion';
                 }
                 if($analytics_service->isOn && $analytics_service->allow_counting){
                     if($analytics_service->useAjax){
                         $once_per_attrs = isset($once_per_time) ? "once_per_time='{$once_per_time}' ifso_name='{$name}'" : "";
-                        $el = "<div class='ifso-conversion-complete' {$once_per_attrs} ". ($allowed_triggers ? 'allowed_triggers="' . implode(',',$allowed_triggers) . '"' : '')  . ($disallowed_triggers ? 'disallowed_triggers="' . implode(',',$disallowed_triggers) . '"' : '') . ' style="display:none;height:0;"></div>';  //public javascript file catches uses this div as trigger for conversion to fire
+                        $el = "<div class='ifso-conversion-complete' {$once_per_attrs} ". ($allowed_triggers ? 'allowed_triggers="' . esc_attr(implode(',',$allowed_triggers)) . '"' : '')  . ($disallowed_triggers ? 'disallowed_triggers="' . esc_attr(implode(',',$disallowed_triggers)) . '"' : '') . ' style="display:none;height:0;"></div>';  //public javascript file catches uses this div as trigger for conversion to fire
                         return $el;
                     }
                     else{
@@ -322,7 +316,7 @@ class ExtendedShortcodes {
                 return $user_data['nickname'];
             }
             elseif(!empty($atts['default'])){
-                return $atts['default'];
+                return esc_html($atts['default']);
             }
         });
     }
@@ -335,17 +329,15 @@ class ExtendedShortcodes {
             $redirect_to = !empty($atts['login_redirect']) ? $atts['login_redirect'] : $current_url;
 
             if(!is_user_logged_in()){
-                $link_text = !empty($atts['login_text']) ? $atts['login_text'] : 'Log In';
+                $link_text = !empty($atts['login_text']) ? esc_html($atts['login_text']) : 'Log In';
                 $link_url = esc_url(wp_login_url($redirect_to));
             }
             else{
-                $link_text = !empty($atts['logout_text']) ? $atts['logout_text'] : 'Log Out';
+                $link_text = !empty($atts['logout_text']) ? esc_html($atts['logout_text']) : 'Log Out';
                 $link_url = esc_url(wp_logout_url($redirect_to));
             }
 
-            $html = "<a class='ifso_loginout_link' href='{$link_url}'>{$link_text}</a>";
-            return $html;
-
+            return "<a class='ifso_loginout_link' href='{$link_url}'>{$link_text}</a>";
         });
     }
 
