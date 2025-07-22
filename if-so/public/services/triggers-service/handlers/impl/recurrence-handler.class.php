@@ -70,7 +70,8 @@ class RecurrenceHandler extends ChainHandlerBase {
 
                 if(count($overriding_versions)>0){
                     $context->set_new_default($recurr_version);
-                    $context->clear_context(array_merge($overriding_versions,[$recurrence_version_index]));
+                    //$context->clear_context(array_merge($overriding_versions,[$recurrence_version_index]));
+                    $context->clear_context($overriding_versions);
                     return $this->handle_next($context);
                 }
                 else{

@@ -66,27 +66,26 @@ class LicenseAjaxService {
 
     public function triggerPage_message_action(){
         $message_license_expired = $this->return_license_data();
-        $lockedConditionBox_message = function($link,$text){
+        $arrow_svg = function($color='#fff'){return '<svg style="vertical-align:middle;margin-left:8px;transform:translateY(-1px);" class="license-message-arrow" xmlns="http://www.w3.org/2000/svg" width="11" height="13" viewBox="0 0 19 18"> <path id="arrow" fill="' . $color . '" d="M10.054 18l-1.549-1.56 6.299-6.342H.002V7.894h14.802l-6.299-6.34 1.549-1.559 8.943 9.002z"></path> </svg>';};
+        $lockedConditionBox_message = function($link,$text)use($arrow_svg){
             return '
-                <a style="color:#d25134" href="' . $link . '" target="_blank">
-                <div class="get-license clearfix" style="margin-top: 0;background: #f8f8f8;padding: 8px 10px;border-top: 1px solid #e5e5e5;color: #d66249;">
-                    <div class="text">
+                <a href="' . $link . '" target="_blank">
+                <div class="get-license clearfix" style="margin-top: 0;background: #f8f8f8;padding: 8px 30px;border-top: 1px solid #e5e5e5;color: #d66249;">
+                    <div style="color:#d25134" class="text">
                         '.$text.'
                     </div>
-                    <a href="'. $link . '" class="get-license-btn_red" target="_blank">'.__("CONTINUE", 'if-so').'<i class="fa fa-play" style="margin-left:10px;" aria-hidden="true"></i>
-                    </a>
+                    <a href="'. $link . '" class="get-license-btn_red" target="_blank">'.__("CONTINUE", 'if-so').$arrow_svg('#d25134').'</a>
                 </div>
                 </a>';
         };
-        $lockedVersionBox_message = function($link,$text){
+        $lockedVersionBox_message = function($link,$text)use($arrow_svg){
             return '
-                <a style="color:white" href="'. $link . '" target="_blank">
+                <a href="'. $link . '" target="_blank">
                 <div class="get-license clearfix">
                     <div class="text">
                         '.$text.'
                     </div>
-                    <a href="' . $link . '" class="get-license-btn" target="_blank" >'.__('CONTINUE', 'if-so').'<i class="fa fa-play" style="margin-left:10px;" aria-hidden="true"></i>
-                    </a>
+                    <a href="' . $link . '" class="get-license-btn" target="_blank" >'.__('CONTINUE', 'if-so'). $arrow_svg() .'</a>
                 </div>
                 </a>';
         };

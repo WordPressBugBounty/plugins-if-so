@@ -84,7 +84,8 @@ class DataRulesUiModel{
                         }
 
                         if($rule === 'cookie-relationship'){
-                            $ret->$rule = new ConditionUIElement($rule,'','select',true,[new ConditionUIOption('is','Is'),new ConditionUIOption('is-not','Is Not'),new ConditionUIOption('is-more','Numeric Value Is More Than'),new ConditionUIOption('is-less','Numeric Value Is Less Than')]);
+                            $ret->$rule = new ConditionUIElement($rule,'','select',true,
+                                [new ConditionUIOption('is','Is'),new ConditionUIOption('is-not','Is Not'),new ConditionUIOption('contains','Contains'),new ConditionUIOption('not-','Doesn\'t Contain'),new ConditionUIOption('is-more','Numeric Value Is More Than'),new ConditionUIOption('is-less','Numeric Value Is Less Than')]);
                         }
 
                         if ($rule === 'cookie-value-input') {
@@ -534,17 +535,17 @@ class DataRulesUiModel{
         $settings_page_url = $this->get_links()['settings_page'];
         $conditions_noticeboxes = [
             'AB-Testing' =>[],
-            'advertising-platforms'=>["noticebox"=>new ConditionNoticebox( "noticebox",__("Paste the following string into the \"tracking template\" field (in Google Ads):<br> <div class='ifso-url-template'>{lpurl}?ifso=<span class='value-text'>your-query-value</span></div>", 'if-so'),'#6D7882','transparent',false)],
+            'advertising-platforms'=>["noticebox"=>new ConditionNoticebox( "noticebox",__("Paste the following string into the \"tracking template\" field (in Google Ads):<br> <div class='ifso-url-template'>{lpurl}?ifso=<span class='value-text'>your-query-value</span></div>", 'if-so'),NoticeBoxColors::GREY,'transparent',false)],
             'Cookie'=>[],
             'Device'=>[],
-            'url'=>["noticebox"=>new ConditionNoticebox("noticebox",__("Add the query string <span class='ifso-url-template' style='white-space:nowrap'>?ifso=<span class='value-text'>your-query-value</span></span> to the page URL to display the content <p style='margin-top:5px;font-style:italic;font-weight:600;'>e.g. domain.com/?ifso=your-query-value</p>"), '#6D7882', 'transparent',false)],
+            'url'=>["noticebox"=>new ConditionNoticebox("noticebox",__("Add the query string <span class='ifso-url-template' style='white-space:nowrap'>?ifso=<span class='value-text'>your-query-value</span></span> to the page URL to display the content <p style='margin-top:5px;font-style:italic;font-weight:600;'>e.g. domain.com/?ifso=your-query-value</p>"), NoticeBoxColors::GREY, 'transparent',false)],
             'UserIp'=>[],
             'Geolocation'=>[],
             'PageUrl'=>[],
-            'PageVisit'=>["noticebox"=>new ConditionNoticebox("noticebox",__("The pages visited condition relies on a cookie to track the visitor's activity. <a target='_blank' href='{$settings_page_url}'>Click here</a> and uncheck the \"Deactivate Pages Visited Cookie\" option to use this condition.", 'if-so'),'#b44949','#f6d9de')],
+            'PageVisit'=>["noticebox"=>new ConditionNoticebox("noticebox",__("The pages visited condition relies on a cookie to track the visitor's activity. <a target='_blank' href='{$settings_page_url}'>Click here</a> and uncheck the \"Deactivate Pages Visited Cookie\" option to use this condition.", 'if-so'),NoticeBoxColors::RED,NoticeBoxColors::LIGHTRED)],
             'referrer'=>[],
             //'Time-Date'=>[new ConditionNoticebox(__('This condition is based on the local time of your site', 'if-so') . ' ' . current_time('h:i A') . ((date_default_timezone_get()) ? ', ' . date_default_timezone_get() : ''),'#fff')],
-            'User-Behavior'=>[ConditionNoticebox::make_multiSubgroup_array(__('Content will be displayed according to the user\'s total number of page views on the site. <a  href="https://www.if-so.com/help/documentation/new-and-returning-visitors?utm_source=Plugin&utm_medium=standalone&utm_campaign=inlineHelp" target="_blank">More options</a>', 'if-so'),'#5787f9','#fff',false,['NewUser','Returning'])],
+            'User-Behavior'=>[ConditionNoticebox::make_multiSubgroup_array(__('Content will be displayed according to the user\'s total number of page views on the site. <a  href="https://www.if-so.com/help/documentation/new-and-returning-visitors?utm_source=Plugin&utm_medium=standalone&utm_campaign=inlineHelp" target="_blank">More options</a>', 'if-so'),NoticeBoxColors::PURPLE,NoticeBoxColors::LIGHTPURPLE,false,['NewUser','Returning'])],
             'Utm'=>[],
             'Groups'=>[],
             'userRoles'=>[],
@@ -708,4 +709,16 @@ class ConditionNoticebox{
         }
         return $ret;
     }
+}
+
+class NoticeBoxColors{
+    const PURPLE = '#6A6DD4';
+    const LIGHTPURPLE = '#F7F7FC';
+    const YELLOW = '#e7bc27';
+    const LIGHTYELLOW = '#FFFCF4';
+    const RED = '#E46A69';
+    const LIGHTRED = '#FDF7F7';
+    const GREEN = '##78D59E';
+    const LIGHTGREEN = '#F7FDFA';
+    const GREY = '#6D7882';
 }

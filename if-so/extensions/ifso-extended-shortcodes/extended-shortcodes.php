@@ -452,21 +452,27 @@ class ExtendedShortcodes {
             if($this->is_edit_page_or_publish_action()) return;
             $ajaxTriggersService = AjaxTriggersService::get_instance();
             $url = (!empty($atts['url'])) ? $this->make_url_string_from_template($atts['url'],$ajaxTriggersService->get_current_request()->getRequestURL()) : null;
-            $code = (!empty($atts['code'])) ? $atts['code'] : 301;
-            $type = (!empty($atts['type'])) ? $atts['type'] : ($ajaxTriggersService->is_inside_ajax_triggers_request() ? 'js' : 'http');
+            $type = $ajaxTriggersService->is_inside_ajax_triggers_request() ? 'js' :  (!empty($atts['type']) ? $atts['type'] : 301)  ;
             if(!empty($atts['name']) && !empty($atts['do_once_per'])) {
                 if (isset($_COOKIE['ifso-rdr-' . $atts['name']])) return;
                 else {
                     $time = strtolower($atts['do_once_per']) === 'session' ? 0 : time() + intval($atts['do_once_per']);
-                    CookieConsent::get_instance()->set_cookie('ifso-rdr-' . $atts['name'], '1', time() + intval($atts['do_once_per']), '/', 'preferences');
+                    CookieConsent::get_instance()->set_cookie('ifso-rdr-' . $atts['name'], '1', $time, '/', 'preferences');
                 }
             }
             if($url!==null){
-                if($type==='http'){
+                if(!empty($atts['forward_query_params']) && $atts['forward_query_params']==='yes')
+                    $url = add_query_arg($ajaxTriggersService->get_current_request()->getParams(),$url);
+
+                if(!empty($atts['exclude_admins']) && $atts['exclude_admins']==='yes' && current_user_can('administrator'))
+                    return "<p style='color:#6A6DD4;background:#F7F7FC;border: 1px solid #6A6DD4;padding:10px 8px;border-radius:4px;'>Redirect skipped because you're logged in as an admin. Intended redirect URL: <a href='{$url}' target='_blank'>{$url}</a>. To see the regular behavior, open the page in a new incognito window or set the exclude_admins parameter in the redirect shortcode to \"no\".</p>";
+
+                if($type!=='js'){
+                    $code = (is_numeric($type)) ? (int)$type : 301;
                     wp_redirect(esc_url_raw($url),$code);
                     exit();
                 }
-                elseif($type==='js')
+                else
                     return '<script>(function(){var escaped_url = "' . esc_url($url) .'";var el = document.createElement("textarea");el.innerHTML = escaped_url;location.href = el.value;})()</script>';
             }
         });

@@ -14,14 +14,10 @@ class PluginSettingsService {
 		'ifso_settings_page_apply_the_content_filter_option';
 	const REMOVE_AUTO_P_TAG_OPTION =
 		'ifso_settings_page_remove_auto_p_tag_option';
-	const ALLOW_FRAGMENTED_CACHE =
-		'ifso_settings_page_allow_fragmented_cache_option';
 	const REMOVE_COOKIE =
 		'ifso_settings_pages_remove_visits_cookie_option';
 	const ALLOW_SHORTCODES =
 		'ifso_settings_pages_allow_shortcodes_option';
-	const DISABLE_CACHE =
-		'ifso_settings_pages_disable_cache_option';
     const AJAX_ANALYTICS =
         'ifso_settings_pages_analytics_with_ajax_option';
     const DISABLE_ANALYTICS =
@@ -59,10 +55,8 @@ class PluginSettingsService {
 	public $removePluginDataOption;
 	public $applyTheContentFilterOption;
 	public $removeAutoPTagOption;
-	public $allowFragmentedCacheOption;
 	public $removePageVisitsCookie;
 	public $allowShortcodesInTitle;
-	public $disableCache;
     public $ajaxAnalytics;
     public $disableAnalytics;
     public $userGroupLimit;
@@ -89,14 +83,10 @@ class PluginSettingsService {
 			$this->create_apply_the_content_filter_option();
 		$this->removeAutoPTagOption = 
 			$this->create_remove_auto_p_tag_option();
-		$this->allowFragmentedCacheOption = 
-			$this->create_allow_fragmented_cache_option();
 		$this->removePageVisitsCookie = 
 			$this->remove_visits_cookie_option();
 		$this->allowShortcodesInTitle = 
 			$this->create_allow_shortcodes_option();
-		$this->disableCache = 
-			$this->create_disable_cache_option();
         $this->ajaxAnalytics =
             $this->create_ajax_analytics_option();
         $this->disableAnalytics =
@@ -138,17 +128,6 @@ class PluginSettingsService {
 		$postName = 'ifso_settings_pages_remove_visits_cookie';
 		$option = new IfSoSettingsYesNoOption(
 				self::REMOVE_COOKIE,
-				$default,
-				$postName
-			);
-		return $option;	
-	}
-
-	private function create_allow_fragmented_cache_option() {
-		$default = false;
-		$postName = 'ifso_settings_pages_allow_fragmented_cache';
-		$option = new IfSoSettingsYesNoOption(
-				self::ALLOW_FRAGMENTED_CACHE,
 				$default,
 				$postName
 			);
@@ -211,17 +190,6 @@ class PluginSettingsService {
 		return $option;	
 	}
 
-	private function create_disable_cache_option() {
-		$default = false;
-		$postName = 'ifso_settings_pages_disable_cache';
-		$option = new IfSoSettingsYesNoOption(
-				self::DISABLE_CACHE,
-				$default,
-				$postName
-			);
-		return $option;	
-	}
-
     private function create_disable_analytics_option() {
         $default = false;
         $postName = 'ifso_settings_pages_analytics_disabled';
@@ -234,7 +202,7 @@ class PluginSettingsService {
     }
 
     private function create_ajax_analytics_option() {
-        $default = true;
+        $default = false;
         $postName = 'ifso_settings_pages_analytics_with_ajax';
         $option = new IfSoSettingsYesNoOption(
             self::AJAX_ANALYTICS,
@@ -406,10 +374,8 @@ class PluginSettingsService {
 			$this->removePluginDataOption->apply($_POST);
 			$this->applyTheContentFilterOption->apply($_POST);
 			$this->removeAutoPTagOption->apply($_POST);
-			$this->allowFragmentedCacheOption->apply($_POST);
 			$this->removePageVisitsCookie->apply($_POST);
 			$this->allowShortcodesInTitle->apply($_POST);
-			$this->disableCache->apply($_POST);
 			$this->ajaxAnalytics->apply($_POST);
             $this->disableAnalytics->apply($_POST);
             $this->userGroupLimit->apply($_POST);

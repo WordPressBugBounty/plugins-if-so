@@ -20,11 +20,14 @@ use IfSo\Services\LicenseService\LicenseService;
 use IfSo\Services\PluginSettingsService\PluginSettingsService;
 
 class IfsoGutenbergStandaloneConditionBlock extends IfSoGutenbergBlockBase{
-    private $forbidden_blocks = ['core/legacy-widget','mailster-workflow','kadence/pane'];
+    private array $default_forbidden_blocks = ['core/legacy-widget','mailster-workflow','kadence/pane'];
 
     protected function __construct(){
         parent::__construct();
-        $this->forbidden_blocks = apply_filters('ifso_gutenberg_standalone_widget_forbidden_blocks',$this->forbidden_blocks);
+    }
+
+    protected function get_forbidden_blocks(){
+        return apply_filters('ifso_gutenberg_standalone_widget_forbidden_blocks',$this->default_forbidden_blocks);
     }
 
     public function enqueue_block_assets(){
@@ -99,7 +102,7 @@ class IfsoGutenbergStandaloneConditionBlock extends IfSoGutenbergBlockBase{
     public function add_ifso_standalone_attributes_to_all_block_types(){     //Adding them only on in the js breaks the blocks that are rendered server-side
         $registered_blocks = \WP_Block_Type_Registry::get_instance()->get_all_registered();
         foreach( $registered_blocks as $name => $block ) {
-            foreach ($this->forbidden_blocks as $forbidden){
+            foreach ($this->get_forbidden_blocks() as $forbidden){
                 if(strpos($name,$forbidden)!==false)
                     continue;
             }
@@ -150,7 +153,7 @@ class IfsoGutenbergStandaloneConditionBlock extends IfSoGutenbergBlockBase{
         $ui_model_links_json = json_encode($data_rules_model->get_links());
         $ui_model_license_obj_json = json_encode($this->get_license_status_object());
         $ajax_loaders_json = json_encode(array_merge(['same-as-global'=>'Same as global'],\IfSo\PublicFace\Services\AjaxTriggersService\AjaxTriggersService::get_instance()->get_ajax_loader_list('prettynames')));
-        $forbidden_blocks_json = json_encode($this->forbidden_blocks);
+        $forbidden_blocks_json = json_encode($this->get_forbidden_blocks());
         if(function_exists('wp_add_inline_script')){
             $data_scr = <<<SCR
                 var data_rules_model_json = {$ui_model_json};

@@ -271,6 +271,7 @@ class If_So {
 		$this->loader->add_action( 'admin_enqueue_scripts', $plugin_admin, 'enqueue_styles' , 99 );
 		$this->loader->add_action( 'admin_enqueue_scripts', $plugin_admin, 'enqueue_scripts' );
 		$this->loader->add_action( 'init', $plugin_admin, 'register_post_types', 1 );
+        $this->loader->add_action( 'in_admin_header', $plugin_admin, 'remove_admin_notices_from_ifso_admin_pages' );
 		
 		$this->loader->add_action( 'admin_menu', $plugin_settings, 'add_plugin_menu_items' );
 		//$this->loader->add_action( 'network_admin_menu', $plugin_settings, 'add_plugin_menu_items' );
@@ -283,7 +284,7 @@ class If_So {
 		
 		$this->loader->add_filter( 'template_include', $plugin_settings, 'include_ifso_custom_triggers_template', 1 );
 
-		/* Ajax Actions */		
+		/* Ajax Actions */
 		$this->loader->add_action( 'wp_ajax_load_tinymce_repeater', $plugin_settings, 'load_tinymce' );
         $this->loader->add_action( 'wp_ajax_ifso_analytics_req', $analytics_ajax_handler, 'handle' );
         $this->loader->add_action( 'wp_ajax_trigger_export_req', $trigger_port_handler, 'handle' );     //Import/Export/Duplicate actions handler
@@ -320,6 +321,7 @@ class If_So {
         $this->loader->add_filter('enter_title_here',$interface_mod,'replace_newtrigger_title_placeholder',10,2);
         $this->loader->add_filter( 'post_row_actions', $interface_mod, 'add_export_button', 10, 2 );
         $this->loader->add_filter( 'post_row_actions', $interface_mod, 'add_scan_button', 10, 2 );
+        $this->loader->add_action('edit_form_top',$interface_mod,'add_trigger_scan_button_triggerpage');
         $this->loader->add_filter( 'tiny_mce_before_init', $interface_mod, 'tinymce_modify_settings', 10 );
         $this->loader->add_action( 'views_edit-ifso_triggers', $interface_mod, 'add_import_button');
         $this->loader->add_action('admin_notices', $interface_mod,'trigger_imported_notice');

@@ -14,17 +14,25 @@ class CookieIsSet extends TriggerBase {
 
         $source = !empty($rule['cookie-or-session']) && $rule['cookie-or-session']==='session' && isset($_SESSION)  ? $_SESSION : $_COOKIE ;
         $relationship = !empty($rule['cookie-relationship']) ? $rule['cookie-relationship'] : 'is';
-
         $cookie_name = isset($rule['cookie-input']) ? $rule['cookie-input'] : '' ;
         $cookie_value = isset($rule['cookie-value-input']) ? $rule['cookie-value-input'] : '';
         $match = false;
 
-
 		if(!empty($cookie_name) || !empty($cookie_value)){
-            if(!empty($cookie_name) && isset($cookie_value) && $this->cookie_exists($cookie_name,$source) && ($relationship==='is-more' || $relationship==='is-less')){
-                if(is_numeric($source[$cookie_name]) && (($relationship==='is-more' && intval($source[$cookie_name])>intval($cookie_value)) || ($relationship==='is-less' && intval($source[$cookie_name])<intval($cookie_value))))
+            
+            if(!empty($cookie_name) && $cookie_value !== '' && $this->cookie_exists($cookie_name,$source)){
+                if(is_numeric($source[$cookie_name])){
+                    if($relationship==='is-more' && intval($source[$cookie_name])>intval($cookie_value))
+                        return $content;
+                    if($relationship==='is-less' && intval($source[$cookie_name])<intval($cookie_value))
+                        return $content;
+                }
+                if($relationship==='contains' && strpos($source[$cookie_name],$cookie_value)!==false)
+                    return $content;
+                if($relationship==='not-contains' && strpos($source[$cookie_name],$cookie_value)===false)
                     return $content;
             }
+
             if(!empty($cookie_name) && empty($cookie_value))
                 $match = $this->cookie_exists($cookie_name,$source);
 
@@ -32,7 +40,7 @@ class CookieIsSet extends TriggerBase {
                 $match = $this->cookie_value_exists($cookie_value,$source);
 
             if(!empty($cookie_name) && !empty($cookie_value))
-                $match = ($this->cookie_exists($cookie_name,$source) && $source[$cookie_name] == $cookie_value);
+                $match = ($this->cookie_exists($cookie_name,$source) && $source[$cookie_name] === $cookie_value);
 
 
             if(($relationship==='is' && $match) || ($relationship==='is-not'&&!$match))
@@ -53,13 +61,4 @@ class CookieIsSet extends TriggerBase {
             return true;
 	    return false;
     }
-
-	private function contains_or_not($arg, $f, $t, $source) {
-		foreach ($source as $key=>$val) {
-			if(strpos($key, $arg) !== false)
-				return $f;
-		}
-		return $t; 
-	}
 }
-

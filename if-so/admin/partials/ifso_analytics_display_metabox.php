@@ -116,7 +116,7 @@ if (get_post_status( $current_post_id ) == 'publish' ):
 
 <?php if(!isset($_COOKIE['ifso_hide_analytics_notice'])): ?>
     <div class="analytics-noticebox whileLoading purple-noticebox">
-        <span class="closeX" style="border-color:#c0bc25;">X</span>
+        <span class="closeX"">X</span>
         <p>If-So does not count admin visits. Browse incognito to make tests.</p>
     </div>
 <?php endif; ?>
@@ -151,9 +151,10 @@ if (get_post_status( $current_post_id ) == 'publish' ):
             data = JSON.parse(res);
             container.appendChild(createRow(['<?php _e('Version', 'if-so'); ?>','<?php _e('Views', 'if-so'); ?>','<?php _e('Conversions', 'if-so'); ?>','<?php _e('Conv. rate', 'if-so'); ?>']));
             for(var x = 0;x<=data.length-1;x++){
-                var convRate = ( Number(data[x]['views'])!=0) ? (Number(data[x]['conversion'])*100/Number(data[x]['views']) ).toFixed(2) + '%' : '0.00%';
+                var views = Number(data[x]['views']) + Number(data[x]['recurrence_views']);
+                var convRate = ( views !=0) ? (Number(data[x]['conversion'])*100/views ).toFixed(2) + '%' : '0.00%';
                 //var convRate = ( Number(data[x]['views'])!=0) ? Math.round((Number(data[x]['conversion'])*100/Number(data[x]['views']) )) + '%' : '0%';
-                var newrow = createRow([data[x]['version_name'],data[x]['views'],data[x]['conversion'],convRate]);
+                var newrow = createRow([data[x]['version_name'],views,data[x]['conversion'],convRate]);
                 newrow.setAttribute('myversion',x);
                 if(data[x]['version_name']=='Default') newrow.setAttribute('myversion','default');
                 if(x%2==0) newrow.className += ' odd';

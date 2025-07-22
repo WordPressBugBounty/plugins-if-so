@@ -124,7 +124,7 @@ function generate_version_symbol($version_number) {
         ?>
     </h2>
     <div class="ifso-audience-tabs-select-wrapper">
-        <ul class="ifso-license-tabs-header">
+        <ul class="ifso-admin-tabs-header">
             <li class="ifso-tab default-tab" data-tab="ifso-audiences-main-tab"><?php _e('Audiences', 'if-so');?></li>
             <?php
                 if(!empty($extra_tabs)){

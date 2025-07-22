@@ -13,8 +13,8 @@
     margin-right: 3px;
 }
 
-.ifso-block-wrapper select{
-    margin-bottom:20px;
+.ifso-block-wrapper select:last-of-type{
+    margin-bottom:10px;
 }
 
 .ifso-block-wrapper .components-placeholder__label{

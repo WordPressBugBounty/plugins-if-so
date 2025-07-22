@@ -8,17 +8,17 @@ ob_start();
  * registers the activation and deactivation functions, and defines a function
  * that starts the plugin.
  *
- * @link              http://www.if-so.com/
+ * @link              https://www.if-so.com/
  * @since             1.0.0
  * @package           IfSo
  *
  * @wordpress-plugin
  * Plugin Name:       If-So
- * Plugin URI:        http://www.if-so.com/
+ * Plugin URI:        https://www.if-so.com/
  * Description:       Display different content to different visitors. Simple to use, just select a condition and set content accordingly.
- * Version:           1.9.3.2
+ * Version:           1.9.4
  * Author:            If So Plugin
- * Author URI:        http://www.if-so.com/
+ * Author URI:        https://www.if-so.com/
  * License:           GPL-2.0+
  * License URI:       http://www.gnu.org/licenses/gpl-2.0.txt
  * Text Domain:       if-so

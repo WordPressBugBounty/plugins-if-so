@@ -3,7 +3,7 @@
 /**
  * The settings of the plugin.
  *
- * @link       http://if-so.com
+ * @link       https://if-so.com
  * @since      1.0.0
  * @package    IfSo
  * @subpackage IfSo/admin
@@ -59,11 +59,6 @@ class If_So_Admin_Settings {
 	
 	public function ifso_shortcode_display_metabox( $post ){
 		require_once('partials/ifso_shortcode_display_metabox.php');
-		return false;
-	}
-
-	public function ifso_helper_metabox( $post ) {
-		require_once('partials/ifso_helper_metabox.php');
 		return false;
 	}
 
@@ -384,15 +379,6 @@ class If_So_Admin_Settings {
 				'default'
 			);
 		}
-
-		add_meta_box(
-			'ifso_helper_metabox',
-			__('Need Help?', 'if-so'),
-			array( $this, 'ifso_helper_metabox' ),
-			'ifso_triggers',
-			'side',
-			'low'
-		);
 	}
 	
 	public function move_yoast_metabox_down( $priority ){

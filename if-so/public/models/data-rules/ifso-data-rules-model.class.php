@@ -18,7 +18,7 @@ class DataRulesModel {
      * @var      array    $conditions    An array of conditions available to triggers in the plugin
      */
     protected $conditions = [
-        'general' => ['trigger_type','testing-mode','freeze-mode','recurrence_option','recurrence_custom_units','recurrence_custom_value','recurrence-override','views','conversion','add_to_group','remove_from_group','version_name'],
+        'general' => ['trigger_type','testing-mode','freeze-mode','recurrence_option','recurrence_custom_units','recurrence_custom_value','recurrence-override','views','recurrence_views','conversion','add_to_group','remove_from_group','version_name'],
         'AB-Testing' => ['AB-Testing', 'ab-testing-sessions','ab-testing-custom-no-sessions','number_of_views'],
         'advertising-platforms' => ['advertising_platforms_option', 'advertising_platforms'],
         'Cookie' => ['cookie-or-session','cookie-relationship','cookie-input','cookie-value-input'],

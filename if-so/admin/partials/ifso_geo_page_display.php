@@ -596,7 +596,7 @@
     <div class="wrap">
         <h2> <?php _e('If-So Dynamic Content | Geolocation'); ?> </h2>
         <div class="ifso-geo-tabs-select-wrapper">
-            <ul class="ifso-license-tabs-header">
+            <ul class="ifso-admin-tabs-header">
                 <li class="ifso-tab default-tab" data-tab="ifso-geo-page-tab-info">	 <?php _e('Info', 'if-so');?></li>
                 <li class="ifso-tab" data-tab="ifso-geo-page-tab-notifications"><?php _e('Notifications', 'if-so'); ?></li>
                 <li class="ifso-tab" data-tab="ifso-geo-page-tab-dki"><?php _e('DKI Shortcodes', 'if-so'); ?></li>

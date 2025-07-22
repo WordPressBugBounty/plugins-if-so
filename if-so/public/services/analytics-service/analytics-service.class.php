@@ -16,7 +16,7 @@ require_once(IFSO_PLUGIN_BASE_DIR . 'services/plugin-settings-service/plugin-set
 class AnalyticsService {
     private static $instance;
 
-    public static $analytics_fields = ['views','conversion'];
+    public static $analytics_fields = ['views','conversion','recurrence_views'];
 
     private $trigger_rules_field_name = 'ifso_trigger_rules';
 
@@ -355,7 +355,8 @@ class AnalyticsService {
                 self::$viewed_triggers[$tid] = $rule_data->get_version_index();
                 $this->set_last_viewed_version_cookie($tid,$rule_data->get_version_index());
                 if(!$this->useAjax){
-                    $this->increment_analytics_field($tid,$rule_data->get_version_index(),'views');
+                    $view_field = ($rule_data->get_rendering_recurrence_version()!==null) ? 'recurrence_views' : 'views';
+                    $this->increment_analytics_field($tid,$rule_data->get_version_index(),$view_field);
                 }
                 else{
                     CookieConsent::get_instance()->set_cookie($this->currently_viewing_cookie_name,json_encode(self::$viewed_triggers),0,'/');

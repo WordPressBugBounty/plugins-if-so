@@ -321,9 +321,11 @@ function createNewPositionForLocationSelection(wholeGeolocationContainer, newLoc
 
 function newLocationSelected(wholeGeolocationContainer, newLocationData, newLocationGUI) {
   const position = createNewPositionForLocationSelection(wholeGeolocationContainer, newLocationData);
+  let newFieldLocationType = newLocationData.split('!!')[0];
+  newFieldLocationType = newFieldLocationType[0].toUpperCase() + newFieldLocationType.slice(1).toLowerCase();
 
   // Add to the DOM
-  const newFieldHTML = getAutocompleteGeoFieldHTML(position, newLocationGUI);
+  const newFieldHTML = getAutocompleteGeoFieldHTML(position,newFieldLocationType + ' : ' +  newLocationGUI);
   const closestGeolocationFieldsContainer = wholeGeolocationContainer.querySelector('.ifso-autocomplete-fields-container');
   appendNewFieldToAutocompleteSection(closestGeolocationFieldsContainer, newFieldHTML);
 }

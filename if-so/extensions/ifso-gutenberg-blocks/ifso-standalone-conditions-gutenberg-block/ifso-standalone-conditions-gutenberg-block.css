@@ -5,7 +5,20 @@
 }
 
 .ifso-widget-inuse {
-    box-shadow:0 0 7px 1px #6665e7!important;
+    box-shadow: 0 0 0 1.2px #6665e7 !important;
+    border-radius: 2px;
+}
+
+.ifso-widget-inuse:not(.is-selected):after{
+    content:"if-so condition active";
+    background: #fff;
+    padding: 0 10px;
+    position: absolute;
+    top: 0;
+    left: 5%;
+    font-size:50%;
+    color:#6665e7;
+    transform: translateY(-70%);
 }
 
 .ifso-block-wrap .ifso-has-standalone-marker{
@@ -146,7 +159,8 @@
 }
 
 .ifso-standalone-condition-form .ifso-stantalone-error-message{
-    border: 1px solid #a02222;
+    border: 1px solid #eb665c;
+    background: #fdf1f1;
     text-align: center;
     margin:10px 0 20px 0;
     padding: 2px 20px 6px;
@@ -154,7 +168,7 @@
 }
 
 .ifso-standalone-condition-form .ifso-stantalone-error-message a{
-    color:#a02222;
+    color: #eb665c;
     box-shadow: none;
     outline: none;
 }

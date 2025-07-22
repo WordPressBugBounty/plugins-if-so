@@ -4,7 +4,7 @@ Donate link: https://www.if-so.com/?utm_source=WordPress&utm_medium=Readme&utm_c
 Tags: Dynamic content, personalization, conditional, geolocatargeting, location
 Requires at least: 4.0.1
 Tested up to: 6.8
-Stable tag: 1.9.3.1
+Stable tag: 1.9.3.2
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -295,6 +295,15 @@ You sure can! So far, we have not come across any WordPress themes that If-So Dy
 
 == Changelog ==
 
+= 1.9.4 =
+
+* New visual tool for generating If-So DKI and Utility shortcodes
+* Shortcode improvements – [ifso-redirect] shortcode generator
+* Reworked the A/B Testing condition for improved usability
+* If-So Trigger Gutenberg block: added “Load with AJAX” option
+* UI improvements
+* Performance improvements
+* Bug fixes
 
 = 1.9.3.2 =
 

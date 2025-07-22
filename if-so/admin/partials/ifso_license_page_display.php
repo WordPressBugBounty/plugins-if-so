@@ -15,7 +15,7 @@
     $geo_dummy_license = make_dummy_license($geo_license);
 
 	function is_license_valid($status) {
-		return ( $status !== false && $status == 'valid' );
+		return ( $status === 'valid' );
 	}
     function make_dummy_license($key){
         $dummy_license = $key;
@@ -30,7 +30,8 @@
 ?>
 
 <div class="wrap">
-    <h2><?php _e('License','if-so'); ?></h2>
+    <h2 style="display:none;"></h2> <!--MOVING THE ADMIN NOTICES ABOVE THE REAL TITLE-->
+    <h1><?php _e('License','if-so'); ?></h1>
 	<div class="ifso-license-wrapper">
         <h1 style="margin-top:20px;"><?php _e('Pro License', 'if-so'); ?></h1>
         <p><?php _e("Activate a pro or a free trial license key to unlock all features. No session limit except for the geolocation condition. ", 'if-so'); ?><a href="https://www.if-so.com/plans?utm_source=Plugin&utm_medium=licensePage&utm_campaign=proLicense" target="_blank"><?php _e('Get a pro license.', 'if-so'); ?></a></p>
@@ -78,7 +79,7 @@
                                 <!--<?php _e('Activate License'); ?>-->
                             </th>
                             <td>
-                                <?php if( $status !== false && $status == 'valid' ) { ?>
+                                <?php if( $status === 'valid' ) { ?>
                                     <?php wp_nonce_field( 'edd_ifso_nonce', 'edd_ifso_nonce' ); ?>
                                     <input type="submit" class="button-secondary" name="edd_ifso_license_deactivate" value="<?php _e('Deactivate License','if-so'); ?>"/>
                                 <?php } else {
@@ -94,14 +95,14 @@
                       $expires_license_message = __('Your license key expires on','if-so');
                 ?>
                 <!-- License key expiratiaton date -->
-                <?php if ($status == 'valid' && $expires == 'lifetime') { ?>
+                <?php if ($status === 'valid' && $expires === 'lifetime') { ?>
                 <div class="license_expires_message"></span><?php echo $lifetime_license_message;?></div>
-                <?php } else if ( $status == 'valid' && $expires !== false ) { ?>
+                <?php } else if ( $status === 'valid' && $expires !== false ) { ?>
                 <div class="license_expires_message"><?php echo $expires_license_message;?> <span class="expire_date"><?php echo date_i18n( 'F j, Y', strtotime( $expires, current_time( 'timestamp' ) ) ); ?>.</span></div>
                 <?php } ?>
             </form>
 
-            <?php if ($status !== false && $status == 'valid' ): ?>
+            <?php if ($status === 'valid' ): ?>
                 <div class="approved_license_message">
                     <?php _e('<strong>Thank you for using If-So Dynamic Content!</strong> Please feel free to contact our team with any questions you may have.','if-so') ?>
                 </div>
@@ -152,7 +153,7 @@
                             <!--<?php _e('Activate License'); ?>-->
                         </th>
                         <td>
-                            <?php if( $geo_status !== false && $geo_status == 'valid' ) { ?>
+                            <?php if( $geo_status === 'valid' ) { ?>
                                 <?php wp_nonce_field( 'edd_ifso_nonce', 'edd_ifso_nonce' ); ?>
                                 <input type="submit" class="button-secondary" name="edd_ifso_geo_license_deactivate" value="<?php _e('Deactivate License', 'if-so'); ?>"/>
                             <?php } else {
@@ -166,9 +167,9 @@
             </form>
             <a class="clear-license-link" style="margin-top:10px;float: right;" title="Click here if you are having trouble deactivating your Geo license or if you want to purge the license data from the system completely." href="<?php echo esc_url($_SERVER['REQUEST_URI'] . '&edd_ifso_geo_license_clear=true&edd_ifso_nonce=' . wp_create_nonce( "edd_ifso_nonce" ));?>"><?php _e('Clear Geo License','if-so'); ?></a>
             <!-- Geo License key expiratiaton date -->
-            <?php if ($geo_status == 'valid' && $geo_expires == 'lifetime') { ?>
+            <?php if ($geo_status === 'valid' && $geo_expires === 'lifetime') { ?>
                 <div class="license_expires_message"><?php _e('Your Geolocation License is Activated.', 'if-so'); ?></span></div>
-            <?php } else if ( $geo_status == 'valid' && $geo_expires !== false ) { ?>
+            <?php } else if ( $geo_status === 'valid' && $geo_expires !== false ) { ?>
                 <div class="license_expires_message"><?php _e('Your geolocation license key expires on ', 'if-so'); ?><span class="expire_date"><?php echo get_date_i18n($geo_expires); ?>.</span></div>
             <?php } ?>
         </div>

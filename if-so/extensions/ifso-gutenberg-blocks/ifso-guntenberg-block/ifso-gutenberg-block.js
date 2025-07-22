@@ -5,7 +5,6 @@ var iconEl = el('svg', {width:20, height:20,  viewBox: '0 0 1080 1080', class:'i
     el('path', {key:'icon-path-3',style: {fill:'#FD5B56'},  d: "M893.5,392.3c62.2,44.4,123.4,88.1,185.8,132.7c-62.2,44.4-123.3,88-185.8,132.7C893.5,568.8,893.5,481.5,893.5,392.3z", class:'st1'})]);
 
 wp.blocks.registerBlockType('ifso/ifso-block', {
-
     title: 'Dynamic Content', // Block name visible to user
 
     icon: iconEl, // Toolbar icon can be either using WP Dashicons or custom SVG
@@ -13,9 +12,8 @@ wp.blocks.registerBlockType('ifso/ifso-block', {
     category: 'common', // Under which category the block would appear
 
     attributes: { // The data this block will be storing
-
-        selected: { type: 'integer', default:0 } /// The ID of the trigger selected to be displayed
-
+        selected: { type: 'integer', default:0 }, /// The ID of the trigger selected to be displayed,
+        load_trigger_via_ajax:{type:'string',default:''}
     },
 
     edit:  window.wp.data.withSelect( function( select ) {
@@ -23,51 +21,52 @@ wp.blocks.registerBlockType('ifso/ifso-block', {
                 posts: select( 'core' ).getEntityRecords( 'postType', 'ifso_triggers', {per_page:-1} )
             };
         } )( function( props ) {
-
             if ( ! props.posts ) {
                 return "Loading...";
             }
-
-            if ( props.posts.length === 0 ) {
+            else if ( props.posts.length === 0 ) {
                 //If no triggers are present on the site, make the block and show the error message
                 return el('div',{className:'ifso-block-wrapper components-placeholder ifso-block-error ' + props.className},
                          [el('div',{className: 'components-placeholder__label'},
                             [iconEl,el('span',{className:'components-placeholder__instructions'},'Dynamic Content')])
                              ,el('span',{className:'components-placeholder__instructions'},'Select a dynamic trigger from the list'),el('span',{className:"errMsg components-placeholder__instructions"},[el('span',{className:'dashicons dashicons-info'},''),"You haven\'t set up any dynamic triggers"]),el('button',{onClick:function(){window.open(ifso_base_url+"/wp-admin/post-new.php?post_type=ifso_triggers","_blank")},className:'is-secondary components-button is-button is-large is-default'},"Create a new trigger")]);
             }
+            else{
+                var triggerOptions = [];
+                var selectedExists = false;
+                triggerOptions.push(el('option',{id:0, value:0},'Select a trigger'));
+                props.posts.map(function(post){     //Fill the ret array with <option> tags for every trigger
+                    var opts = { id:post.id, value:post.id };
+                    if (props.attributes.selected == post.id){
+                        opts.selected = 'selected';
+                        selectedExists = true;
+                    }
+                    var e = el('option',opts,((post.title.raw == '') ? '' : ' ' + post.title.raw) + ' (ID: ' + post.id + ')');
+                    triggerOptions.push(e);
+                });
 
-            var ret = [];
-            var selectedExists = false;
-            ret.push(el('option',{id:0, value:0},'Select a trigger'));
-            props.posts.map(function(post){     //Fill the ret array with <option> tags for every trigger
-                var opts = { id:post.id, value:post.id };
-                if (props.attributes.selected == post.id){
-                    opts.selected = 'selected';
-                    selectedExists = true;
-                }
-                var e = el('option',opts,((post.title.raw == '') ? '' : ' ' + post.title.raw) + ' (ID: ' + post.id + ')');
-                ret.push(e);
-            });
+                if(props.attributes.selected==0) props.setAttributes({selected : props.posts[0].id });  //Set the selected value to the first option if nothing is saved there
 
-            if(props.attributes.selected==0) props.setAttributes({selected : props.posts[0].id });  //Set the selected value to the first option if nothing is saved there
-            //if(props.attributes.selected==0) props.setAttributes({selected : 0 });  //Set the selected value to the first option if nothing is saved there
+                var selClass = '';
 
-            var selClass = '';
+                if(props.attributes.selected!=0 && !selectedExists) selClass = 'trigger-error';     //The trigger previously selected doesnt exist anymore, display error.
 
-            if(props.attributes.selected!=0 && !selectedExists) selClass = 'trigger-error';     //The trigger previously selected doesnt exist anymore, display error.
-
-            var sel = el('select',{onChange:function(e){props.setAttributes({selected : parseInt(e.target.value) }); e.target.className = '';}, className: selClass},ret);    //Make the trigger selector
-
-
-            //Create the final block element(yes, i know -_- )
-            var wrap = el('div',{className:'ifso-block-wrapper components-placeholder ' + props.className},
-                [el('div',{className: 'components-placeholder__label'},iconEl,el('span',{className:'components-placeholder__instructions'},'Dynamic Content')),el('span',{className:'components-placeholder__instructions'},'Select a dynamic trigger from the list'),sel,
-                    el('div',{className:'ifso-button-wrap'},[el('button',{className: 'is-secondary components-button is-button is-large is-default', onClick:function(){window.open(ifso_base_url + '?post_type=ifso_triggers&p=' + props.attributes.selected,'_blank')}},'View trigger'),
-                    el('button',{className: 'is-secondary components-button is-button is-large is-default',onClick:function(){window.open(ifso_base_url + '/wp-admin/post.php?action=edit&post=' + props.attributes.selected,'_blank')}},'Edit trigger')])
-                ]);
+                var triggerSelectDescription = el('span',{className:'components-placeholder__instructions'},'Select a dynamic trigger from the list');
+                var triggerSelect = el('select',{onChange:function(e){props.setAttributes({selected : parseInt(e.target.value) }); e.target.className = '';}, className: selClass},triggerOptions);    //Make the trigger selector
+                var ajaxSelectDescription = el('span',{className:'components-placeholder__instructions'},'Load with Ajax');
+                var ajaxSelect = el('select',{onChange:function(e){props.setAttributes({load_trigger_via_ajax:e.target.value})},value:props.attributes.load_trigger_via_ajax},
+                    [el('option',{value:''},'Same as global'),el('option',{value:'yes'},'Yes'),el('option',{value:'no'},'No')]);
 
 
-            return wrap;
-        } )
+                //Create the final block element(yes, i know -_- )
+                var wrap = el('div',{className:'ifso-block-wrapper components-placeholder ' + props.className},
+                    //[el('div',{className: 'components-placeholder__label'},iconEl,el('span',{className:'components-placeholder__instructions'},'Dynamic Content')),el('span',{className:'components-placeholder__instructions'},'Select a dynamic trigger from the list'),triggerSelect,el('span',{className:'components-placeholder__instructions'},'Load with Ajax'),ajaxSelect,
+                    [el('div',{className: 'components-placeholder__label'},iconEl,el('span',{className:'components-placeholder__instructions'},'Dynamic Content')),triggerSelectDescription,triggerSelect,ajaxSelectDescription,ajaxSelect,
+                        el('div',{className:'ifso-button-wrap'},[el('button',{className: 'is-secondary components-button is-button is-large is-default', onClick:function(){window.open(ifso_base_url + '?post_type=ifso_triggers&p=' + props.attributes.selected,'_blank')}},'View trigger'),
+                            el('button',{className: 'is-secondary components-button is-button is-large is-default',onClick:function(){window.open(ifso_base_url + '/wp-admin/post.php?action=edit&post=' + props.attributes.selected,'_blank')}},'Edit trigger')])
+                    ]);
 
+                return wrap;
+            }
+        })
 });

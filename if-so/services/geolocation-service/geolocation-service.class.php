@@ -18,7 +18,7 @@ class GeolocationService {
 
 	private function __construct() {
         global $wpdb;
-		$web_service_domain = 'http://www.if-so.com/api/';
+		$web_service_domain = 'https://www.if-so.com/api/';
 		$this->web_service_url = $web_service_domain.IFSO_API_VERSION.'/geolocation-service/geolocation-api.php';
         $this->wpdb = $wpdb;
 	}

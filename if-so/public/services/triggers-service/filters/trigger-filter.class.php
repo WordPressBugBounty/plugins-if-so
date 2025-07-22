@@ -6,6 +6,7 @@ require_once(__DIR__ . '/impl/auto-p-tag-filter.class.php');
 require_once(__DIR__ . '/impl/rich-snippet-filter.class.php');
 require_once(__DIR__ . '/impl/w3-total-cache-fragment-caching-filter.class.php');
 require_once(__DIR__ . '/impl/google-analytics-filter.class.php');
+require_once(__DIR__ . '/impl/admin-message-filter.class.php');
 require_once(__DIR__ . '/hooks/impl/recurrence-hook.class.php');
 require_once(__DIR__ . '/hooks/impl/analytics-hook.class.php');
 require_once(__DIR__ . '/hooks/impl/groups-hook.class.php');
@@ -31,6 +32,7 @@ class TriggerFilter {
 		$filters[] = new AutoPTagFilter();
 		$filters[] = new RichSnippetFilter();
 		$filters[] = new GoogleAnalyticsFilter();
+		$filters[] = new AdminMessageFilter();
 		//$filters[] = new W3TotalCacheFragmentCachingFilter(); remove caching filter for now as it breaks some pages sometimes
 
 		return $filters;

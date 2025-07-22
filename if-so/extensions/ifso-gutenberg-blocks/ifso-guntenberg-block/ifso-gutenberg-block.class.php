@@ -48,8 +48,10 @@ class IfSoTriggerGutenbergBlock extends IfSoGutenbergBlockBase {
     }
 
     public function render_ifso_block($atts,$content){
+        $ajax_attr = !empty($atts['load_trigger_via_ajax']) ? sprintf( 'ajax="%1$s"', $atts['load_trigger_via_ajax']) : '';
         if (isset($atts['selected']) && $atts['selected'] > 0){
-            return do_shortcode(sprintf( '[ifso id="%1$d"]', $atts['selected']));
+            $id_attr = do_shortcode(sprintf( 'id="%1$d"', $atts['selected']));
+            return "[ifso {$id_attr} {$ajax_attr}]";
         }
     }
 

@@ -24,7 +24,7 @@ class InterfaceModService{
     public function replace_newtrigger_title_placeholder($title,$post){
 
         if($post->post_type == 'ifso_triggers'){
-            $ret = __('Add title (optional)','if-so');
+            $ret = __('Trigger title (optional)','if-so');
             return $ret;
         }
 
@@ -39,71 +39,36 @@ class InterfaceModService{
     }
 
     public function add_scan_button($actions,$post){
-        if ($post->post_type=='ifso_triggers' && current_user_can('edit_posts')) {
-            $url = admin_url('admin-ajax.php?action=trigger_scan_req&postid=' . $post->ID, basename(__FILE__) ) . '&_ifsononce=' . wp_create_nonce('trigger-scan');
-            $title = __('Scan posts for usages of this shortcode', 'if-so');
-            $text =  __('Find Shortcode', 'if-so');
-            $actions['scan'] = <<<HTM
-                 <a href="{$url}" title="{$title}" rel="permalink"  onclick="window.open('{$url}', 'newwindow', 'width=1200,height=900'); return false;">{$text}</a>
-HTM;
-        }
+        if ($post->post_type=='ifso_triggers' && current_user_can('edit_posts'))
+            $actions['scan'] = $this->create_scan_button($post->ID);
         return $actions;
     }
 
+    public function add_trigger_scan_button_triggerpage($post) {
+        return;     //removed for now
+        if ($post->post_type=='ifso_triggers' && current_user_can('edit_posts'))
+            echo $this->create_scan_button($post->ID,'Find Shortcode');
+    }
+
+    private function create_scan_button($post_id,$button_text='Find Shortcode'){
+        $url = admin_url('admin-ajax.php?action=trigger_scan_req&postid=' . $post_id, basename(__FILE__) ) . '&_ifsononce=' . wp_create_nonce('trigger-scan');
+        $title = __('Scan posts for usages of this shortcode', 'if-so');
+        $text =  __($button_text , 'if-so');
+        return <<<HTM
+                 <a href="{$url}" title="{$title}" rel="permalink"  onclick="window.open('{$url}', 'newwindow', 'width=980,height=900'); return false;">{$text}</a>
+HTM;
+    }
+
     public function trigger_scan_page(){
-        if(!current_user_can('administrator') || !check_admin_referer('trigger-scan','_ifsononce'))
-            wp_die();
-        $postid = (!empty($_REQUEST['postid'])) ? $_REQUEST['postid'] : null;
-        $posts = $this->scan_posts_for_ifso_triggers($postid);
-        $scan_all_triggers = admin_url('admin-ajax.php?action=trigger_scan_req', basename(__FILE__) ) . '&_ifsononce=' . wp_create_nonce('trigger-scan');
-        $render_table_contents = function($posts){
-            ?>
-            <tr>
-                <th>Post Title</th>
-                <th>Post URL</th>
-                <th>Edit Post</th>
-            </tr>
-            <?php
-            foreach ($posts as $post){
-                echo "<tr>";
-                echo "<td>{$post['title']}</td>";
-                echo "<td><a target='_blank' href='{$post['link']}'>{$post['link']}</a></td>";
-                echo "<td><a target='_blank' href='{$post['edit']}'>{$post['edit']}</a></td>";
-                echo "</tr>";
-            }
-        };
-        ?>
-        <style>
-            #ifso-trigger-scan-table{
-                width:100%;
-            }
-            #ifso-trigger-scan-table td{
-                border: 1px solid black;
-                padding: 10px;
-            }
-            body{
-                padding:50px
-            }
-        </style>
-
-
-        <p style="display:block;position:relative;border:1px solid #dba617;color:#dba617;background:#fff9e9;padding:20px;"><b>Note!</b>  The results include only If-So shortcodes contained within the post content and the If-So "Show on all pages" field. (Shortcodes entered using PHP in the website's template files and shortcodes entered into meta fields are not listed.)</p>
-        <?php if(!empty($posts['triggers'])){ ?>
-        <h2>If-So Trigger <?php if($postid!==null && is_numeric($postid)) echo "(ID : $postid)"; ?> shortcodes were found in <?php echo count($posts['triggers']); ?> post<?php echo (count($posts['triggers'])===1) ? '' : 's';?></h2>
-        <table id="ifso-trigger-scan-table">
-            <?php echo $render_table_contents($posts['triggers']) ?>
-        </table>
-        <?php } if(!empty($posts['conversions'])){ ?>
-            <h2 style="margin:70px 0 30px;">Conversions for If-So Trigger <?php if($postid!==null && is_numeric($postid)) echo "(ID : $postid)"; ?> were found in <?php echo count($posts['conversions']); ?> post<?php echo (count($posts['conversions'])===1) ? '' : 's';?></h2>
-            <table id="ifso-trigger-scan-table">
-            <?php echo $render_table_contents($posts['conversions']); ?>
-            </table>
-        <?php } if($postid!==null){?><p><a href="<?php echo $scan_all_triggers; ?>">Look for pages containing any if-so trigger shortcode</a></p><?php } ?>
-        <?php
-        exit();
+        require_once(IFSO_PLUGIN_BASE_DIR . 'admin/partials/ifso_trigger_scan_page_display.php');
     }
 
     private function scan_posts_for_ifso_triggers($tid = null){
+        global $wp_post_types;
+        if(isset($wp_post_types['ifso_triggers']))
+            $wp_post_types['ifso_triggers']->exclude_from_search = false;
+        if(!is_numeric($tid))
+            $tid = null;
         $ret=['triggers'=>[],'conversions'=>[]];
         $args = [
             'posts_per_page' => -1,
@@ -111,7 +76,7 @@ HTM;
         ];
         $query = new \WP_Query($args);
         $tid_regex_part = $tid===null ? '.+' : $tid;
-        $trigger_sc_regex = '/\[.*ifso.+id.?\=[\'\"]'. $tid_regex_part .'[\'\"].*\]/';
+        $trigger_sc_regex = '/\[.*ifso.+id.?\=[\'\"]'. $tid_regex_part .'[\'\"].*\]|ifso\/ifso-block.+\"selected\"\:' . $tid_regex_part .'/';   //if-so trigger shortcode or Gutenberg block
         $relevant_conversion_exists = function($content,$tid){
             $conversion_sc_regex = '/\[.*ifso\_conversion(.*)\]/U';
             if(preg_match_all($conversion_sc_regex,$content,$matches)){
@@ -138,6 +103,11 @@ HTM;
                 $edit_url = get_edit_post_link($id);
                 $content = get_the_content();
                 $link = get_permalink();
+                if(get_post_type()==='ifso_triggers'){      //The contents of if-so triggers "live" inside the post meta
+                    $postmeta = get_post_meta($id);
+                    $content = !empty($postmeta['ifso_trigger_version']) ? implode(' ',$postmeta['ifso_trigger_version']) : '';
+                    $content .= !empty($postmeta['ifso_trigger_default']) ? implode(' ',$postmeta['ifso_trigger_default']) : '';
+                }
                 $occ_data = ['title'=>$title,'edit'=>$edit_url,'content'=>$content,'link'=>$link];
                 if(preg_match($trigger_sc_regex,$content))
                     $ret['triggers'][] = $occ_data;
@@ -159,7 +129,7 @@ HTM;
 
     public function add_import_button($arr){
         if (current_user_can('edit_posts')) {
-            $html = '<div class="wrap" style="margin-bottom:0;color: #0073aa;"> <form action="' . admin_url('admin-ajax.php?action=trigger_export_req&importtrigger=true&_ifsononce=' . $this->create_trigger_port_nonce()) . '" method="post" enctype="multipart/form-data"><label for="triggerToImport" style="font-weight:normal"><span>+ '. __('Import  trigger', 'if-so') .'</span><input style="display:none" type="file" onchange="form.submit()" name="triggerToImport" id="triggerToImport"></label></form></div>';
+            $html = '<div class="wrap" style="margin-bottom:0;color: #0073aa;"> <form action="' . admin_url('admin-ajax.php?action=trigger_export_req&importtrigger=true&_ifsononce=' . $this->create_trigger_port_nonce()) . '" method="post" enctype="multipart/form-data"><label for="triggerToImport" style="font-weight:normal;display: inline-block;margin-bottom: 5px;cursor: pointer;"><span>+ '. __('Import  trigger', 'if-so') .'</span><input style="display:none" type="file" onchange="form.submit()" name="triggerToImport" id="triggerToImport"></label></form></div>';
         }
         echo $html;
         return $arr;
@@ -202,6 +172,11 @@ HTM;
         global $post;
         if(isset($post) && $post->post_type !=='ifso_triggers' && !(isset($_GET['action']) && $_GET['action'] === 'elementor')){
             echo '<a href="'. admin_url( 'edit.php' ).'?post_type=ifso_triggers&TB_iframe=true&width=1024&height=600" id="ifso-editor-button" class="button thickbox" title="If-So triggers"><img style="bottom:1px;position:relative;width:11px;" src="'. plugin_dir_url(__FILE__) . '../../images/logo-256x256.png">'. __('Dynamic Content', 'if-so') .'</a>';
+        }
+        if((wp_doing_ajax() && $_REQUEST['action']==='load_tinymce_repeater') || (isset($post) && $post->post_type ==='ifso_triggers')){        //Adds if-so DKI button and the modal that it opens
+            echo '<a href="#" class="button ifso-insert-dki-modal">If-So Shortcodes</a>';
+            if((isset($post) && $post->post_type ==='ifso_triggers'))
+                require_once(IFSO_PLUGIN_BASE_DIR . 'admin/partials/ifso_dki_modal_display.php');
         }
 
     }

@@ -4,7 +4,7 @@ if ( ! defined( 'ABSPATH' ) ) exit;
 
 // get trigger rules data
 $data = array();
-global $data_versions, $available_pages, $post_status, $languages, $data_rules, $displayClosedFeature, $freeTriggers, $lockedConditionBox, $lockedVersionBox, $isLicenseValid, $allowedTriggersForRecurrence, $notAllowedTriggersForGroups,  $timezones, $removePagesVisitedCookie,$enableVisitCount,$triggersVisitedOn;
+global $data_versions, $available_pages, $post_status, $languages, $data_rules, $displayClosedFeature, $freeTriggers, $isLicenseValid, $allowedTriggersForRecurrence, $notAllowedTriggersForGroups,  $timezones, $removePagesVisitedCookie,$enableVisitCount,$triggersVisitedOn;
 
 require_once(IFSO_PLUGIN_BASE_DIR. 'public/models/data-rules/ifso-data-rules-model.class.php'); //including the model to get the trigger type list from it
 
@@ -12,7 +12,7 @@ require_once(IFSO_PLUGIN_BASE_DIR. 'public/models/data-rules/ifso-data-rules-mod
 
 // Default Content + correspnding Default Metadata
 $data_default = get_post_meta( $post->ID, 'ifso_trigger_default', true );
-$data_default_metadata_json = 
+$data_default_metadata_json =
                 get_post_meta( $post->ID,
                               'ifso_trigger_default_metadata',
                                true );
@@ -253,18 +253,6 @@ $allowedTriggersForRecurrence = apply_filters('ifso_allow_triggers_for_recurrenc
                                             ));
 $notAllowedTriggersForGroups = array("Device");
 
-// $lockedConditionBox = '
-//     <div class="locked-condition-box">
-//         <div class="text">
-//             This is locked condition. Click here to unlock all features.
-//         </div>
-
-//         <a href="#" class="unlock-button">
-//             <i class="fa fa-unlock-alt" aria-hidden="true"></i> Unlock Now
-//         </a>
-//     </div>
-// ';
-
 /* Ifso License End */
 
 require_once(IFSO_PLUGIN_BASE_DIR . 'services/plugin-settings-service/plugin-settings-service.class.php');
@@ -352,14 +340,11 @@ function generateDataAttributes($nextAttrs = []){
 function get_rule_item($index, $rule=array(), $is_template = false) {
     global $data_versions,
            $available_pages,
-           $post_status,
-           $languages, 
-           $lockedVersionBox, 
-           $data_rules, 
+           $languages,
+           $data_rules,
            $displayClosedFeature, 
            $freeTriggers, 
-           $lockedConditionBox, 
-           $isLicenseValid, 
+           $isLicenseValid,
            $allowedTriggersForRecurrence,
            $notAllowedTriggersForGroups,
            $timezones,
@@ -391,7 +376,6 @@ function get_rule_item($index, $rule=array(), $is_template = false) {
         } else {
             // Start by many
             $prevChar = generate_version_symbol(64 + $current_version_index);
-
             $current_instructions = __("Select a condition. The content will be displayed only if it is met and if versions A-".$prevChar." are not realized", 'if-so');
         }
     }
@@ -402,9 +386,7 @@ function get_rule_item($index, $rule=array(), $is_template = false) {
         <div class="row rule-wrap">
             <div class="col-xs-12 rule-toolbar-wrap <?php echo (!$isLicenseValid && (!$is_template && isset($rule['trigger_type']) &&  !empty($rule['trigger_type']) && !in_array($rule['trigger_type'], $freeTriggers) || (isset($rule['trigger_type']) && $rule['trigger_type'] == "User-Behavior" && isset($rule['User-Behavior']) && !in_array($rule['User-Behavior'], array('LoggedIn', 'LoggedOut', 'Logged'))))) ? '' : ''; ?><?php echo (isset($rule['freeze-mode']) && $rule['freeze-mode'] == "true") ? "freeze-overlay-active-container" : ""; ?>">
                 <h3>
-                    <img src="<?php echo plugin_dir_url(dirname(__FILE__)) . 'images/IfSo_logo25X8.png'; ?>" />
-                    <!--<span class="version-count"><?php echo $current_version_count; ?></span>-->
-                    <span class="version-alpha"><?php echo (__('Dynamic Content').' - '.__('Version', 'if-so')); ?> <?php echo $current_version_count_char; ?></span> 
+                    <span class="version-alpha"><?php echo (__('Dynamic Content').' - '.__('Version', 'if-so')); ?> <?php echo $current_version_count_char; ?></span>
                 </h3>
                 <button type="button" data-repeater-delete class="repeater-delete btn btn-delete" title=<?php _e('Delete', 'if-so')?>><i class="fa fa-trash-o" aria-hidden="true"></i></button>
                 <!-- begin freeze mode section -->
@@ -448,64 +430,73 @@ function get_rule_item($index, $rule=array(), $is_template = false) {
 
                 </div>
             </div>
-            <div class="col-md-3">
+            <div class="col-md-3 ifso-trigger-condition-wrap">
+                <h3 class="title">Condition</h3>
                 <p class="versioninstructions"><?php echo $current_instructions; ?>:</p>
                 <div class="ifso-form-group">
-                    <!--<label for="repeatable_editor_repeatable_editor_content"><?php _e( 'Trigger', 'if-so' ); ?></label><br>-->
                     <select name="repeater[<?php echo $current_version_index; ?>][trigger_type]" class="form-control trigger-type" autocomplete="off">
                         <option value="" <?php echo generateDataAttributes(); ?> ><?php _e('Select a Condition', 'if-so'); ?></option>
 
-
-                        <option value="Device" <?php echo (isset($rule['trigger_type']) && $rule['trigger_type'] == 'Device') ? 'SELECTED' : '';echo generateDataAttributes(['user-behavior-device']); ?>><?php _e('Device', 'if-so'); ?></option>
-
-                        <option value="User-Behavior" <?php echo (isset($rule['trigger_type']) && $rule['trigger_type'] == 'User-Behavior') ? 'SELECTED' : '';echo generateDataAttributes(['user-behavior-selection','user-behavior-logged-selection','recurrence-field','groups-field']); ?>>
-                            <?php _e('User Behavior', 'if-so'); ?>
-                        </option>
-
-                        <option value="referrer" <?php echo (isset($rule['trigger_type']) && $rule['trigger_type'] == 'referrer') ? 'SELECTED' : '';echo generateDataAttributes(['referrer-selection','referrer-custom','locked-box','recurrence-field','groups-field']); ?>>
-                            <?php echo (__('Referral Source', 'if-so') . $displayClosedFeature); ?>
-                        </option>
-
-                        <option value="PageUrl" <?php echo (isset($rule['trigger_type']) && $rule['trigger_type'] == 'PageUrl') ? 'SELECTED' : '';echo generateDataAttributes(['page-url-custom','page-url-ignore-case','locked-box','recurrence-field','groups-field']);?> >
-                            <?php echo (__('Page URL', 'if-so') . $displayClosedFeature); ?>
+                        <option value="AB-Testing" <?php echo (isset($rule['trigger_type']) && $rule['trigger_type'] == 'AB-Testing') ? 'SELECTED' : '';echo generateDataAttributes(['ab-testing-selection','locked-box','recurrence-field','groups-field']); ?>>
+                            <?php echo (__('A/B Testing', 'if-so').$displayClosedFeature); ?>
                         </option>
 
                         <option value="advertising-platforms" <?php echo (isset($rule['trigger_type']) && $rule['trigger_type'] == 'advertising-platforms') ? 'SELECTED' : '';echo generateDataAttributes(['advertising-platforms-selection','advertising-platforms-google-section','locked-box','recurrence-field','groups-field']); ?>>
                             <?php echo (__('Advertising Platforms', 'if-so').$displayClosedFeature); ?>
                         </option>
-                        <option value="url" <?php echo (isset($rule['trigger_type']) && $rule['trigger_type'] == 'url') ? 'SELECTED' : '';echo generateDataAttributes(['url-custom','locked-box','recurrence-field','groups-field']); ?>>
-                            <?php echo (__('Dynamic Link', 'if-so').$displayClosedFeature); ?>
-                        </option>
-                        <option value="AB-Testing" <?php echo (isset($rule['trigger_type']) && $rule['trigger_type'] == 'AB-Testing') ? 'SELECTED' : '';echo generateDataAttributes(['ab-testing-selection','locked-box','recurrence-field','groups-field']); ?>>
-                            <?php echo (__('A/B Testing', 'if-so').$displayClosedFeature); ?>
 
-                        <option value="Time-Date" <?php echo (isset($rule['trigger_type']) && $rule['trigger_type'] == 'Time-Date') ? 'SELECTED' : '';echo generateDataAttributes(['time-date-pick-start-date','time-date-pick-end-date','time-date-selection','times-dates-schedules-selections','groups-field']); ?>>
-                            <?php echo (__('Date & Time', 'if-so')); ?>
-                        </option>
-
-                        <option value="Geolocation" <?php echo (isset($rule['trigger_type']) && $rule['trigger_type'] == 'Geolocation') ? 'SELECTED' : '';echo generateDataAttributes(['geolocation-selection','geolocation-behaviour','groups-field']); ?>>
-                            <?php _e('Geolocation', 'if-so'); ?>
-                        </option>
-
-                        <option value="PageVisit" <?php echo (isset($rule['trigger_type']) && $rule['trigger_type'] == 'PageVisit') ? 'SELECTED' : '';echo generateDataAttributes(['page-visit-selection','locked-box','recurrence-field','groups-field']); ?>>
-                            <?php echo (__('Pages Visited', 'if-so').$displayClosedFeature); ?>
+                        <option value="Groups" <?php echo (isset($rule['trigger_type']) && $rule['trigger_type'] == 'Groups') ? 'SELECTED' : '';echo generateDataAttributes(['group-name', 'user-group-relation', 'locked-box','recurrence-field','groups-field']); ?>>
+                            <?php echo (__('Audiences', 'if-so') . $displayClosedFeature); ?>
                         </option>
 
                         <option value="Cookie" <?php echo (isset($rule['trigger_type']) && $rule['trigger_type'] == 'Cookie') ? 'SELECTED' : '';echo generateDataAttributes(['cookie','locked-box','groups-field']); ?>>
                             <?php echo (__('Cookie / Session Variable', 'if-so') . $displayClosedFeature); ?>
                         </option>
 
+                        <option value="Time-Date" <?php echo (isset($rule['trigger_type']) && $rule['trigger_type'] == 'Time-Date') ? 'SELECTED' : '';echo generateDataAttributes(['time-date-pick-start-date','time-date-pick-end-date','time-date-selection','times-dates-schedules-selections','groups-field']); ?>>
+                            <?php echo (__('Date & Time', 'if-so')); ?>
+                        </option>
+
+                        <option value="Device" <?php echo (isset($rule['trigger_type']) && $rule['trigger_type'] == 'Device') ? 'SELECTED' : '';echo generateDataAttributes(['user-behavior-device']); ?>><?php _e('Device', 'if-so'); ?></option>
+
+                        <option value="url" <?php echo (isset($rule['trigger_type']) && $rule['trigger_type'] == 'url') ? 'SELECTED' : '';echo generateDataAttributes(['url-custom','locked-box','recurrence-field','groups-field']); ?>>
+                            <?php echo (__('Dynamic Link', 'if-so').$displayClosedFeature); ?>
+                        </option>
+
+                        <option value="Geolocation" <?php echo (isset($rule['trigger_type']) && $rule['trigger_type'] == 'Geolocation') ? 'SELECTED' : '';echo generateDataAttributes(['geolocation-selection','geolocation-behaviour','groups-field']); ?>>
+                            <?php _e('Geolocation', 'if-so'); ?>
+                        </option>
+
+                        <option value="PageUrl" <?php echo (isset($rule['trigger_type']) && $rule['trigger_type'] == 'PageUrl') ? 'SELECTED' : '';echo generateDataAttributes(['page-url-custom','page-url-ignore-case','locked-box','recurrence-field','groups-field']);?> >
+                            <?php echo (__('Page URL', 'if-so') . $displayClosedFeature); ?>
+                        </option>
+
+                        <option value="PageVisit" <?php echo (isset($rule['trigger_type']) && $rule['trigger_type'] == 'PageVisit') ? 'SELECTED' : '';echo generateDataAttributes(['page-visit-selection','locked-box','recurrence-field','groups-field']); ?>>
+                            <?php echo (__('Pages Visited', 'if-so').$displayClosedFeature); ?>
+                        </option>
+
+                        <option value="PostCategory" <?php echo (isset($rule['trigger_type']) && $rule['trigger_type'] == 'PostCategory') ? 'SELECTED' : '';echo generateDataAttributes(['post-category-operator','post-category-compare', 'locked-box', 'groups-field']); ?> >
+                            <?php echo (__('Post Category', 'if-so')) . $displayClosedFeature; ?>
+                        </option>
+
+                        <option value="referrer" <?php echo (isset($rule['trigger_type']) && $rule['trigger_type'] == 'referrer') ? 'SELECTED' : '';echo generateDataAttributes(['referrer-selection','referrer-custom','locked-box','recurrence-field','groups-field']); ?>>
+                            <?php echo (__('Referral Source', 'if-so') . $displayClosedFeature); ?>
+                        </option>
+
+                        <option value="TriggersVisited" <?php echo (isset($rule['trigger_type']) && $rule['trigger_type'] == 'TriggersVisited') ? 'SELECTED' : '';echo generateDataAttributes(['triggers-visited-relationship','triggers-visited-id', 'locked-box', 'groups-field']); ?> >
+                            <?php echo (__('Triggers Visited', 'if-so')) . $displayClosedFeature; ?>
+                        </option>
 
                         <option value="UserIp" <?php echo (isset($rule['trigger_type']) && $rule['trigger_type'] == 'UserIp') ? 'SELECTED' : '';echo generateDataAttributes(['user-ip','groups-field']); ?>>
                             <?php echo (__('User IP', 'if-so')); ?>
                         </option>
 
-                        <option value="Utm" <?php echo (isset($rule['trigger_type']) && $rule['trigger_type'] == 'Utm') ? 'SELECTED' : '';echo generateDataAttributes(['utm-type','utm-relation','utm-value','locked-box','recurrence-field','groups-field']); ?>>
-                            <?php echo (__('UTM', 'if-so') . $displayClosedFeature); ?>
+                        <option value="User-Behavior" <?php echo (isset($rule['trigger_type']) && $rule['trigger_type'] == 'User-Behavior') ? 'SELECTED' : '';echo generateDataAttributes(['user-behavior-selection','user-behavior-logged-selection','recurrence-field','groups-field']); ?>>
+                            <?php _e('User Behavior', 'if-so'); ?>
                         </option>
 
-                        <option value="Groups" <?php echo (isset($rule['trigger_type']) && $rule['trigger_type'] == 'Groups') ? 'SELECTED' : '';echo generateDataAttributes(['group-name', 'user-group-relation', 'locked-box','recurrence-field','groups-field']); ?>>
-                            <?php echo (__('Audiences', 'if-so') . $displayClosedFeature); ?>
+                        <option value="Utm" <?php echo (isset($rule['trigger_type']) && $rule['trigger_type'] == 'Utm') ? 'SELECTED' : '';echo generateDataAttributes(['utm-type','utm-relation','utm-value','locked-box','recurrence-field','groups-field']); ?>>
+                            <?php echo (__('UTM', 'if-so') . $displayClosedFeature); ?>
                         </option>
 
                         <option value="userRoles" <?php echo (isset($rule['trigger_type']) && $rule['trigger_type'] == 'userRoles') ? 'SELECTED' : '';echo generateDataAttributes(['user-role','user-role-relationship', 'locked-box', 'groups-field']); ?> >
@@ -516,15 +507,6 @@ function get_rule_item($index, $rule=array(), $is_template = false) {
                             <?php echo (__('User Details', 'if-so')) . $displayClosedFeature; ?>
                         </option>
 
-                        <option value="TriggersVisited" <?php echo (isset($rule['trigger_type']) && $rule['trigger_type'] == 'TriggersVisited') ? 'SELECTED' : '';echo generateDataAttributes(['triggers-visited-relationship','triggers-visited-id', 'locked-box', 'groups-field']); ?> >
-                            <?php echo (__('Triggers Visited', 'if-so')) . $displayClosedFeature; ?>
-                        </option>
-
-                        <option value="PostCategory" <?php echo (isset($rule['trigger_type']) && $rule['trigger_type'] == 'PostCategory') ? 'SELECTED' : '';echo generateDataAttributes(['post-category-operator','post-category-compare', 'locked-box', 'groups-field']); ?> >
-                            <?php echo (__('Post Category', 'if-so')) . $displayClosedFeature; ?>
-                        </option>
-
-
                         <?php do_action('ifso_custom_conditions_ui_selector',$rule); ?>
 
                     </select>
@@ -532,7 +514,6 @@ function get_rule_item($index, $rule=array(), $is_template = false) {
                 </div>
                 <div class="ifso-form-group">
                     <select name="repeater[<?php echo $current_version_index; ?>][trigger]" data-field="referrer-selection" class="form-control referrer-selection <?php echo (isset($rule['trigger']) && !empty($rule['trigger']) && isset($rule['trigger_type']) && $rule['trigger_type'] == 'referrer') ? 'show-selection' : ''; ?>">
-                        <!--<option value="" data-reset="referrer-custom|url-custom|page-selection|common-referrers"><?php _e('Choose a Referrer', 'if-so'); ?></option>-->
                         <option value="custom" <?php echo (isset($rule['trigger']) && $rule['trigger'] == 'custom') ? 'SELECTED' : ''; ?> data-reset="page-category|common-referrers|page-selection|url-custom" data-next-field="|referrer-custom|locked-box"><?php _e('URL', 'if-so'); ?></option>
                         <option value="page-on-website" <?php echo (isset($rule['trigger']) && $rule['trigger'] == 'page-on-website') ? 'SELECTED' : ''; ?> data-next-field="page-selection|locked-box" data-reset="page-category|common-referrers|referrer-custom|url-custom"><?php _e('Page on your website', 'if-so'); ?></option>
                         <option value="page-category" <?php echo (isset($rule['trigger']) && $rule['trigger'] == 'page-category') ? 'SELECTED' : ''; ?> data-next-field="page-category|locked-box" data-reset="common-referrers|referrer-custom|url-custom|page-selection"><?php _e('Post/Page Category', 'if-so'); ?></option>
@@ -541,23 +522,27 @@ function get_rule_item($index, $rule=array(), $is_template = false) {
                 </div>
                 <div class="ifso-form-group">
                     <select name="repeater[<?php echo $current_version_index; ?>][AB-Testing]" data-field="ab-testing-selection" class="form-control ab-testing <?php echo (isset($rule['AB-Testing']) && !empty($rule['AB-Testing']) && (isset($rule['trigger_type']) && $rule['trigger_type'] == 'AB-Testing')) ? 'show-selection' : ''; ?>">
-                        <option value="20%" <?php echo (isset($rule['AB-Testing']) && $rule['AB-Testing'] == '20%') ? 'SELECTED' : ''; ?> data-reset="common-referrers|referrer-custom|url-custom|page-selection"><?php _e('20% of the sessions', 'if-so'); ?></option>
-                        <option value="25%" <?php echo (isset($rule['AB-Testing']) && $rule['AB-Testing'] == '25%') ? 'SELECTED' : ''; ?> data-reset="common-referrers|referrer-custom|url-custom|page-selection"><?php _e('25% of the sessions', 'if-so'); ?></option>
-                        <option value="33%" <?php echo (isset($rule['AB-Testing']) && $rule['AB-Testing'] == '33%') ? 'SELECTED' : ''; ?> data-reset="common-referrers|referrer-custom|url-custom|page-selection"><?php _e('33% of the sessions', 'if-so'); ?></option>
-                        <option value="50%" <?php echo (isset($rule['AB-Testing']) && $rule['AB-Testing'] == '50%') ? 'SELECTED' : ''; ?> data-reset="common-referrers|referrer-custom|url-custom|page-selection"><?php _e('50% of the sessions', 'if-so'); ?></option>
-                        <option value="75%" <?php echo (isset($rule['AB-Testing']) && $rule['AB-Testing'] == '75%') ? 'SELECTED' : ''; ?> data-reset="common-referrers|referrer-custom|url-custom|page-selection
-                        "><?php _e('75% of the sessions', 'if-so'); ?></option>
-                        <option value="100%" <?php echo (isset($rule['AB-Testing']) && $rule['AB-Testing'] == '100%') ? 'SELECTED' : ''; ?> data-reset="common-referrers|referrer-custom|url-custom|page-selection
-                        "><?php _e('100% (control group)', 'if-so'); ?></option>
+                    <?php
+                        $max_versions = 5;
+                        for($i=2;$i<=$max_versions;$i++){
+                            for($y=1;$y<=$i;$y++){
+                                $percentage = intval($y/$i*100);
+                                $exploded_selection = !empty($rule['AB-Testing']) ?  explode('||',$rule['AB-Testing']) : null;
+                                $selected = ($exploded_selection!==null && (int)$exploded_selection[0]===$percentage && (int)$exploded_selection[1]===$y && (int)$exploded_selection[2]===$i) ? 'SELECTED' : '';
+                                echo "<option value='{$percentage}||{$y}||$i' {$selected} data-reset='common-referrers|referrer-custom|url-custom|page-selection'>{$i} Variations - Version {$y}/{$i}</option>";
+                            }
+                            if($i!==$max_versions) echo "<option value='' disabled></option>";
+                        }
+                    ?>
                     </select>
 
-                    <div class="ab-testing-custom-sessions-display <?php echo (isset($rule['AB-Testing']) && !empty($rule['AB-Testing']) && (isset($rule['trigger_type']) && $rule['trigger_type'] == 'AB-Testing')) ? 'show-selection' : ''; ?>" data-field="ab-testing-selection">
+                    <!--<div class="ab-testing-custom-sessions-display <?php echo (isset($rule['AB-Testing']) && !empty($rule['AB-Testing']) && (isset($rule['trigger_type']) && $rule['trigger_type'] == 'AB-Testing')) ? 'show-selection' : ''; ?>" data-field="ab-testing-selection">
                         <p><?php echo (__('Limit','if-so') . ' (' . __('Optional', 'if-so') . '):'); ?></p>
-                    </div>
+                    </div>-->
 
                     <input type="hidden" name="repeater[<?php echo $current_version_index; ?>][saved_number_of_views]" <?php echo ((!empty($rule['number_of_views']) || (isset($rule['number_of_views']) && $rule['number_of_views'] == 0)) && (isset($rule['trigger_type']) && $rule['trigger_type'] == 'AB-Testing')) ? "value='{$rule['number_of_views']}'" : ''; ?> />
                     
-                    <select name="repeater[<?php echo $current_version_index; ?>][ab-testing-sessions]" data-field="ab-testing-selection" class="form-control ab-testing <?php echo (isset($rule['ab-testing-sessions']) && !empty($rule['ab-testing-sessions']) && (isset($rule['trigger_type']) && $rule['trigger_type'] == 'AB-Testing')) ? 'show-selection' : ''; ?>">
+                    <!--<select name="repeater[<?php echo $current_version_index; ?>][ab-testing-sessions]" data-field="ab-testing-selection" class="form-control ab-testing <?php echo (isset($rule['ab-testing-sessions']) && !empty($rule['ab-testing-sessions']) && (isset($rule['trigger_type']) && $rule['trigger_type'] == 'AB-Testing')) ? 'show-selection' : ''; ?>">
                         <option value="Unlimited" data-reset="common-referrers|referrer-custom|url-custom|page-selection|ab-testing-custom"><?php _e('Unlimited', 'if-so'); ?></option>
                         <option value="100" <?php echo (isset($rule['ab-testing-sessions']) && $rule['ab-testing-sessions'] == '100') ? 'SELECTED' : ''; ?> data-reset="common-referrers|referrer-custom|url-custom|page-selection|ab-testing-custom"><?php _e('100 Sessions', 'if-so'); ?></option>
                         <option value="200" <?php echo (isset($rule['ab-testing-sessions']) && $rule['ab-testing-sessions'] == '200') ? 'SELECTED' : ''; ?> data-reset="common-referrers|referrer-custom|url-custom|page-selection|ab-testing-custom"><?php _e('200 Sessions', 'if-so'); ?></option>
@@ -565,13 +550,17 @@ function get_rule_item($index, $rule=array(), $is_template = false) {
                         <option value="1000" <?php echo (isset($rule['ab-testing-sessions']) && $rule['ab-testing-sessions'] == '1000') ? 'SELECTED' : ''; ?> data-reset="common-referrers|referrer-custom|url-custom|page-selection|ab-testing-custom"><?php _e('1000 Sessions', 'if-so'); ?></option>
                         <option value="2000" <?php echo (isset($rule['ab-testing-sessions']) && $rule['ab-testing-sessions'] == '2000') ? 'SELECTED' : ''; ?> data-reset="common-referrers|referrer-custom|url-custom|page-selection|ab-testing-custom"><?php _e('2000 Sessions', 'if-so'); ?></option>
                         <option value="Custom" <?php echo (isset($rule['ab-testing-sessions']) && $rule['ab-testing-sessions'] == 'Custom') ? 'SELECTED' : ''; ?> data-reset="common-referrers|referrer-custom|url-custom|page-selection|ab-testing-custom" data-next-field="ab-testing-custom|locked-box"><?php _e('Custom', 'if-so'); ?></option>
-                    </select>
+                    </select>-->
+                </div>
+
+                <div class="ifso-form-group">
+                    <input type="text" name="repeater[<?php echo $current_version_index; ?>][ab-testing-custom-no-sessions]" data-field="ab-testing-custom" placeholder="<?php _e('Max no. of views', 'if-so'); ?>" class="form-control ab-testing-custom <?php echo (!empty($rule['ab-testing-custom-no-sessions']) && (isset($rule['trigger_type']) && $rule['trigger_type'] == 'AB-Testing')) ? 'show-selection' : ''; ?>" <?php echo (!empty($rule['ab-testing-custom-no-sessions']) && (isset($rule['trigger_type']) && $rule['trigger_type'] == 'AB-Testing')) ? "value='{$rule['ab-testing-custom-no-sessions']}'" : ''; ?> />
                 </div>
 
                 <?php if (!isset($_COOKIE['ifso_hide_abt_notice'])): ?>
                     <div class="ifso-form-group">
                         <div data-field="ab-testing-selection" class="noticebox-container  <?php echo (isset($rule['trigger_type']) && $rule['trigger_type'] == 'AB-Testing') ? 'show-selection' : ''; ?>">
-                            <div class="abt-noticebox purple-noticebox"><span class="closeX">X</span><p><?php _e('Use the recurrence option and create a control group to conduct a proper split test.', 'if-so');?>  <a target="_blank" href="https://www.if-so.com/help/documentation/ab-testing/?utm_source=Plugin&utm_medium=Instructions&utm_campaign=abtesting&utm_term=abt"><?php _e('Learn More','if-so'); ?></a> </p></div>
+                            <div class="abt-noticebox purple-noticebox"><span class="closeX">X</span><p><?php _e('First time using If-So for A/B Testing?', 'if-so');?>  <a target="_blank" href="https://www.if-so.com/help/documentation/ab-testing/?utm_source=Plugin&utm_medium=Instructions&utm_campaign=abtesting&utm_term=abt"><?php _e('Read this first','if-so'); ?></a>. </p></div>
                         </div>
                     </div>
                 <?php endif; ?>
@@ -635,7 +624,6 @@ function get_rule_item($index, $rule=array(), $is_template = false) {
                             <?php 
                                 $areThereAnySelections = (isset($rule['page_visit_data']) &&
                                                       !empty($rule['page_visit_data']));
-
                             ?>
 
                             <div class="ifso-autocomplete-fields-container <?php echo ($areThereAnySelections) ? "shown":""; ?>">
@@ -730,7 +718,7 @@ function get_rule_item($index, $rule=array(), $is_template = false) {
                 <?php if ($removePagesVisitedCookie): ?>
                     <div class="ifso-form-group">
                         <div data-field="page-visit-selection" class="noticebox-container  <?php echo (isset($rule['trigger_type']) && $rule['trigger_type'] == 'PageVisit') ? 'show-selection' : ''; ?>">
-                            <div class="pagevisit-noticebox yellow-noticebox"><p><?php _e('The pages visited condition relies on a cookie to track the visitor\'s activity. Activate the cookie to use this condition.', 'if-so');?>  <a target="_blank" href="<?php echo admin_url('admin.php?page=' . EDD_IFSO_PLUGIN_SETTINGS_PAGE); ?>">Settings</a> </p></div>
+                            <div class="pagevisit-noticebox red-noticebox"><p><?php _e('The pages visited condition relies on a cookie to track the visitor\'s activity. Activate the cookie to use this condition.', 'if-so');?>  <a target="_blank" href="<?php echo admin_url('admin.php?page=' . EDD_IFSO_PLUGIN_SETTINGS_PAGE); ?>">Settings</a> </p></div>
                         </div>
                     </div>
                 <?php endif; ?>
@@ -752,7 +740,6 @@ function get_rule_item($index, $rule=array(), $is_template = false) {
                             <?php 
                                 $areThereAnySelections = (isset($rule['geolocation_data']) &&
                                                       !empty($rule['geolocation_data']));
-
                             ?>
 
                             <div class="ifso-autocomplete-fields-container <?php echo ($areThereAnySelections) ? "shown":""; ?>">
@@ -777,13 +764,11 @@ function get_rule_item($index, $rule=array(), $is_template = false) {
                                         foreach ($splitted_geolocation_data as $key => $value) {
                                             if ($value != "1") {
                                                 $explodedData = explode("!!", $value);
-
-                                                // $isCountry = ($explodedData[0] == "COUNTRY");
                                                 $address = $explodedData[1];
-
+                                                $locationType = ucfirst(strtolower($explodedData[0]));
                                                 ?>
                                                 <div class="locationField">
-                                                <span class="specific-location"><?php echo $address; ?></span>
+                                                <span class="specific-location"><?php echo $locationType . ' : ' . $address; ?></span>
                                                     <button class="remove-autocomplete" data-pos="<?php echo $i; ?>"><i class="fa fa-times-circle-o" aria-hidden="true"></i></button>
                                                 </div>
                                                 <?php
@@ -892,15 +877,11 @@ function get_rule_item($index, $rule=array(), $is_template = false) {
                                 <?php if (!isset($_COOKIE['set_geo_instructions'])): ?>
                         <div class="ifso-form-group">
                             <div data-field="" class="geo-info-container nodisplay <?php echo (isset($rule['trigger_type']) && $rule['trigger_type'] == 'Geolocation') ? 'show-selection' : ''; ?>">
-                                <div class="setgeoinstructions purple-noticebox"><span class="closeXGeo">X</span><p><?php _e('Dynamic content at the city level might not be 100% accurate.','if-so'); ?> <a href="https://www.if-so.com/geo-targeting#geoAccuracy" target="_blank"><?php _e('Read more','if-so') ?> >></a></p></div>
+                                <div class="setgeoinstructions purple-noticebox"><span class="closeX">X</span><p><?php _e('Dynamic content at the city level might not be 100% accurate.','if-so'); ?> <a href="https://www.if-so.com/geo-targeting#geoAccuracy" target="_blank"><?php _e('Read more','if-so') ?> >></a></p></div>
                             </div>
                         </div>
                     <?php endif; ?>
                             </div>
-<!--                            <div class="geolocation-add-container">
-                                <button class="gelocation-add-btn">Add location</button>
-                            </div>
--->
 
                     </div>                    
 
@@ -948,15 +929,10 @@ function get_rule_item($index, $rule=array(), $is_template = false) {
                     <?php if (!isset($_COOKIE['ifso_hide_settime_instructions'])): ?>
                         <div class="ifso-form-group">
                             <div data-field="times-dates-schedules-selections" class="set-time-info-container <?php echo (isset($rule['trigger_type']) && $rule['trigger_type'] == 'Time-Date') ? 'show-selection' : ''; ?>">
-                                <div class="settimeinstructions purple-noticebox"><span class="closeX">X</span><p><?php _e('This condition is based on the local time of your site', 'if-so'); ?> (<?php echo  current_time('h:i A'); ?>) <a href="<?php echo admin_url('options-general.php') ?>" target="_blank"><?php _e('edit', 'if-so'); ?></a></p></div>
+                                <div class="settimeinstructions yellow-noticebox"><span class="closeX">X</span><p><?php _e('This condition is based on the local time of your site', 'if-so'); ?> (<?php echo  current_time('h:i A'); ?>) <a href="<?php echo admin_url('options-general.php') ?>" target="_blank"><?php _e('edit', 'if-so'); ?></a></p></div>
                             </div>
                         </div>
                     <?php endif; ?>
-
-
-                <div class="ifso-form-group">
-                    <input type="text" name="repeater[<?php echo $current_version_index; ?>][ab-testing-custom-no-sessions]" data-field="ab-testing-custom" placeholder="<?php _e('Max no. of sessions', 'if-so'); ?>" class="form-control ab-testing-custom <?php echo (!empty($rule['ab-testing-custom-no-sessions']) && (isset($rule['trigger_type']) && $rule['trigger_type'] == 'AB-Testing')) ? 'show-selection' : ''; ?>" <?php echo (!empty($rule['ab-testing-custom-no-sessions']) && (isset($rule['trigger_type']) && $rule['trigger_type'] == 'AB-Testing')) ? "value='{$rule['ab-testing-custom-no-sessions']}'" : ''; ?> />
-                </div>
 
                 <div class="ifso-form-group">
                     <select name="repeater[<?php echo $current_version_index; ?>][User-Behavior]" data-field="user-behavior-selection" class="form-control ab-testing <?php echo (!empty($rule['User-Behavior']) && (isset($rule['trigger_type']) && $rule['trigger_type'] == 'User-Behavior')) ? 'show-selection' : ''; ?>">
@@ -998,11 +974,8 @@ function get_rule_item($index, $rule=array(), $is_template = false) {
                     <div class="ifso-form-group">
 
                         <select name="repeater[<?php echo $current_version_index; ?>][user-behavior-logged]" class="form-control referrer-custom <?php echo (isset($rule['trigger_type']) && $rule["trigger_type"] == "User-Behavior" && isset($rule['User-Behavior']) && $rule['User-Behavior'] == "Logged") ? 'show-selection' : ''; ?>" data-field="user-behavior-logged-selection">
-
                             <option value="logged-in" <?php echo (isset($rule['user-behavior-logged']) && $rule['user-behavior-logged'] == 'logged-in') ? 'SELECTED' : ''; ?> data-reset="common-referrers|referrer-custom|url-custom|page-selection|user-behavior-retn-custom"><?php _e('Yes', 'if-so'); ?></option>
                             <option value="logged-out" <?php echo (isset($rule['user-behavior-logged']) && $rule['user-behavior-logged'] == 'logged-out') ? 'SELECTED' : ''; ?> data-reset="common-referrers|referrer-custom|url-custom|page-selection|user-behavior-retn-custom"><?php _e('No', 'if-so'); ?></option>
-
-
                         </select>
 
                     </div>
@@ -1015,13 +988,11 @@ function get_rule_item($index, $rule=array(), $is_template = false) {
                     </div>
 
                         <select name="repeater[<?php echo $current_version_index; ?>][user-behavior-returning]" class="form-control referrer-custom <?php echo (isset($rule['User-Behavior']) && $rule['User-Behavior'] == "Returning") ? 'show-selection' : ''; ?>" data-field="user-behavior-returning">
-
                             <option value="first-visit" <?php echo (isset($rule['user-behavior-returning']) && $rule['user-behavior-returning'] == 'first-visit') ? 'SELECTED' : ''; ?> data-reset="common-referrers|referrer-custom|url-custom|page-selection|user-behavior-retn-custom"><?php _e('First Visit', 'if-so'); ?></option>
                             <option value="second-visit" <?php echo (isset($rule['user-behavior-returning']) && $rule['user-behavior-returning'] == 'second-visit') ? 'SELECTED' : ''; ?> data-reset="common-referrers|referrer-custom|url-custom|page-selection|user-behavior-retn-custom"><?php _e('2 Visits', 'if-so'); ?></option>
                             <option value="three-visit" <?php echo (isset($rule['user-behavior-returning']) && $rule['user-behavior-returning'] == 'three-visit') ? 'SELECTED' : ''; ?> data-reset="common-referrers|referrer-custom|url-custom|page-selection|user-behavior-retn-custom"><?php _e('3 Visits', 'if-so'); ?></option>
                             <option value="custom" <?php echo (isset($rule['user-behavior-returning']) && $rule['user-behavior-returning'] == 'custom') ? 'SELECTED' : ''; ?> data-reset="common-referrers|referrer-custom|url-custom|page-selection|user-behavior-retn-custom"
                             data-next-field="user-behavior-retn-custom"><?php _e('Custom', 'if-so'); ?></option>
-
                         </select>
 
 
@@ -1037,7 +1008,7 @@ function get_rule_item($index, $rule=array(), $is_template = false) {
                     <?php if (!$enableVisitCount): ?>
                         <div class="ifso-form-group">
                             <div data-field="new-visitor" class="noticebox-container  <?php echo (isset($rule['trigger_type']) && $rule['trigger_type'] == 'User-Behavior'&& $rule['User-Behavior'] == 'NewUser') ? 'show-selection' : ''; ?>">
-                                <div class="pagevisit-noticebox yellow-noticebox"><p><?php echo __('Please go to') . ' <a href="' . admin_url('admin.php?page=' . EDD_IFSO_PLUGIN_SETTINGS_PAGE) . '" target="_blank">If-So> Settings</a>' . __(' and check the "Enable visit count" option in order to use this condition.', 'if-so');?></p></div>
+                                <div class="pagevisit-noticebox red-noticebox"><p><?php echo __('Please go to') . ' <a href="' . admin_url('admin.php?page=' . EDD_IFSO_PLUGIN_SETTINGS_PAGE) . '" target="_blank">If-So> Settings</a>' . __(' and check the "Enable visit count" option in order to use this condition.', 'if-so');?></p></div>
                             </div>
                         </div>
                     <?php endif; ?>
@@ -1047,13 +1018,11 @@ function get_rule_item($index, $rule=array(), $is_template = false) {
                 <?php if (!isset($_COOKIE['ifso_hide_newuser_notice'])): ?>
                     <div class="ifso-form-group">
                         <div data-field="new-visitor" class="set-time-info-container <?php echo (isset($rule['trigger_type']) && $rule['trigger_type'] == 'User-Behavior' && $rule['User-Behavior'] == 'NewUser') ? 'show-selection' : ''; ?>">
-                            <div class="newusernotice"><span class="closeX">X</span><p><?php _e('Content will be displayed according to the user\'s total number of page views on the site.', 'if-so');?> <a target="_blank" href="https://www.if-so.com/help/documentation/new-and-returning-visitors?utm_source=Plugin&utm_medium=Micro&utm_campaign=NewReturning"><?php _e('Learn more', 'if-so');?></a> </p></div>
+                            <div class="newusernotice purple-noticebox"><span class="closeX">X</span><p><?php _e('Content will be displayed according to the user\'s total number of page views on the site.', 'if-so');?> <a target="_blank" href="https://www.if-so.com/help/documentation/new-and-returning-visitors?utm_source=Plugin&utm_medium=Micro&utm_campaign=NewReturning"><?php _e('Learn more', 'if-so');?></a> </p></div>
                         </div>
                     </div>
                 <?php endif; ?>
                 
-<!--                <input type="text" class="ifsodatetimepicker"> -->
-
                     <div class="ifso-form-group">
 
                         <select name="repeater[<?php echo $current_version_index; ?>][user-behavior-browser-language]" class="form-control referrer-custom <?php echo (isset($rule['User-Behavior']) && $rule['User-Behavior'] == "BrowserLanguage") ? 'show-selection' : ''; ?>" data-field="user-behavior-browser-language">
@@ -1106,21 +1075,23 @@ function get_rule_item($index, $rule=array(), $is_template = false) {
                     <!-- to be added in the future for other types of custom referrers -->
 
                 <div class="ifso-form-group">
-                    <select class="page-visit-autocomplete ifso-input-autocomplete form-control referrer-custom <?php echo (isset($rule['trigger_type']) && $rule['trigger_type'] == 'Cookie') ? 'show-selection' : '';?>"  name="repeater[<?php echo $current_version_index; ?>][cookie-relationship]"  data-field="cookie">
-                        <option value="is" <?php if(!empty($rule['cookie-relationship']) && $rule['cookie-relationship'] === 'is') echo 'SELECTED'; ?> ><?php _e('Is','if-so');?></option>
-                        <option value="is-not" <?php if(!empty($rule['cookie-relationship']) && $rule['cookie-relationship'] === 'is-not') echo 'SELECTED'; ?> ><?php _e('Is not','if-so');?></option>
-                        <option value="is-more" <?php if(!empty($rule['cookie-relationship']) && $rule['cookie-relationship'] === 'is-more') echo 'SELECTED'; ?> ><?php _e('Numeric Value Is More Than','if-so');?></option>
-                        <option value="is-less" <?php if(!empty($rule['cookie-relationship']) && $rule['cookie-relationship'] === 'is-less') echo 'SELECTED'; ?> ><?php _e('Numeric Value Is Less Than','if-so');?></option>
-                    </select>
-                </div>
-
-                <div class="ifso-form-group">
                     <p class="referrer-custom <?php echo (isset($rule['trigger_type']) && $rule['trigger_type'] == 'Cookie') ? 'show-selection' : ''; ?>"  data-field="cookie">Chose a source:</p>
                 </div>
                 <div class="ifso-form-group">
                     <select placeholder="<?php _e('Chose a source', 'if-so'); ?>" name="repeater[<?php echo $current_version_index; ?>][CookieOrSession]" data-symbol="PAGEURL" class="page-visit-autocomplete ifso-input-autocomplete form-control referrer-custom <?php echo (isset($rule['trigger_type']) && $rule['trigger_type'] == 'Cookie') ? 'show-selection' : ''; ?>" novalidate data-field="cookie" autocomplete="off">
                         <option value="cookie" <?php echo (isset($rule['cookie-or-session']) && $rule['cookie-or-session'] == 'cookie') ? 'SELECTED' : ''?>>Cookie</option>
                         <option value="session" <?php echo (isset($rule['cookie-or-session']) && $rule['cookie-or-session'] == 'session') ? 'SELECTED' : ''?>>Session Variable</option>
+                    </select>
+                </div>
+
+                <div class="ifso-form-group">
+                    <select class="page-visit-autocomplete ifso-input-autocomplete form-control referrer-custom <?php echo (isset($rule['trigger_type']) && $rule['trigger_type'] == 'Cookie') ? 'show-selection' : '';?>"  name="repeater[<?php echo $current_version_index; ?>][cookie-relationship]"  data-field="cookie">
+                        <option value="is" <?php if(!empty($rule['cookie-relationship']) && $rule['cookie-relationship'] === 'is') echo 'SELECTED'; ?> ><?php _e('Is','if-so');?></option>
+                        <option value="is-not" <?php if(!empty($rule['cookie-relationship']) && $rule['cookie-relationship'] === 'is-not') echo 'SELECTED'; ?> ><?php _e('Is Not','if-so');?></option>
+                        <option value="contains" <?php if(!empty($rule['cookie-relationship']) && $rule['cookie-relationship'] === 'contains') echo 'SELECTED'; ?> ><?php _e('Contains','if-so');?></option>
+                        <option value="not-contains" <?php if(!empty($rule['cookie-relationship']) && $rule['cookie-relationship'] === 'not-contains') echo 'SELECTED'; ?> ><?php _e('Doesn\'t Contain','if-so');?></option>
+                        <option value="is-more" <?php if(!empty($rule['cookie-relationship']) && $rule['cookie-relationship'] === 'is-more') echo 'SELECTED'; ?> ><?php _e('Numeric Value Is More Than','if-so');?></option>
+                        <option value="is-less" <?php if(!empty($rule['cookie-relationship']) && $rule['cookie-relationship'] === 'is-less') echo 'SELECTED'; ?> ><?php _e('Numeric Value Is Less Than','if-so');?></option>
                     </select>
                 </div>
 
@@ -1188,9 +1159,7 @@ function get_rule_item($index, $rule=array(), $is_template = false) {
                 <div class="ifso-form-group">
                     <input type="text" name="repeater[<?php echo $current_version_index; ?>][compare_referrer]" data-field="referrer-custom" placeholder="<?php _e('https://your-referrer.com', 'if-so'); ?>" class="form-control referrer-custom <?php echo (!empty($rule['compare']) && (isset($rule['trigger_type']) && $rule['trigger_type'] == 'referrer')) ? 'show-selection' : ''; ?>" <?php echo (!empty($rule['compare']) && (isset($rule['trigger_type']) && $rule['trigger_type'] == 'referrer')) ? "value='{$rule['compare']}'" : ''; ?> />
                     <input type="text" name="repeater[<?php echo $current_version_index; ?>][compare_url]" data-field="url-custom" placeholder="<?php _e('Name your query string', 'if-so'); ?>" class="form-control url-custom <?php echo (!empty($rule['compare']) && (isset($rule['trigger_type']) && $rule['trigger_type'] == 'url')) ? 'show-selection' : ''; ?>" <?php echo (!empty($rule['compare']) && (isset($rule['trigger_type']) && $rule['trigger_type'] == 'url')) ? "value='{$rule['compare']}'" : ''; ?> />
-                    <?php /*if(!empty($rule['compare']) && ($rule['trigger_type'] == 'url')): ?>
-                        <span class="" data-field="url-custom"><input type="text" onfocus="this.select();" readonly="readonly" value='<?php echo $rule['compare']; ?>' class="large-text code"></span>
-                    <?php endif;*/ ?>
+
                     <div class="instructions" data-field="url-custom">
                         <p><?php _e('Add the following string to the end of your page URL to display the content:', 'if-so'); ?></p>
                         <pre class="ifso-dynamic-link-code"><code>?ifso=<b>your-query-string</b></code></pre>
@@ -1244,7 +1213,7 @@ function get_rule_item($index, $rule=array(), $is_template = false) {
                     <div class="utm-value-wrap referrer" data-field="utm-value">
                         <input class="showhide_input utm_input page-visit-autocomplete ifso-input-autocomplete form-control referrer-custom <?php echo ((isset($rule['utm-value']) && !empty($rule['utm-value']) && isset($rule['trigger_type']) && $rule['trigger_type'] == 'Utm') ? 'show-selection' : '');?>" value="<?php if(isset($rule['utm-value']) && !empty($rule['utm-value'])) echo $rule['utm-value']; ?>" type="text" name="repeater[<?php echo $current_version_index; ?>][utm-value]"  placeholder="<?php _e('UTM tag value', 'if-so'); ?>" data-field="utm-value">
                         <div data-field="utm-value"  class="yellow-noticebox utm-noticebox showhide_container nodisplay <?php echo ((isset($rule['utm-value']) && !empty($rule['utm-value']) && isset($rule['trigger_type']) && $rule['trigger_type'] == 'Utm') ? 'show-selection' : '');?>" value="<?php if(isset($rule['utm-value']) && !empty($rule['utm-value'])) echo $rule['utm-value']; ?>">
-                            <span class="closingX utm-closingx">X</span>
+                            <span class="closeX">X</span>
                             <?php _e('This field is case-sensitive', 'if-so'); ?>
                         </div>
 
@@ -1363,7 +1332,7 @@ function get_rule_item($index, $rule=array(), $is_template = false) {
                 <?php if (!$triggersVisitedOn): ?>
                     <div class="ifso-form-group">
                         <div data-field="triggers-visited-relationship" class="noticebox-container  <?php echo (isset($rule['trigger_type']) && $rule['trigger_type'] == 'TriggersVisited') ? 'show-selection' : ''; ?>">
-                            <div class="pagevisit-noticebox yellow-noticebox"><p><?php echo __('Please go to') . ' <a href="' . admin_url('admin.php?page=' . EDD_IFSO_PLUGIN_SETTINGS_PAGE) . '" target="_blank">If-So> Settings</a>' . __(' and check the "Trigger Visited" option in order to use this condition.', 'if-so');?></p></div>
+                            <div class="pagevisit-noticebox red-noticebox"><p><?php echo __('Please go to') . ' <a href="' . admin_url('admin.php?page=' . EDD_IFSO_PLUGIN_SETTINGS_PAGE) . '" target="_blank">If-So> Settings</a>' . __(' and check the "Trigger Visited" option in order to use this condition.', 'if-so');?></p></div>
                         </div>
                     </div>
                 <?php endif; ?>
@@ -1554,7 +1523,8 @@ function get_rule_item($index, $rule=array(), $is_template = false) {
 
 
 
-            <div class="col-md-9">
+            <div class="col-md-9 ifso-trigger-content-wrap">
+                <h3 class="title">Content</h3>
                 <?php if($is_template): ?>
                     <div class="repeater-editor-wrap"></div>
                 <?php else: ?>
@@ -1579,11 +1549,16 @@ function get_rule_item($index, $rule=array(), $is_template = false) {
                       empty($data_rules)): ?>
  
                 <div class="col-md-1 ifso-tm-section">
- 
-                    <a href="#" onclick="return false;" title="See how this version will look on your website. Press Update/ Publish for changes to take effect." class="tm-tip ifso_tooltip">?</a>
-                    <span class="text"><?php _e('Testing Mode', 'if-so'); ?> </span>
-                    <div  class="ifso-tm circle"></div>
- 
+
+                    <div class="col-md-3">
+
+                    </div>
+
+                    <div class="col-md-9">
+                        <a href="#" onclick="return false;" title="See how this version will look on your website. Press Update/ Publish for changes to take effect." class="tm-tip ifso_tooltip">?</a>
+                        <span class="text"><?php _e('Testing Mode', 'if-so'); ?> </span>
+                        <div  class="ifso-tm circle"></div>
+                    </div>
                 </div>
  
             <?php else: ?>
@@ -1637,9 +1612,8 @@ function get_rule_item($index, $rule=array(), $is_template = false) {
     if ( !isset($_COOKIE['ifso_is_first_use']) ):
         setcookie('ifso_is_first_use', true, time() + (10 * 365 * 24 * 60 * 60), "/");
 ?>
-<div id="ifso-modal-first-use">
-    <a href="<?php echo plugin_dir_url( __FILE__ ); ?>/assets/images/how-it-works.gif" data-group="ifso-first-use-images" class="ifso-first-use-images"></a>
-  
+<div class="ifso-modal-content ifso-modal-first-use-content">
+    <img src="<?php echo plugin_dir_url( __FILE__ ); ?>/assets/images/how-it-works.gif">
 </div>
 <?php endif; ?>
 <!-- IfSo Modal for first use : End -->
@@ -1648,25 +1622,21 @@ function get_rule_item($index, $rule=array(), $is_template = false) {
 <?php
 $current_post_id = get_the_ID();
 $published = (get_post_status( $current_post_id ) == 'publish' );
-$user = wp_get_current_user();
-if(isset($user->ID) && 0!== $user->ID)     //If user is logged in(even though they should be at this point)
-    $user_name = get_user_meta($user->ID)['first_name'][0];
+$ajax_compat_option_selected = PluginSettingsService\PluginSettingsService::get_instance()->renderTriggersViaAjax->get();
 
-if (!isset($_COOKIE['ifso_hide_caching_modal']) && defined('WP_CACHE') && WP_CACHE && $published):    //If "Never Show Again" wasn't pressed, the cache is on and the trigger is published
+if (!isset($_COOKIE['ifso_hide_caching_modal']) && defined('WP_CACHE') && WP_CACHE && $published && !$ajax_compat_option_selected):    //If "Never Show Again" wasn't pressed, the cache is on and the trigger is published
     ?>
     <div class="ifso-modal" id="ifso-modal-caching-compat">
         <div class="content">
-            <?php echo (!empty($user_name)) ? "<p style='margin-left:-10px;'>{$user_name}, </p>" : ''; ?>
-            <p>We noticed you are using cache on your website.</p>
-            <p>If-So is fully compatible with page caching. To ensure that the dynamic content loads as expected, please visit the plugin's settings and select the "Page Caching Compatibility" checkbox.</p>
-            <p><a href="<?php echo admin_url( 'admin.php?page=' . EDD_IFSO_PLUGIN_SETTINGS_PAGE ); ?>" target='_blank'>Open Settings ></a></p>
+            <p class="ifso-noticebox-icon" style="background: #6A6DD4;font-size:inherit;margin:0;width:34px;height:34px;">i</p>
+            <p style="font-weight:bold;font-size:20px;">We noticed you are using cache on your website.</p>
+            <p>If-So is fully compatible with page caching. To ensure that the dynamic content loads as expected, please visit the plugin's settings and check the "Page Caching Compatibility" checkbox.</p>
         </div>
         <div class="buttons">
-            <button type="button" class="button neverAgain">Never Show Again</button>
             <button type="button" class="button cls">Close</button>
+            <button type="button" class="button neverAgain">Never Show Again</button>
+            <a class="button" href="<?php echo admin_url( 'admin.php?page=' . EDD_IFSO_PLUGIN_SETTINGS_PAGE ); ?>" target='_blank' style="color:#fff;background:#6a6dd4;">Open Settings</a>
         </div>
-        <img class="guyImg" src="<?php echo IFSO_PLUGIN_DIR_URL . 'admin/images/Help.png';?>">
-
     </div>
 <?php endif; ?>
 <!-- IfSoIfSo Modal for caching plugins interop : End -->
@@ -1684,8 +1654,6 @@ if (!isset($_COOKIE['ifso_hide_caching_modal']) && defined('WP_CACHE') && WP_CAC
             data-repeater-item's name attribute would become group-a[0][text-input],
             and the second data-repeater-item would become group-a[1][text-input]
         -->
-        <?php // echo "<pre>".print_r($data_rules, true)."</pre>"; ?>
-        <?php // echo "<pre>".print_r($data_versions, true)."</pre>"; ?>
         
         <div id="ifso-versions-container">
             <ul class="ifso-versions-sortable">
@@ -1707,8 +1675,10 @@ if (!isset($_COOKIE['ifso_hide_caching_modal']) && defined('WP_CACHE') && WP_CAC
         <button type="button" id="reapeater-add" class="btn-add"><i class="fa fa-plus highlighted" aria-hidden="true"></i>&nbsp;&nbsp;&nbsp;<?php _e('Add Another Version', 'if-so'); ?></button>
         <?php if(!isset($_COOKIE['hide_too_many_conditions_notif'])):?>
             <div class="too-many-conditions-notif yellow-noticebox nodisplay">
-                <span class="closingX">X</span>
-                <?php _e("If-So allows you to create as many versions as you want. Depending on your server configuration, some of the versions may disappear after updating a trigger with many versions. In the case that you face this issue, it can be fixed by simply increasing the \"max_input_vars\" value in your php.ini.",'if-so');?> <a href="https://www.if-so.com/?post_type=faq-items&p=32007" target="_blank"><?php _e('Learn More','if-so');?></a>.
+                <span class="closeX">X</span>
+                <p>
+                    <?php _e("If-So allows you to create as many versions as you want. Depending on your server configuration, some of the versions may disappear after updating a trigger with many versions. In the case that you face this issue, it can be fixed by simply increasing the \"max_input_vars\" value in your php.ini.",'if-so');?> <a href="https://www.if-so.com/?post_type=faq-items&p=32007" target="_blank"><?php _e('Learn More','if-so');?></a>.
+                </p>
             </div>
         <?php endif; ?>
     </div>
@@ -1717,7 +1687,6 @@ if (!isset($_COOKIE['ifso_hide_caching_modal']) && defined('WP_CACHE') && WP_CAC
         <div class="row rule-wrap default-rule-wrap">
             <div class="col-md-3">
                 <h3>
-                    <!--<span class="version-count">1</span>-->
                     <?php _e('Default Content', 'if-so'); ?>
                 </h3>
                 <p><?php _e('Default content appears when none of the conditions are met.', 'if-so'); ?><br><br> <?php _e('Leave this blank if you', 'if-so'); ?> <strong><?php _e('do not', 'if-so'); ?></strong> <?php _e('want to display anything by default', 'if-so'); ?>.</p>
@@ -1754,19 +1723,17 @@ if (!isset($_COOKIE['ifso_hide_caching_modal']) && defined('WP_CACHE') && WP_CAC
                 <?php $submit_text = ($post_status == 'publish') ? __('Update', 'if-so') : __('Publish', 'if-so'); ?>
                 <?php if($post_status != 'publish'): ?>
                 <p class="reminder">
-                    <b class="highlighted"><?php _e('Finished', 'if-so'); ?>?</b>
-                    <?php _e('Press publish to receive a shortcode to use on your website.', 'if-so'); ?>
+                    <b class="highlighted"><?php _e('All Set', 'if-so'); ?>?</b>
+                    <?php _e('Hit “Publish” and paste the trigger\'s shortcode wherever you wish to display its content.', 'if-so'); ?>
                     &nbsp;<!--<span class="submit-btn-wrap"><?php submit_button( $submit_text, 'primary', 'submit', false, NULL ); ?></span>-->
                 </p>
-
-                <?php endif; /*else: ?>
-                <span class="submit-btn-wrap"><?php submit_button( $submit_text, 'primary', 'submit', false, NULL ); ?></span>
-                <?php endif; */?>
+                <?php endif; ?>
                 <p ><a style="text-decoration: underline;color: #3c434a;" href="https://if-so.com/privacy-policy" target="_blank">Privacy Policy</a> </p>
             </div>
         </div>
     </div>
 </div><!-- /.wrap -->
+<?php require_once(IFSO_PLUGIN_BASE_DIR . 'admin/partials/ifso_helper_metabox.php'); ?>
 <?php if($broken_trigger_types):?>
 <script>
     var broken_types_str = '<?php echo json_encode($broken_trigger_types);?>';
@@ -1774,4 +1741,3 @@ if (!isset($_COOKIE['ifso_hide_caching_modal']) && defined('WP_CACHE') && WP_CAC
     alert('One of this trigger’s version has a missing condition. The issue is likely to happen due to a deactivated extension.\nNOTE! Clicking “Update” will delete the settings of the missing condition/s!');
 </script>
 <?php endif; ?>
-

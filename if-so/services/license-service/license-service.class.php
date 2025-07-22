@@ -61,11 +61,11 @@ class LicenseService extends LicenseServiceBase {
 					$message = __( 'The license key is invalid for this version of the plugin. Make sure you have updated the plugin. If the problem persists, please contact us at support@if-so.com.' );
 					break;
 				case 'no_activations_left':
-					$message = __( 'This license key is currently active in another domain. !!!LINKSTART!!!http://www.if-so.com/plans?ifso=pro&utm_source=Plugin&utm_medium=LicenseErrors&utm_campaign=LicenseAlreadyActive!!!LINKEND!!!!!!LINKTEXT!!!Click here to get a new license!!!LINKTEXTEND!!!' );
+					$message = __( 'This license key is currently active in another domain. !!!LINKSTART!!!https://www.if-so.com/plans?ifso=pro&utm_source=Plugin&utm_medium=LicenseErrors&utm_campaign=LicenseAlreadyActive!!!LINKEND!!!!!!LINKTEXT!!!Click here to get a new license!!!LINKTEXTEND!!!' );
 					
 					break;
 				case 'domain_already_has_key':
-					$message = __( 'A free trial license has already been used for this domain. !!!LINKSTART!!!http://www.if-so.com/plans?ifso=pro&utm_source=Plugin&utm_medium=TrialEnded&utm_campaign=LicensePage!!!LINKEND!!!!!!LINKTEXT!!!Click here to get a pro license.!!!LINKTEXTEND!!!' );
+					$message = __( 'A free trial license has already been used for this domain. !!!LINKSTART!!!https://www.if-so.com/plans?ifso=pro&utm_source=Plugin&utm_medium=TrialEnded&utm_campaign=LicensePage!!!LINKEND!!!!!!LINKTEXT!!!Click here to get a pro license.!!!LINKTEXTEND!!!' );
 					break;
 				default :
 					break;

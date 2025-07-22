@@ -6,8 +6,25 @@
     html{
         padding:0!important;
     }
-    #wpcontent{
-        margin: 0;
+    body{
+        background:#fff;
+    }
+    .title-wrap{
+        text-align: center;
+        margin:32px 0;
+    }
+    .title-wrap>*{
+        display:block;
+        color:#515962;
+    }
+    .title-wrap .page-icon{
+        margin:0 auto;
+        width: 70px;
+        height: 70px;
+    }
+    #wpwrap #wpcontent{
+        margin: 0!important;
+        padding:0!important;
     }
     #wpadminbar,#adminmenumain,.notice{
         display: none;
@@ -17,10 +34,12 @@
     }
     .ifso-autocomplete-generator .row{
         position: relative;
-        width: 49%;
+        width: 50%;
+        box-sizing: border-box;
     }
     .ifso-autocomplete-generator .row.inputs-row{
         float: left;
+        padding: 0 16px 0 83.5px;
     }
     .ifso-autocomplete-generator .inputs-row .instructions span{
         padding: 0 6px;
@@ -30,10 +49,12 @@
         margin-right: 4px;
     }
     .ifso-autocomplete-generator .inputs-row .input-wrapper{
-        margin-bottom:5px;
     }
     .ifso-autocomplete-generator .inputs-row .input-wrapper input, .ifso-autocomplete-generator .inputs-row .input-wrapper select{
         width:100%;
+        max-width:none;
+        margin-bottom:17px;
+        color: #515962;
     }
     .ifso-autocomplete-generator .inputs-row .input-wrapper input{
         padding: 4px;
@@ -42,24 +63,34 @@
     }
     .ifso-autocomplete-generator .row.results-row{
         float: right;
-        padding: 0px 20px;
-        box-sizing: border-box
+        box-sizing: border-box;
+        padding: 0 83.5px 0 16px;
+    }
+    .results_display_wrap .locations-description{
+        text-align: center;
+        border: none;
+        padding: 0;
+        font-size:16px;
+        font-weight: 600;
+        color: #515962;
+        margin:6px 0 20px 0;
     }
     .results_display_wrap .results_display .locations-type{
         text-transform: capitalize;
     }
     .results_display_wrap .results_display{
-        margin-bottom: 20px;
+        margin-bottom: 24px;
+        border: 1px solid #8C8F94;
+        background: #fff;
+        border-radius: 3px;
     }
-    .results_display_wrap .copy_results_wrap{
+    .results_display_wrap .copy_results_wrap .copy_btn{
         text-align: center;
-    }
-    .results_display_wrap .copy_results_wrap .reset_btn{
-        border-color:#b32d2e;
-        color:#b32d2e;
-    }
-    .results_display_wrap .copy_results_wrap .reset_btn:focus{
-        box-shadow: 0 0 0 1px #b32d2e;
+        background: #696DDB;
+        border: none;
+        width: 100%;
+        box-shadow: none;
+        font-size:16px;
     }
     .results_display_wrap .copy_results_wrap .results_copied_notification{
         color: #008a20;
@@ -70,10 +101,17 @@
     }
     .results_display_wrap .location-version-wrap{
         position: relative;
-        margin-bottom: 2px;
+        margin-bottom: 8px;
+        border-bottom: 1px solid #515962;
+        padding: 0 0 8px 8px;
+    }
+    .results_display_wrap .location-version-wrap .specific-location{
+        color:#515962;
+        font-size:14px;
     }
     .results_display_wrap .results_display .remove-location{
         cursor:pointer;
+        top:0;
     }
     .instructions_display_wrap{
         padding-bottom: 10px;
@@ -83,12 +121,21 @@
     .instructions_display_wrap .inst-title{
         text-decoration: underline;margin-bottom: 20px;
     }
-
+    @media screen and (max-width: 600px) {
+        .ifso-autocomplete-generator .row.results-row, .ifso-autocomplete-generator .row.inputs-row{
+            padding: 0 10px;
+            float:none;
+            width:100%;
+        }
+    }
 </style>
-    
+
 <div class="page-wrap">
-    <h1 clasx="page-title">Select Locations</h1>
-    <hr>
+    <div class="title-wrap">
+        <img class="page-icon" src="<?php echo IFSO_PLUGIN_DIR_URL . 'admin/images/select_locaitons_icon.png';?>">
+        <h1 class="page-title" style="margin:8px;font-size:24px;">Select Locations</h1>
+        <p class="page-subtitle" style="font-size:16px;margin:0;">Select locations to target. Click "Insert" to apply.</p>
+    </div>
     <form class="ifso-autocomplete-generator">
         <div class="row inputs-row">
             <div class="input-wrapper">
@@ -117,7 +164,6 @@
                 </div>
                 <div class="copy_results_wrap">
                     <button class="copy_btn button button-large button-primary" type="button">Copy</button>
-                    <button class="reset_btn button button-large" type="button">Reset </button>
                     <p class="results_copied_notification">Copied!</p>
                 </div>
                 <input hidden readonly="readonly" id="generated-location-result">
@@ -177,7 +223,6 @@
                 if(_this.results_field.value!=='' && _this.results_field.value!=='[]')
                     _this.flashCopyLabel();
             });
-            this.form.querySelector('.copy_results_wrap .reset_btn').addEventListener('click',function (){_this.changeLocationType(this.type,true);});
             if(this.openerHasPipe())
                 this.form.querySelector('.copy_results_wrap .copy_btn').innerHTML = 'Insert';
         },
