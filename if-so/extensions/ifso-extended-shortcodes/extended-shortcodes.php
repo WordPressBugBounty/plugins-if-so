@@ -54,7 +54,7 @@ class ExtendedShortcodes {
         if($ret instanceof DKIFallback)
             $ret = esc_html($ret->content);
         elseif(!$ajax)
-            $ret = $before . $ret . $after;
+            $ret = esc_html($before) . $ret . esc_html($after);
 
         return $ret;
     }

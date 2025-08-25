@@ -4,7 +4,7 @@ Donate link: https://www.if-so.com/?utm_source=WordPress&utm_medium=Readme&utm_c
 Tags: Dynamic content, personalization, conditional, geolocatargeting, location
 Requires at least: 4.0.1
 Tested up to: 6.8
-Stable tag: 1.9.3.2
+Stable tag: 1.9.4.1
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -294,6 +294,10 @@ You sure can! So far, we have not come across any WordPress themes that If-So Dy
 
 
 == Changelog ==
+
+= 1.9.4.1 =
+
+* Resolved a non-critical security concern.
 
 = 1.9.4 =
 
