@@ -88,7 +88,8 @@ class AfterUpgradeService {
 
     private static function reset_metabox_order(){
         global $wpdb;
-        $wpdb->update($wpdb->prefix.'usermeta',['meta_key'=>''],['meta_key'=>'meta-box-order_ifso_triggers']);
+        //$wpdb->update($wpdb->prefix.'usermeta',['meta_key'=>''],['meta_key'=>'meta-box-order_ifso_triggers']);
+        $wpdb->delete($wpdb->prefix.'usermeta',['meta_key'=>'meta-box-order_ifso_triggers']);
     }
 
     private static function create_license_renew_columns_if_not_exist(){

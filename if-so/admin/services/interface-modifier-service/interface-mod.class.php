@@ -50,7 +50,7 @@ class InterfaceModService{
             echo $this->create_scan_button($post->ID,'Find Shortcode');
     }
 
-    private function create_scan_button($post_id,$button_text='Find Shortcode'){
+    public function create_scan_button($post_id,$button_text='Find Shortcode'){
         $url = admin_url('admin-ajax.php?action=trigger_scan_req&postid=' . $post_id, basename(__FILE__) ) . '&_ifsononce=' . wp_create_nonce('trigger-scan');
         $title = __('Scan posts for usages of this shortcode', 'if-so');
         $text =  __($button_text , 'if-so');
@@ -373,5 +373,24 @@ HTM;
         wp_die();
     }
 
+    public function generate_version_symbol($version_number) {
+        $version_number = intval($version_number+64+1);
+        $num_of_characters_in_abc = 26;
+        $base_ascii = 64;
+        $version_number = intval($version_number) - $base_ascii;
+
+        $postfix = '';
+        if ($version_number > $num_of_characters_in_abc) {
+            $postfix = intval($version_number / $num_of_characters_in_abc) + 1;
+            $version_number %= $num_of_characters_in_abc;
+            if ($version_number == 0) {
+                $version_number = $num_of_characters_in_abc;
+                $postfix -= 1;
+            }
+        }
+
+        $version_number += $base_ascii;
+        return chr($version_number) . strval($postfix);
+    }
 }
 

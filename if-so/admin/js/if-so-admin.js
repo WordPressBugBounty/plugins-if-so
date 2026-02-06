@@ -5,31 +5,35 @@
     $(document).on("click", ".ifso-admin-tabs-header .ifso-tab", function() {
         if ( $(this).hasClass("selected-tab") )
             return;
-        var selectedTab = $(this).data('tab');
-        var contentToShow = "." + selectedTab;
-        var $selectedTab = $(".selected-tab");
-        var firstOpen = $selectedTab.length===0;
-        var contentToHide = "." + $selectedTab.data("tab");
-        window.location.hash = selectedTab;
-        // switch classes
-        $selectedTab.removeClass("selected-tab");
+        var tabset = $(this).parent().data('tabset');
+        var tabset_tabs_parent_selector = typeof(tabset) !== 'undefined' ?  '.ifso-admin-tabs[data-tabset="' + tabset + '"] ' : '';
+        var selectedTabName = $(this).data('tab');
+        var oldSelectedTab = $(this).parent().find(".selected-tab");
+        var contentToShowSelector = tabset_tabs_parent_selector +  "." + selectedTabName;
+        var contentToHideSelector = tabset_tabs_parent_selector +  "." + oldSelectedTab.data("tab");
+        var firstOpen = oldSelectedTab.length===0;
+        window.location.hash = selectedTabName;
+        // switch tab headings
+        oldSelectedTab.removeClass("selected-tab");
         $(this).addClass("selected-tab");
         // switch contents
         if(firstOpen)
-            $(contentToShow).stop(true).fadeIn();
+            $(contentToShowSelector).stop(true).fadeIn();
         else{
-            $(contentToHide).stop(true).fadeOut('fast', function() {$(contentToShow).stop(true).fadeIn();});
+            $(contentToHideSelector).stop(true).fadeOut('fast', function() {$(contentToShowSelector).stop(true).fadeIn();});
         }
     });
 
     $(document).ready(function(){
         //Geo page -switch tabs according to the hash
         if($('[data-tab]').length>0){
-            if(window.location.hash!='' && $('[data-tab=' + window.location.hash.substring(1) + ']').length>0){
+            if($('.ifso-admin-tabs-header').length===1 && window.location.hash!='' && $('[data-tab=' + window.location.hash.substring(1) + ']').length>0){
                 $('[data-tab=' + window.location.hash.substring(1) + ']').click();
             }
             else if($('.ifso-tab.default-tab').length>0){
-                $('.ifso-tab.default-tab').click();
+                $('.ifso-tab.default-tab').each(function(){
+                        $(this).click();
+                });
             }
         }
 

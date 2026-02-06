@@ -129,6 +129,14 @@
 			firstUseModal.createModal($(".ifso-modal-first-use-content")[0]);
 			firstUseModal.openModal();
 		}
+
+		if($(".php-shortcode-toggle-wrap").length){
+			var phpCodeModal = new TinyModal('triggerpage-php-code-modal');
+			phpCodeModal.createModal($('.php-shortcode-toggle-wrap')[0])
+			$(".php-shortcode-toggle-link").on('click',function (){
+				phpCodeModal.openModal();
+			});
+		}
 		
 		// Enable Time/Day Schedule
 		$(".date-time-schedule").dayScheduleSelector(scheduleSettings);
@@ -288,27 +296,7 @@
 				}
 			});
 		}
-		
-		// toggle PHP code
-		$(document).on( 'click', '.php-shortcode-toggle-link', function(e) {
-			$('.php-shortcode-toggle-wrap').slideToggle( "slow", function() {});
-			e.target.querySelector('.ifso-turnme').classList.toggle('ifso-turnt-around')
-		});
-		$(document).on( 'click', '.shortcode-withtitle-toggle-link', function(e) {
-			$('.shortcode-withtitle-toggle-wrap').slideToggle( "slow", function() {});
-			e.target.querySelector('.ifso-turnme').classList.toggle('ifso-turnt-around')
-		});
-		// toggle analytics meta box info
-		$(document).on( 'click', '.php-analytics-toggle-link', function(e) {
-			$('.php-analytics-toggle-wrap').slideToggle( "slow", function() {});
-			e.target.querySelector('.ifso-turnme').classList.toggle('ifso-turnt-around')
-		});
-		// popup notice/generator
-		$(document).on( 'click', '.ifso-popup-shortcode-link', function(e) {
-			$('.ifso-popup-notice-wrap').slideToggle( "slow", function() {});
-			e.target.querySelector('.ifso-turnme').classList.toggle('ifso-turnt-around')
-		});
-		
+
 		$('.post-type-ifso_triggers #post').on('submit', function (e) {
 			// Updating all the schedule data with their correspond hidden input
 			$(".date-time-schedule").each(function() {
@@ -359,7 +347,7 @@
 			}
 			$(this).closest('.recurrence-container').find('.current-recurrence-type').text(rawRecurrenceToVisual(recurrenceType));
 		});
-		$(document).on( 'change', '.rule-wrap select', function() {
+		$(document).on( 'change', '.rule-wrap select', function() {	//Version condition changed
 			var selectedOption = $(this).find(':selected');
 			var switchWrap = $(this).closest('.rule-wrap');
 			var ruleToolbarWrap = switchWrap.find('.rule-toolbar-wrap');
@@ -376,18 +364,20 @@
 					switchWrap.find("[data-field*='" + resetAttrValue + "']").prop('required', false);
 					// Treat special data-fields
 					if (resetAttrValue == "advertising-platforms-selection") {
-						// switchWrap.find("[data-field*='" + resetAttrValue + "']").trigger('change');
 						var elem = switchWrap.find("[data-field*='" + resetAttrValue + "']");
 						platform_symbols(elem);
 					}
 				});
 			}
+			//Reset recurrence field
+			if(selectedOption.val()==='AB-Testing')
+				switchWrap.find('.recurrence-selection .recurrence-option input[value="always"]').click();
+			else
+				switchWrap.find('.recurrence-selection .recurrence-option input[value="none"]').click();
 
 			if (typeof nextFieldAttr === 'undefined') return;
 			var nextFields = nextFieldAttr.split('|');
 			$.each( nextFields, function( key, nextAttrValue ) {
-				console.log(nextAttrValue + ":");
-				console.log(switchWrap.find("[data-field='" + nextAttrValue + "']"));
 				switchWrap.find("[data-field='" + nextAttrValue + "']").show();
 				var isRequired = !isInArray(nextAttrValue, notRequiredFields);
 				switchWrap.find("[data-field='" + nextAttrValue + "']").prop('required', isRequired);
@@ -573,17 +563,6 @@
 
 		if($('.ifso-modal-need-help').length>0){
 			showOnFocus(null,$('.ifso-modal-need-help'),$('.ifso-modal-need-help .closeX'),'need_help');
-		}
-
-
-		/*Send test email - send AJAX*/
-		if($('#ifso_send_test_email').length>0){
-			$('#ifso_send_test_email').on('click',function(){ajaxPost({action:'send_test_mail'},function(a){alert('A testing email was sent successfully. Please check your spam folder if you do not see it in your inbox.')},function(a,b){var errText = a.responseText || '';alert('Something went wrong! Please check your internet connection and try again!\n'+errText)})});
-		}
-
-		//Contstruct the analytics UI if we're in a relevant page(the fuction defined in analytics metabox template)
-		if(typeof(constructAnalyticsUi)=='function'){
-			constructAnalyticsUi();
 		}
 
 		notifyIfTooManyVersions();

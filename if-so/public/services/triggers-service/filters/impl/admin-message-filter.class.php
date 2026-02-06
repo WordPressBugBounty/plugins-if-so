@@ -127,7 +127,7 @@ class AdminMessageFilter extends FilterBase {
                 <div class="ifso-fe-admin-notice">
                     <div class="notice-content">
                         <h3>This page is running A/B tests.</h3>
-                        <p>A/B tests do not run for logged-in admins, to switch views, log out or open the site in incognito mode.</p>
+                        <p>A/B tests do not run for logged-in admins, to make the versions rotate, log out or open the site in incognito mode.</p>
                     </div>
                     <span class="closeX" onclick="this.parentElement.parentElement.classList.add('minified');ifso_scope.createCookie('{$hide_notice_cookie_name}','1',30);">&#10006;&#xFE0E;</span>
                 </div>

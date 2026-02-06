@@ -182,6 +182,12 @@ box-shadow: none;
 #ifso_triggers_metabox .postbox-header{
     display: none;
 }
+.postbox .postbox-header .hndle{
+    cursor:default;
+}
+.postbox .postbox-header .handle-actions{
+    display:none;
+}
 
 #poststuff #ifso_triggers_metabox .inside {
     margin: 0;
@@ -355,10 +361,6 @@ box-shadow: none;
 .recurrence-radio {
     float:left;
     margin: 3px 0 !important;
-
-    height: 11px !important;
-    width: 11px !important;
-    min-width: 11px !important;
 }
 .recurrence-radio:checked:before {
     width: 5px !important;
@@ -382,9 +384,6 @@ box-shadow: none;
 }
 input.form-control.deviceformcontrol {
 	margin: 0 3px 3px;
-    width: 10px;
-    min-width: 10px;
-    height: 10px;
 }
 
 input.form-control.deviceformcontrol:before {
@@ -413,7 +412,7 @@ input.form-control.deviceformcontrol:before {
     background: #fff;
 }
 
-.referrer-custom, .ab-testing-custom, .url-custom, .referrer-selection, .rule-item .instructions, .ab-testing {
+.referrer-custom, .ab-testing-custom, .url-custom, .referrer-selection, .rule-item .instructions, .ab-testing, .cond-field  {
 	display: none;
 }
 
@@ -512,6 +511,9 @@ input.form-control.deviceformcontrol:before {
     float: left;
     width: 100%;
     background:#fff;
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
 }
 
 .rule-toolbar-wrap-clear {
@@ -526,6 +528,10 @@ input.form-control.deviceformcontrol:before {
     float: left;
     color: #7e8188;
     line-height: 0.9em;
+}
+
+.rule-toolbar-wrap .toolbar-buttons-wrap{
+    flex-grow: 1;
 }
 
 .rule-toolbar-wrap h3 img {
@@ -565,41 +571,28 @@ input.form-control.deviceformcontrol:before {
     font-weight: bold;
 }
 
-.btn-delete {
-	color: #767779;
-    background-color: transparent;
-    border: none;
-    border-left: 1px solid #dedfe0;
-    float: right;
-    border-radius: 0;
-    padding: 1.3em 1.6em 1.1em;
-	-webkit-transition: all 200ms ease-in-out 0s;
-    -moz-transition: all 200ms ease-in-out 0s;
-    -o-transition: all 200ms ease-in-out 0s;
-    transition: all 200ms ease-in-out 0s;
-}
-
-.btn-delete i {
-	font-size: 1.5em;
-}
-
-.btn-delete:hover, .btn-freeze:hover {
-	color: #4f575f;
-	background: rgba(0, 0, 0, 0.05);
-}
-
-.btn-freeze, .ifso-btn-drag, .ifso-btn-dup, .ifso-btn-version-name {
+.btn-freeze, .ifso-btn-drag, .ifso-btn-dup, .ifso-btn-version-name,.btn-delete {
     color: #767779;
     background-color: transparent;
     border: none;
     border-left: 1px solid #dedfe0;
     float: right;
     border-radius: 0;
-    padding: 1.31em 1.6em;
+    padding: 1.3em 1.6em 1.1em;
     -webkit-transition: all 200ms ease-in-out 0s;
     -moz-transition: all 200ms ease-in-out 0s;
     -o-transition: all 200ms ease-in-out 0s;
     transition: all 200ms ease-in-out 0s;
+    height: 57px;
+}
+
+.btn-delete i {
+    font-size: 1.5em;
+}
+
+.btn-delete:hover, .btn-freeze:hover {
+    color: #4f575f;
+    background: rgba(0, 0, 0, 0.05);
 }
 
 .highlighted {
@@ -690,9 +683,10 @@ input.form-control.deviceformcontrol:before {
     margin-top:12px;
 }
 
+
 .ifso-sc-metabox-toggle-wrap {
-	display: none;
-    margin-bottom:10px;
+    margin: 15px auto;
+    width: 75%;
 }
 
 .ifso-sc-metabox-toggle-wrap p{
@@ -704,10 +698,22 @@ input.form-control.deviceformcontrol:before {
     display:block
 }
 
-.ifso-sc-metabox-toggle-link {
-    color: #00a0d2;
+#ifso_shortcode_display .ifso-sc-metabox-toggle-link, #ifso_shortcode_display .shortcode-tab a{
+    color: #777;
     font-weight: 400;
     cursor: pointer;
+}
+
+#ifso_shortcode_display .ifso-sc-metabox-toggle-link:before, #ifso_shortcode_display .shortcode-tab a:before{
+    content:">";
+    color: #6a6dd4;
+    padding: 0 5px 0 2px;
+    font-size: 0.8em;
+    top: -1px;
+    position: relative
+}
+
+.ifso-sc-metabox-toggle-link{
     margin: 0.3em 0;
 }
 
@@ -1215,7 +1221,6 @@ input.ifso-autocomplete-opener {
 /* Settings Page related CSS - Begin */
 .ifso-admin-tabs-header {
     list-style:none;
-    float:left;
     width:100%;
     border-bottom:1px solid #cccccc;
     margin-bottom: 42px;
@@ -1720,6 +1725,7 @@ input.ifso-autocomplete-opener {
 .purple-noticebox:before{
     content:"i";
     background: #6A6DD4;
+    font-family: Script MT Bold;
 }
 
 .noicon-noticebox:before{
@@ -1734,10 +1740,6 @@ input.ifso-autocomplete-opener {
     vertical-align: sub;
     font-weight: normal;
     margin-top: 10px;
-}
-
-.recurrence-selection .recurrence-override input[type=checkbox]{
-    transform: scale(0.7) translate(-15%,-8%);
 }
 
 .geo-license-section .form-table .description.active, .license-form .license-tbl .description.active{
@@ -1814,13 +1816,11 @@ input.ifso-autocomplete-opener {
 }
 
 .add_new_group .button.button-primary{
-    background-color:#1aa61a;
-    border-color:#1aa61a;
-    margin-left:5px;
-}
-
-.noticebox-container .nogroups_noticebox, .pagevisit-noticebox{
-    text-align:center;
+    background-color: #696DDB;
+    border-color: #696DDB;
+    margin-left: 5px;
+    border-radius: 5px;
+    padding: 0 27px 1px 27px;
 }
 
 .ifso-form-group select.form-control{
@@ -1830,12 +1830,14 @@ input.ifso-autocomplete-opener {
 .ui-tooltip{
     padding:0!important;
     border:none;
+    box-shadow:none;
 }
 
 .ui-tooltip-content{
     padding:16px;
     background:#6665e7 ;
     color:#fff;
+    border-radius:4px;
 }
 
 
@@ -1960,6 +1962,89 @@ input.pageurl-checkbox{
 }
 /*"Need help?" modal END*/
 
+.post-type-ifso_triggers input[type="radio"]{
+    height:11px;
+    width:11px;
+}
+
+.postbox#ifso_shortcode_display, .postbox#ifso_analytics_metabox{
+    width: 50%;
+    height: 302px;
+    display: inline-block!important;
+    vertical-align: middle;
+    margin-right: -3px;
+    border: none;
+    overflow: auto;
+    scrollbar-width: thin;
+}
+
+@media screen and (max-width: 1125px) and (min-width: 850px), (max-width: 650px){
+    .postbox#ifso_shortcode_display, .postbox#ifso_analytics_metabox{
+        width: 100%;
+    }
+}
+
+#ifso_analytics_metabox{
+    margin-right:-5px!important;
+    right:1px;
+}
+
+#ifso_analytics_metabox .inside, #ifso_shortcode_display .inside{
+    padding:0;
+}
+
+#ifso_shortcode_display .ifso-admin-tabs{
+    padding:0 16px 15px 16px;
+}
+
+#ifso_shortcode_display .ifso-admin-tabs .shortcode-tab .shortcode .code{
+    border:none;
+    height: 59px;
+}
+
+#ifso_shortcode_display .ifso-admin-tabs .shortcode .code, #normal-sortables #ifso_shortcode_display .ifso-admin-tabs select{
+    width:85%;
+    display:block;
+}
+
+#ifso_shortcode_display .postbox-header, #ifso_analytics_metabox .postbox-header{
+    display:none;
+}
+
+.post-type-ifso_triggers #post .postbox .ifso-admin-tabs-header{
+    margin: 0 0 30px 0;
+}
+
+.post-type-ifso_triggers #post .postbox .ifso-admin-tabs-header .ifso-tab{
+    background: none;
+    border: none;
+    font-size: 16px;
+    padding: 11px;
+    margin: 0 14px 0 10px;
+}
+
+.post-type-ifso_triggers #post .postbox .ifso-admin-tabs-header .ifso-tab.selected-tab{
+    background: none;
+    border-bottom: 3px solid #696DDB;
+    font-weight: 600;
+    color: #333;
+}
+
+.post-type-ifso_triggers .ifso-admin-tabs{
+    padding: 0 16px;
+}
+
+
+@media screen and (max-width:1630px){
+    .post-type-ifso_triggers #post .postbox .ifso-admin-tabs-header{
+        margin-bottom:20px;
+    }
+
+    .postbox#ifso_shortcode_display, .postbox#ifso_analytics_metabox{
+        height:312px;
+    }
+}
+
 .ifso-custom-version-name{
     position: relative;
     display: inline-block;
@@ -1988,4 +2073,40 @@ input.pageurl-checkbox{
 
 .dodisplay{
     display:block!important;
+}
+
+/* if-so dashboard modals - common elements */
+.modal-active.tiny-modal-overlay .modalContent .closebutton{
+    fill: #515962 !important;
+    background-color: transparent !important;
+    border: 1px solid #515962;
+    border-radius: 50%;
+    width: 20px !important;
+    padding: 3px !important;
+    top: 10px;
+    right: 10px;
+}
+/* if-so dashboard modal END */
+
+.shortcode.shortcode-with-cpybtn{
+    position:relative;
+    display:block;
+}
+
+.shortcode.shortcode-with-cpybtn .cpy-shortcode-btn{
+    position: absolute;
+    background-color: #fff;
+    border-radius: 4px;
+    padding: 0px 8px;
+    right: 20%;
+    top: 50%;
+    border: none;
+    width: 32px;
+    height: 32px;
+    box-sizing: content-box;
+    transform: translateY(-50%);
+}
+
+.shortcode.shortcode-with-cpybtn .cpy-shortcode-btn:active{
+    background-color: #F5F5F5;
 }

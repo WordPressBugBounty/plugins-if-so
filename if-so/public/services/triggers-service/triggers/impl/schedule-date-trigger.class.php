@@ -27,13 +27,12 @@ class ScheduleDateTrigger extends TimeDateTriggerBase {
 
 		$schedule = json_decode($rule['Date-Time-Schedule']);
 		$format = "Y/m/d H:i:s";
-		$tz = \IfSo\PublicFace\Helpers\WpDateTimeZone::getWpTimezone();
-		$currTime = current_time($format);
-        $time_obj = new \DateTime('now',$tz);
-        $currDay = $time_obj->format('w');
+		$tz = !empty($rule['Date-Time-User-Timezone']) && $rule['Date-Time-User-Timezone']==='user-geo' ? $this->get_timezone('geo') : $this->get_timezone();
+        $currDate = new \DateTime('now',$tz);
+		$currTime = $currDate->format($format);
+        $currDay = $currDate->format('w');
 		$selectedHours = $schedule->$currDay;
 		$dayYearMonth = preg_split("/ /", $currTime)[0];
-		$currDate = \DateTime::createFromFormat($format, current_time($format),$tz);
 
 		if (!empty($selectedHours)) {
 			foreach ($selectedHours as $hoursKey => $hoursPair) {

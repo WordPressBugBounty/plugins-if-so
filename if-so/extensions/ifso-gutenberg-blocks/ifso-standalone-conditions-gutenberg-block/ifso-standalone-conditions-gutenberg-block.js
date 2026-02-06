@@ -488,7 +488,7 @@
     var withIfsoBorder = wp.compose.createHigherOrderComponent( function( BlockListBlock ) {
         return function( props ) {
             if(is_block_forbidden(props.name)) return el(BlockListBlock,props);
-            var isOpen = (props.attributes.ifso_condition_type !== '');
+            var isOpen = (typeof(props.attributes.ifso_condition_type) !== 'undefined' && props.attributes.ifso_condition_type !== '');
             var newProps = {...props,className: (isOpen) ? props.className + ' ifso-widget-inuse' : props.className};
             return el( BlockListBlock, newProps );
         }

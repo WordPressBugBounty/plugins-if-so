@@ -1,6 +1,7 @@
 <?php
 namespace Elementor;
 
+use IfSo\Admin\Services\InterfaceModService\InterfaceModService;
 use IfSo\PublicFace\Services\TriggersService;
 
 if ( ! defined( 'ABSPATH' ) ) {
@@ -246,29 +247,11 @@ class IFSO_Dynamic_Widget extends Widget_Base {
             $version_names['default'] = "Default";
         }
         foreach ( $data_versions as $key => $value ) {
-            $version_names[ $key ] = $this->generate_version_symbol(65 + intval($key));
+            $version_names[ $key ] = InterfaceModService::get_instance()->generate_version_symbol($key);;
         }
 
 
         return $version_names;
-    }
-    protected function generate_version_symbol($version_number) {
-        $num_of_characters_in_abc = 26;
-        $base_ascii = 64;
-        $version_number = intval($version_number) - $base_ascii;
-
-        $postfix = '';
-        if ($version_number > $num_of_characters_in_abc) {
-            $postfix = intval($version_number / $num_of_characters_in_abc) + 1;
-            $version_number %= $num_of_characters_in_abc;
-            if ($version_number == 0) {
-                $version_number = $num_of_characters_in_abc;
-                $postfix -= 1;
-            }
-        }
-
-        $version_number += $base_ascii;
-        return chr($version_number) . strval($postfix);
     }
 
     protected function get_trigger_analytics( $trigger_id, $firstIterFlag ) {
@@ -394,7 +377,7 @@ class IFSO_Dynamic_Widget extends Widget_Base {
             if(!empty($all_triggers)){
                 foreach ( $all_triggers as $key => $trigger_data ) {
                     $trigger_condition    = $this->get_readable_condition( $trigger_data );
-                    $trigger_version_name = $this->generate_version_symbol(65 + intval($key));
+                    $trigger_version_name = InterfaceModService::get_instance()->generate_version_symbol($key);
                     $html                 .= "</br><b>$trigger_version_name:</b><p>Condition: $trigger_condition</p>";
                 }
             }

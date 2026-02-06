@@ -37,6 +37,7 @@ class ExtendedShortcodes {
         $this->do_add_cookie_shortcode();
         $this->do_redirect_shortcode();
         $this->do_google_analytics_event_shortcode();
+        $this->do_hide_site_content_shortcode();
 
         do_action('ifso_extra_extended_shortcodes');
     }
@@ -487,6 +488,26 @@ class ExtendedShortcodes {
         });
     }
 
+    private function do_hide_site_content_shortcode() {
+        add_shortcode('ifso_hide_site_content',function ($atts) {
+            if($this->is_edit_page_or_publish_action()) return;
+            if((empty($atts['block_admins']) || $atts['block_admins']!=='yes') && current_user_can('administrator')) return;
+            $message = !empty($atts['message']) ? $atts['message'] : 'The site content has been blocked!';
+            if(AjaxTriggersService::get_instance()->is_inside_ajax_triggers_request()){
+                if(shortcode_exists('ifso_modal'))
+                    return '<style>.modal-active.tiny-modal-overlay{background:#fff;}.modalContent{text-align: center}</style>' .
+                            do_shortcode("[ifso_modal closebtn='none']{$message}[/ifso_modal]");
+            }
+            else{
+                ob_start();
+                add_action('wp_footer',function()use($message){
+                    ob_end_clean();
+                    echo "<div class='ifso_block_site_content_message' style='position: absolute;top:50%;left:50%;transform:translate(-50%,-50%);'>{$message}</div>";
+                },PHP_INT_MAX);
+            }
+        });
+    }
+
     public function modify_ifso_shorcode_add_edit($data){
         if($data['post_type']!='ifso_triggers'){
             $pattern = '/\[ifso (id\=)(([\"\']{0,1})(\d+)([\"\']{0,1}))( .+){0,1}\]/';
@@ -513,8 +534,9 @@ class ExtendedShortcodes {
             'query'=>!empty($current_url_parsed['query']) ? $current_url_parsed['query'] : '',
             'domain'=>count($domain_parts)>1 ? implode('.',array_slice($domain_parts,0,count($domain_parts)-1)) : (count($domain_parts)===1 ? $domain_parts[0] : ''),
             'tld'=>count($domain_parts)>1 ? end($domain_parts) : '',
+            '?'=>!empty($current_url_parsed['query']) ? '?' : ''
         ];
-        return is_string($template_url) ? str_replace(['{{SCHEME}}','{{HOST}}','{{PATH}}','{{QUERY}}','{{DOMAIN}}','{{TLD}}'],[$current_url_parts['scheme'],$current_url_parts['host'],$current_url_parts['path'],$current_url_parts['query'],$current_url_parts['domain'],$current_url_parts['tld']],$template_url) : $template_url;
+        return is_string($template_url) ? str_replace(['{{SCHEME}}','{{HOST}}','{{PATH}}','{{QUERY}}','{{DOMAIN}}','{{TLD}}','{{?}}'],[$current_url_parts['scheme'],$current_url_parts['host'],$current_url_parts['path'],$current_url_parts['query'],$current_url_parts['domain'],$current_url_parts['tld'],$current_url_parts['?']],$template_url) : $template_url;
     }
 
 }

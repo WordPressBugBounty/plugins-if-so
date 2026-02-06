@@ -19,4 +19,16 @@ abstract class TimeDateTriggerBase extends TriggerBase {
 
 		return true;
 	}
+
+
+    protected function get_timezone($tz_type='wp'){
+        $tz = \IfSo\PublicFace\Helpers\WpDateTimeZone::getWpTimezone();
+        if($tz_type === 'geo'){
+            $user_geo_tz = \IfSo\Services\GeolocationService\GeolocationService::get_instance()->get_user_location()->get('timeZone');
+            if($user_geo_tz!==null)
+                $tz =  new \DateTimeZone($user_geo_tz);
+        }
+        return $tz;
+
+    }
 }

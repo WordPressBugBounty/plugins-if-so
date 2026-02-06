@@ -3,8 +3,8 @@ Contributors: ifso
 Donate link: https://www.if-so.com/?utm_source=WordPress&utm_medium=Readme&utm_campaign=Donate%20link
 Tags: Dynamic content, personalization, conditional, geolocatargeting, location
 Requires at least: 4.0.1
-Tested up to: 6.8
-Stable tag: 1.9.4.1
+Tested up to: 6.9
+Stable tag: 1.9.5.1
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -294,6 +294,25 @@ You sure can! So far, we have not come across any WordPress themes that If-So Dy
 
 
 == Changelog ==
+
+= 1.9.6 =
+Added a new ifso_cookie_category filter that allows you to change the cookie consent category of cookies added by If-So. The filter receives two arguments: the cookie type (necessary, statistics, marketing, preferences) and the cookie name (<a href="https://www.if-so.com/faq-items/can-i-change-the-category-of-if-so-cookies/?utm_source=WordPress&utm_medium=Readme&utm_campaign=v2&utm_term=cookiefilter" target="_blank">Learn more</a>).
+
+Added a new DKI shortcode that lets you block users from accessing the site based on If-So conditions (for example, country-based blocking; <a href="https://www.if-so.com/geolocation-wordpress-plugin/wordpress-country-block/?utm_source=WordPress&utm_medium=Readme&utm_campaign=v2&utm_term=cookiefilter" target="_blank">Learn more</a>).
+
+= 1.9.5.1 =
+
+* Bug fixes (Built-in analytics UI)
+
+= 1.9.5 =
+
+* User IP condition - added a “starts with” operator
+* Conditional Elementor and Gutenberg blocks - added Date & Time conditions
+* Date & Time condition - can now operate using either the server timezone or the user’s local timezone (via geolocation)
+* UI improvements on the trigger page
+* [ifso-redirect] and [ifsoDKI type='url'] shortcodes - URL template now supports the {{?}} character, which renders a “?” when a query string exists and an empty string when it doesn’t
+* Bug fixes and performance optimizations
+
 
 = 1.9.4.1 =
 

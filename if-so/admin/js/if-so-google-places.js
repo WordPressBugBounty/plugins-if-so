@@ -344,8 +344,8 @@ function fillInAddress(elem, autocomplete,type='city') {
     var formattedAddress = selectedLocation;
   }
   elem.value = "";
-  var newCityData = createNewLocation(CITY, selectedLocation, formattedAddress);
-  newLocationSelected(closestContainerParent, newCityData, formattedAddress);
+  var newLocationData = createNewLocation(type.toUpperCase(), selectedLocation, formattedAddress);
+  newLocationSelected(closestContainerParent, newLocationData, formattedAddress);
 }
 
 function fillInState(elem,autocomplete){

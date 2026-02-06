@@ -50,6 +50,6 @@ class TriggersService {
 	}
 
 	public function handle_from_data($data_rules, $data_versions, $default_content, $http_request=null){
-	    return $this->root_handler->handle(TriggerContextLoader::load_context_from_data(666,$data_rules,$data_versions,$default_content,$http_request));
+	    return $this->root_handler->handle(TriggerContextLoader::load_context_from_data(0,$data_rules,$data_versions,$default_content,$http_request));
     }
 }

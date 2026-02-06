@@ -183,7 +183,7 @@ class AnalyticsService {
                 foreach(self::$analytics_fields as $field){
                     $ret[$field] = $this->get_analytics_field($postid,$versionid,$field);
                 }
-                if($inject_version_name) $ret['version_name'] = $this->generate_version_symbol($versionid);
+                if($inject_version_name) $ret['version_name'] = \IfSo\Admin\Services\InterfaceModService\InterfaceModService::get_instance()->generate_version_symbol($versionid);
                 return $ret;
             }
             else{
@@ -289,26 +289,6 @@ class AnalyticsService {
             }
             wp_reset_postdata();
         }
-    }
-
-    private function generate_version_symbol($version_number) {
-        $version_number = intval($version_number+64+1);
-        $num_of_characters_in_abc = 26;
-        $base_ascii = 64;
-        $version_number = intval($version_number) - $base_ascii;
-
-        $postfix = '';
-        if ($version_number > $num_of_characters_in_abc) {
-            $postfix = intval($version_number / $num_of_characters_in_abc) + 1;
-            $version_number %= $num_of_characters_in_abc;
-            if ($version_number == 0) {
-                $version_number = $num_of_characters_in_abc;
-                $postfix -= 1;
-            }
-        }
-
-        $version_number += $base_ascii;
-        return chr($version_number) . strval($postfix);
     }
 
     private function set_last_viewed_version_cookie($postid,$versionid){

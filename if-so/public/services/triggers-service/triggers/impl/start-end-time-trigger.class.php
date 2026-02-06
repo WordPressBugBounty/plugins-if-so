@@ -6,6 +6,7 @@ require_once( plugin_dir_path ( __DIR__ ) . 'trigger-base.class.php');
 require_once('time-date-trigger-base.class.php');
 
 class StartEndTimeTrigger extends TimeDateTriggerBase {
+    private $timezone;
 	protected function is_valid($trigger_data) {
 		if ( !parent::is_valid($trigger_data) )
 			return false;
@@ -17,9 +18,9 @@ class StartEndTimeTrigger extends TimeDateTriggerBase {
 	public function handle($trigger_data) {
 		$rule = $trigger_data->get_rule();
 		$content = $trigger_data->get_content();
+        $this->timezone = !empty($rule['Date-Time-User-Timezone']) && $rule['Date-Time-User-Timezone']==='user-geo' ? $this->get_timezone('geo') : $this->get_timezone();
+        $currDate = new \DateTime('now',$this->timezone);
 
-		$format = "Y/m/d H:i";
-		$currDate = \DateTime::createFromFormat($format, current_time($format));
 		if ( ( isset($rule['Time-Date-Start']) &&
 			   isset($rule['Time-Date-End']) && 
 			   $rule['Time-Date-Start'] == "None" &&
@@ -34,7 +35,7 @@ class StartEndTimeTrigger extends TimeDateTriggerBase {
 			  empty($rule['time-date-start-date']) ) {
 
 			// No start date
-			$endDate = \DateTime::createFromFormat($format, $rule['time-date-end-date']);
+			$endDate = $this->create_date($rule['time-date-end-date']);
 
 			if ($currDate <= $endDate) {
 				// Yes! we are in the right time frame
@@ -46,7 +47,7 @@ class StartEndTimeTrigger extends TimeDateTriggerBase {
 			  		  empty($rule['time-date-end-date']) ) {
 
 			// No end date
-			$startDate = \DateTime::createFromFormat($format, $rule['time-date-start-date']);
+			$startDate = $this->create_date($rule['time-date-start-date']);
 
 			if ($currDate >= $startDate) {
 				// Yes! we are in the right time frame
@@ -54,8 +55,8 @@ class StartEndTimeTrigger extends TimeDateTriggerBase {
 			}
 		} else {
 			// Both have dates
-			$startDate = \DateTime::createFromFormat($format, $rule['time-date-start-date']);
-			$endDate = \DateTime::createFromFormat($format, $rule['time-date-end-date']);
+			$startDate = $this->create_date($rule['time-date-start-date']);
+			$endDate = $this->create_date($rule['time-date-end-date']);
 
 			if ($currDate >= $startDate &&
 				$currDate <= $endDate) {
@@ -68,4 +69,13 @@ class StartEndTimeTrigger extends TimeDateTriggerBase {
 
 		return false;
 	}
+
+    private function create_date($date_string){
+        $format = "Y/m/d H:i";
+        if(preg_match('/^\d+\:\d+/',$date_string))      // TIME only
+            $format = 'H:i';
+        //elseif(preg_match('/\d+\/\d+\/\d+ \d+\:\d+/',$date_string))     // DATE and TIME
+        //    $format = "Y/m/d H:i";
+        return \DateTime::createFromFormat($format,$date_string,$this->timezone);
+    }
 }

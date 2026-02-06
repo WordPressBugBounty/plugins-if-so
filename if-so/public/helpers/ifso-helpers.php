@@ -43,9 +43,9 @@ class CookieConsent{
     }
 
     private function set_consent_manager_type(){
-        if (isset($_COOKIE["CookieConsent"]))
+        if (is_plugin_active( 'cookiebot/cookiebot.php' ) || defined('CYBOT_COOKIEBOT_PLUGIN_DIR') || isset($_COOKIE["CookieConsent"]))
             $this->cookie_consent_manager_type = 'cookiebot';
-        elseif(isset($_COOKIE["hu-consent"]))
+        elseif(function_exists('Cookie_Notice'))
             $this->cookie_consent_manager_type = 'hu-compliance';
         elseif(function_exists('cmplz_has_consent'))
             $this->cookie_consent_manager_type ='complianz';
@@ -71,6 +71,8 @@ class CookieConsent{
     }
 
     private function cookiebot_is_category_allowed($category){
+        if(!isset($_COOKIE["CookieConsent"])) return ($category==='necessary');     //Cookie consent not given yet
+
         if($_COOKIE["CookieConsent"]==='-1') //The user is not within a region that requires consent - all cookies are accepted
             return true;
 
@@ -95,6 +97,8 @@ class CookieConsent{
     }
 
     private function hu_compliance_is_category_allowed($category){
+        if(!Cookie_Notice()::cookies_accepted()) return false;
+        if(!isset($_COOKIE["hu-consent"])) return true;
         $CookieConsent = $this->get_object_from_cookie('hu-consent');
         $category_matcher = ['necessary'=>"1",'statistics'=>"2",'preferences'=>"3",'marketing'=>"4"];
         $matched_category = $category_matcher[$category];
@@ -104,11 +108,13 @@ class CookieConsent{
     }
 
     private function complianz_is_category_allowed($category){
-        if(cmplz_consent_mode())
-            return cmplz_has_consent($category);
-        return true;
+        add_filter('cmplz_user_consenttype',function($consenttype){
+            if($consenttype==='other')
+                return false;
+            return $consenttype;
+        });
+        return cmplz_has_consent($category);
     }
-
 
     private function get_cookie_type($cname){
         $cookie_type = false;
@@ -122,7 +128,8 @@ class CookieConsent{
     private function is_cookie_allowed($cname,$ctype=null){
         $ret = true;
         if($this->cookie_consent_manager_type!==false){
-            $cookie_type = ($ctype===null) ? $this->get_cookie_type($cname) : $ctype;
+            $cookie_type = apply_filters('ifso_cookie_category',
+                ($ctype===null) ? $this->get_cookie_type($cname) : $ctype,$cname);
             $cached_val = $this->get_cached_cookie_permission($cookie_type);
             if($cached_val!==null)
                 return $cached_val;

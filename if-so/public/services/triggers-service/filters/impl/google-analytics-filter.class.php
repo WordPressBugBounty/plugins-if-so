@@ -14,8 +14,10 @@ class GoogleAnalyticsFilter extends FilterBase {
         if(!empty($trigger_data) && $an_service->isOn && $an_service->allow_counting){
             $trigger_id = $trigger_data->get_trigger_id();
             $version = $trigger_data->get_version_index();
+            $unique_id = $trigger_data->get_data_rules()[$version]['version_uid'] ? $trigger_data->get_data_rules()[$version]['version_uid'] : null;
+            if($unique_id===null) return $text;
             $version_name = !empty($trigger_data->get_data_rules()[$version]['version_name']) ? $trigger_data->get_data_rules()[$version]['version_name'] : null;
-            $text .= $an_service->render_google_analytics_event_element(['trigger'=>$trigger_id,'version'=>$version,'version_name'=>$version_name]);
+            $text .= $an_service->render_google_analytics_event_element(['trigger'=>$trigger_id,'version'=>$unique_id,'version_name'=>$version_name]);
         }
 
         return $text;

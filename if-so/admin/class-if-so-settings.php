@@ -356,7 +356,7 @@ class If_So_Admin_Settings {
 			array($this, 'ifso_trigger_settings_metabox'),
 			'ifso_triggers',
 			'normal',
-			'high'
+			'default'
 		);
 
 		add_meta_box(
@@ -364,19 +364,19 @@ class If_So_Admin_Settings {
 			__('Shortcode', 'if-so'),
 			array( $this, 'ifso_shortcode_display_metabox' ),
 			'ifso_triggers',
-			'side',
-			'default'
+			'normal',
+			'high'
 		);
 
 		//NEW analytics meta box
 		if(!$this->settings_service->disableAnalytics->get()){
 			add_meta_box(
 				'ifso_analytics_metabox',
-				__('Analytics', 'if-so') .'<a id="refreshTriggerAnalytics" style="margin-left:5px;" href="javascript:refreshAnalyticsDisplay();""><i class="fa fa-refresh" aria-hidden="true"></i></a>',
+				__('Analytics', 'if-so'),
 				array( $this, 'ifso_analytics_display_metabox' ),
 				'ifso_triggers',
-				'side',
-				'default'
+				'normal',
+				'high'
 			);
 		}
 	}
@@ -589,10 +589,6 @@ class If_So_Admin_Settings {
 
 			/* End User Behavior */
 
-			$numberOfViews = 0;
-			if (!empty($group_item['saved_number_of_views']))
-				$numberOfViews = $group_item['saved_number_of_views'];
-
 			$user_behavior_device_mobile = false;
 			$user_behavior_device_tablet = false;
 			$user_behavior_device_desktop = false;
@@ -679,10 +675,10 @@ class If_So_Admin_Settings {
 				'Time-Date-End' => isset($group_item['Time-Date-End']) ? $group_item['Time-Date-End'] : null,
 				'Time-Date-Schedule-Selection' => isset($group_item['Time-Date-Schedule-Selection']) ? $group_item['Time-Date-Schedule-Selection'] : null,
 				'Date-Time-Schedule' => isset($group_item['Date-Time-Schedule']) ? $group_item['Date-Time-Schedule']  : null,
+                'Date-Time-User-Timezone' => isset($group_item['Date-Time-User-Timezone']) ? $group_item['Date-Time-User-Timezone']  : null,
 				'testing-mode' => $testing_mode,
 				'freeze-mode' => isset($group_item['freeze-mode']) ? $group_item['freeze-mode'] : null,
 				'ab-testing-sessions' => $ab_testing_no_sessions,
-				'number_of_views' => $numberOfViews,
 				'trigger' => isset($group_item['trigger']) ? $group_item['trigger'] : null,
 				'chosen-common-referrers' => isset($group_item['chosen-common-referrers']) ? $group_item['chosen-common-referrers'] : null,
 				'custom' => isset($group_item['custom']) ? $group_item['custom'] : null,
@@ -727,6 +723,7 @@ class If_So_Admin_Settings {
 				'post-category-operator' => isset($group_item['post-category-operator']) ? $group_item['post-category-operator'] : null,
 				'post-category-compare' => isset($group_item['post-category-compare']) ? $group_item['post-category-compare'] : null,
                 'version_name' => !empty($group_item['version_name']) ? $group_item['version_name'] : null,
+                'version_uid' => !empty($group_item['version_uid']) ? $group_item['version_uid'] : uniqid($index),
 			);
 
             $new_version_rules = apply_filters('ifso_custom_conditions_new_rule_data_extension',$new_version_rules,$group_item);    //For custom triggers extension

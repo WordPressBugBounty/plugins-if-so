@@ -22,6 +22,8 @@ class UserIpAddress extends TriggerBase {
             return $content;
         if($relationship==='not-contains' && strpos($user_ip,$trigger_ip)===false)
             return $content;
+        if($relationship==='starts-with' && substr($user_ip,0,strlen($trigger_ip))===$trigger_ip)
+            return $content;
 
         return false;
     }

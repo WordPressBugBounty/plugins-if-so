@@ -1,5 +1,7 @@
-
 <?php
+use IfSo\Admin\Services\InterfaceModService\InterfaceModService;
+use IfSo\Services\PluginSettingsService;
+
 if ( ! defined( 'ABSPATH' ) ) exit;
 
 // get trigger rules data
@@ -257,8 +259,6 @@ $notAllowedTriggersForGroups = array("Device");
 
 require_once(IFSO_PLUGIN_BASE_DIR . 'services/plugin-settings-service/plugin-settings-service.class.php');
 
-use IfSo\Services\PluginSettingsService;
-
 $settingsServiceInstance
     = PluginSettingsService\PluginSettingsService::get_instance();
 
@@ -298,25 +298,6 @@ function check_for_broken_trigger_types(){
     }
     else
         return false;
-}
-
-function generate_version_symbol($version_number) {
-    $num_of_characters_in_abc = 26;
-    $base_ascii = 64;
-    $version_number = intval($version_number) - $base_ascii;
-
-    $postfix = '';
-    if ($version_number > $num_of_characters_in_abc) {
-        $postfix = intval($version_number / $num_of_characters_in_abc) + 1;
-        $version_number %= $num_of_characters_in_abc;
-        if ($version_number == 0) {
-            $version_number = $num_of_characters_in_abc;
-            $postfix -= 1;    
-        }
-    }
-    
-    $version_number += $base_ascii;
-    return chr($version_number) . strval($postfix);
 }
 
 function generateDataAttributes($nextAttrs = []){
@@ -365,7 +346,7 @@ function get_rule_item($index, $rule=array(), $is_template = false) {
         $current_version_index = $index; //+1; // Removed the +1
         $current_version_count = $current_version_index+1;
         $current_datetime_count = "";
-        $current_version_count_char = generate_version_symbol(64 + $current_version_index+1);
+        $current_version_count_char = InterfaceModService::get_instance()->generate_version_symbol($current_version_index);
 
         if ($index == 0) {
             // First one!
@@ -375,7 +356,7 @@ function get_rule_item($index, $rule=array(), $is_template = false) {
             $current_instructions = __("Select a condition. The content will be displayed only if it is met and if version A is not realized", 'if-so');
         } else {
             // Start by many
-            $prevChar = generate_version_symbol(64 + $current_version_index);
+            $prevChar = InterfaceModService::get_instance()->generate_version_symbol($current_version_index);
             $current_instructions = __("Select a condition. The content will be displayed only if it is met and if versions A-".$prevChar." are not realized", 'if-so');
         }
     }
@@ -388,37 +369,40 @@ function get_rule_item($index, $rule=array(), $is_template = false) {
                 <h3>
                     <span class="version-alpha"><?php echo (__('Dynamic Content').' - '.__('Version', 'if-so')); ?> <?php echo $current_version_count_char; ?></span>
                 </h3>
-                <button type="button" data-repeater-delete class="repeater-delete btn btn-delete" title=<?php _e('Delete', 'if-so')?>><i class="fa fa-trash-o" aria-hidden="true"></i></button>
-                <!-- begin freeze mode section -->
 
-                <?php if ((isset($rule['freeze-mode']) &&
-                          $rule['freeze-mode'] == "true")): ?>
-                    <div class="btn btn-freeze ifso-freezemode" title=<?php _e('Activate/Deactivate', 'if-so')?>>
-                        <span class="text"><i class="fa fa-play" aria-hidden="true"></i></span>
+                <div class="toolbar-buttons-wrap">
+                    <button type="button" data-repeater-delete class="repeater-delete btn btn-delete" title=<?php _e('Delete', 'if-so')?>><i class="fa fa-trash-o" aria-hidden="true"></i></button>
+                    <!-- begin freeze mode section -->
+                    <?php if ((isset($rule['freeze-mode']) &&
+                        $rule['freeze-mode'] == "true")): ?>
+                        <div class="btn btn-freeze ifso-freezemode" title=<?php _e('Activate/Deactivate', 'if-so')?>>
+                            <span class="text"><i class="fa fa-play" aria-hidden="true"></i></span>
+                        </div>
+                    <?php else: ?>
+                        <div class="btn btn-freeze ifso-freezemode" title=<?php _e('Activate/Deactivate', 'if-so')?>>
+                            <span class="text"><i class="fa fa-pause" aria-hidden="true"></i></span>
+                        </div>
+                    <?php endif; ?>
+
+                    <input type="hidden" class="freeze-mode-val" name="repeater[<?php echo $current_version_index; ?>][freeze-mode]" <?php echo isset($rule['freeze-mode']) ? "value='{$rule['freeze-mode']}'" : ''; ?> />
+                    <!-- end freeze mode section -->
+
+                    <!-- begin draggable section -->
+                    <div class="btn ifso-btn-drag" title=<?php _e('Draggable', 'if-so')?>>
+                        <span class="text"><i class="fa fa fa-arrows-alt ifso-draggable-icon" aria-hidden="true"></i></span>
                     </div>
-                <?php else: ?>
-                    <div class="btn btn-freeze ifso-freezemode" title=<?php _e('Activate/Deactivate', 'if-so')?>>
-                        <span class="text"><i class="fa fa-pause" aria-hidden="true"></i></span>
+                    <!-- end draggable section -->
+
+                    <!-- begin custom name section -->
+                    <div class="btn ifso-btn-version-name" style="position:relative;" title="<?php _e('Custom Version Name', 'if-so')?>">
+                        <div class="ifso-form-group ifso-custom-version-name <?php if(empty($rule['version_name'])) echo 'nodisplay'; ?>">
+                            <input class="form-control" type="text" placeholder="<?php _e('Version Name', 'if-so'); ?>" name="repeater[<?php echo $current_version_index; ?>][version_name]" <?php if(!empty($rule['version_name'])) echo "value='{$rule['version_name']}'"; ?> >
+                        </div>
+                        <span class="text"><i class="fa fa-pencil" aria-hidden="true"></i></span>
                     </div>
-                <?php endif; ?>
-
-                <input type="hidden" class="freeze-mode-val" name="repeater[<?php echo $current_version_index; ?>][freeze-mode]" <?php echo isset($rule['freeze-mode']) ? "value='{$rule['freeze-mode']}'" : ''; ?> />
-                <!-- end freeze mode section -->
-
-                <!-- begin draggable section -->
-                <div class="btn ifso-btn-drag" title=<?php _e('Draggable', 'if-so')?>>
-                    <span class="text"><i class="fa fa fa-arrows-alt ifso-draggable-icon" aria-hidden="true"></i></span>
+                    <!-- end custom name section -->
                 </div>
-                <!-- end draggable section -->
 
-                <!-- begin custom name section -->
-                <div class="btn ifso-btn-version-name" style="position:relative;" title="<?php _e('Custom Version Name', 'if-so')?>">
-                    <div class="ifso-form-group ifso-custom-version-name <?php if(empty($rule['version_name'])) echo 'nodisplay'; ?>">
-                        <input class="form-control" type="text" placeholder="<?php _e('Version Name', 'if-so'); ?>" name="repeater[<?php echo $current_version_index; ?>][version_name]" <?php if(!empty($rule['version_name'])) echo "value='{$rule['version_name']}'"; ?> >
-                    </div>
-                    <span class="text"><i class="fa fa-pencil" aria-hidden="true"></i></span>
-                </div>
-                <!-- end custom name section -->
 
                 <div class="col-xs-12 locked-condition-box-container referrer-custom <?php echo (!$isLicenseValid && (!$is_template && isset($rule['trigger_type']) && !in_array($rule['trigger_type'], $freeTriggers) || (isset($rule['trigger_type']) && $rule['trigger_type'] == "User-Behavior" && isset($rule['User-Behavior']) && !in_array($rule['User-Behavior'], array('LoggedIn', 'LoggedOut', 'Logged')))) && !empty($rule['trigger_type'])) ? 'show-selection' : '' ?>" data-field="locked-box">
 
@@ -430,6 +414,7 @@ function get_rule_item($index, $rule=array(), $is_template = false) {
 
                 </div>
             </div>
+            <input type="hidden" name="repeater[<?php echo $current_version_index; ?>][version_uid]" value="<?php echo (!empty($rule) && !empty($rule['version_uid'])) ? $rule['version_uid'] : ''; ?>" />
             <div class="col-md-3 ifso-trigger-condition-wrap">
                 <h3 class="title">Condition</h3>
                 <p class="versioninstructions"><?php echo $current_instructions; ?>:</p>
@@ -535,22 +520,6 @@ function get_rule_item($index, $rule=array(), $is_template = false) {
                         }
                     ?>
                     </select>
-
-                    <!--<div class="ab-testing-custom-sessions-display <?php echo (isset($rule['AB-Testing']) && !empty($rule['AB-Testing']) && (isset($rule['trigger_type']) && $rule['trigger_type'] == 'AB-Testing')) ? 'show-selection' : ''; ?>" data-field="ab-testing-selection">
-                        <p><?php echo (__('Limit','if-so') . ' (' . __('Optional', 'if-so') . '):'); ?></p>
-                    </div>-->
-
-                    <input type="hidden" name="repeater[<?php echo $current_version_index; ?>][saved_number_of_views]" <?php echo ((!empty($rule['number_of_views']) || (isset($rule['number_of_views']) && $rule['number_of_views'] == 0)) && (isset($rule['trigger_type']) && $rule['trigger_type'] == 'AB-Testing')) ? "value='{$rule['number_of_views']}'" : ''; ?> />
-                    
-                    <!--<select name="repeater[<?php echo $current_version_index; ?>][ab-testing-sessions]" data-field="ab-testing-selection" class="form-control ab-testing <?php echo (isset($rule['ab-testing-sessions']) && !empty($rule['ab-testing-sessions']) && (isset($rule['trigger_type']) && $rule['trigger_type'] == 'AB-Testing')) ? 'show-selection' : ''; ?>">
-                        <option value="Unlimited" data-reset="common-referrers|referrer-custom|url-custom|page-selection|ab-testing-custom"><?php _e('Unlimited', 'if-so'); ?></option>
-                        <option value="100" <?php echo (isset($rule['ab-testing-sessions']) && $rule['ab-testing-sessions'] == '100') ? 'SELECTED' : ''; ?> data-reset="common-referrers|referrer-custom|url-custom|page-selection|ab-testing-custom"><?php _e('100 Sessions', 'if-so'); ?></option>
-                        <option value="200" <?php echo (isset($rule['ab-testing-sessions']) && $rule['ab-testing-sessions'] == '200') ? 'SELECTED' : ''; ?> data-reset="common-referrers|referrer-custom|url-custom|page-selection|ab-testing-custom"><?php _e('200 Sessions', 'if-so'); ?></option>
-                        <option value="500" <?php echo (isset($rule['ab-testing-sessions']) && $rule['ab-testing-sessions'] == '500') ? 'SELECTED' : ''; ?> data-reset="common-referrers|referrer-custom|url-custom|page-selection|ab-testing-custom"><?php _e('500 Sessions', 'if-so'); ?></option>
-                        <option value="1000" <?php echo (isset($rule['ab-testing-sessions']) && $rule['ab-testing-sessions'] == '1000') ? 'SELECTED' : ''; ?> data-reset="common-referrers|referrer-custom|url-custom|page-selection|ab-testing-custom"><?php _e('1000 Sessions', 'if-so'); ?></option>
-                        <option value="2000" <?php echo (isset($rule['ab-testing-sessions']) && $rule['ab-testing-sessions'] == '2000') ? 'SELECTED' : ''; ?> data-reset="common-referrers|referrer-custom|url-custom|page-selection|ab-testing-custom"><?php _e('2000 Sessions', 'if-so'); ?></option>
-                        <option value="Custom" <?php echo (isset($rule['ab-testing-sessions']) && $rule['ab-testing-sessions'] == 'Custom') ? 'SELECTED' : ''; ?> data-reset="common-referrers|referrer-custom|url-custom|page-selection|ab-testing-custom" data-next-field="ab-testing-custom|locked-box"><?php _e('Custom', 'if-so'); ?></option>
-                    </select>-->
                 </div>
 
                 <div class="ifso-form-group">
@@ -571,6 +540,19 @@ function get_rule_item($index, $rule=array(), $is_template = false) {
                         <option value="Start-End-Date" <?php echo (isset($rule['Time-Date-Schedule-Selection']) && $rule['Time-Date-Schedule-Selection'] == 'Start-End-Date') ? 'SELECTED' : ''; ?> data-reset="locked-box|common-referrers|referrer-custom|url-custom|page-selection|ab-testing-custom|schedule-selection"
                             data-next-field="time-date-pick-start-date|time-date-pick-end-date"><?php _e('Start/End Date', 'if-so'); ?></option>
                        <option value="Schedule-Date" <?php echo (isset($rule['Time-Date-Schedule-Selection']) && $rule['Time-Date-Schedule-Selection'] == 'Schedule-Date') ? 'SELECTED' : ''; ?> data-reset="common-referrers|referrer-custom|url-custom|page-selection|ab-testing-custom|time-date-selection|time-date-pick-start-date|time-date-pick-end-date" data-next-field="schedule-selection|locked-box"><?php echo(__('Schedule', 'if-so') . $displayClosedFeature); ?></option>
+                    </select>
+                </div>
+
+                <div class="ifso-form-group">
+                    <div class="cond-field <?php echo (isset($rule['trigger_type']) && $rule['trigger_type'] === 'Time-Date') ? 'show-selection' : ''; ?>" data-field="times-dates-schedules-selections">
+                        <p class="start-end-date-headers"><?php _e('Timezone', 'if-so'); ?></p>
+                    </div>
+                </div>
+
+                <div class="ifso-form-group">
+                    <select name="repeater[<?php echo $current_version_index; ?>][Date-Time-User-Timezone]" data-field="times-dates-schedules-selections" class="form-control cond-field <?php echo (isset($rule['trigger_type']) && $rule['trigger_type'] === 'Time-Date') ? 'show-selection' : ''; ?>">
+                        <option value="server" <?php echo (isset($rule['Date-Time-User-Timezone']) && $rule['Date-Time-User-Timezone'] == 'server') ? 'SELECTED' : ''; ?> ><?php _e('Server Time', 'if-so'); ?></option>
+                        <option value="user-geo" <?php echo (isset($rule['Date-Time-User-Timezone']) && $rule['Date-Time-User-Timezone'] == 'user-geo') ? 'SELECTED' : ''; ?>><?php echo(__('User\'s Local Time', 'if-so')); ?></option>
                     </select>
                 </div>
 
@@ -929,7 +911,10 @@ function get_rule_item($index, $rule=array(), $is_template = false) {
                     <?php if (!isset($_COOKIE['ifso_hide_settime_instructions'])): ?>
                         <div class="ifso-form-group">
                             <div data-field="times-dates-schedules-selections" class="set-time-info-container <?php echo (isset($rule['trigger_type']) && $rule['trigger_type'] == 'Time-Date') ? 'show-selection' : ''; ?>">
-                                <div class="settimeinstructions yellow-noticebox"><span class="closeX">X</span><p><?php _e('This condition is based on the local time of your site', 'if-so'); ?> (<?php echo  current_time('h:i A'); ?>) <a href="<?php echo admin_url('options-general.php') ?>" target="_blank"><?php _e('edit', 'if-so'); ?></a></p></div>
+                                <div class="settimeinstructions purple-noticebox"><span class="closeX">X</span><p>
+                                        <?php _e('Server Time: based on your website’s local time', 'if-so'); ?>:(<?php echo  current_time('h:i A'); ?>) <a href="<?php echo admin_url('options-general.php') ?>" target="_blank"><?php _e('edit', 'if-so'); ?></a><br>
+                                        <?php _e('User\'s Local Time: determined through our geolocation service.');?>
+                                </p></div>
                             </div>
                         </div>
                     <?php endif; ?>
@@ -1108,10 +1093,11 @@ function get_rule_item($index, $rule=array(), $is_template = false) {
 
                 <div class="ifso-form-group">
                 <select name="repeater[<?php echo $current_version_index; ?>][UserIp]" class="form-control referrer-custom <?php echo (!empty($rule['ip-input'])) ? 'show-selection' : ''; ?>" data-field="user-ip">
-                    <option value="is" <?php echo (isset($rule['ip-values']) && $rule['ip-values'] == 'is') ? 'SELECTED' : ''; ?>><?php _e('IP Is', 'if-so'); ?></option>
-                    <option value="contains" <?php echo (isset($rule['ip-values']) && $rule['ip-values'] == 'contains') ? 'SELECTED' : ''; ?>><?php _e('IP Contains', 'if-so'); ?></option>
-                    <option value="is-not" <?php echo (isset($rule['ip-values']) && $rule['ip-values'] == 'is-not') ? 'SELECTED' : ''; ?>><?php _e('IP Is Not', 'if-so'); ?></option>
-                    <option value="not-contains" <?php echo (isset($rule['ip-values']) && $rule['ip-values'] == 'not-contains') ? 'SELECTED' : ''; ?>><?php _e('IP Does Not Contain', 'if-so'); ?></option>
+                    <option value="is" <?php echo (isset($rule['ip-values']) && $rule['ip-values'] === 'is') ? 'SELECTED' : ''; ?>><?php _e('IP Is', 'if-so'); ?></option>
+                    <option value="contains" <?php echo (isset($rule['ip-values']) && $rule['ip-values'] === 'contains') ? 'SELECTED' : ''; ?>><?php _e('IP Contains', 'if-so'); ?></option>
+                    <option value="is-not" <?php echo (isset($rule['ip-values']) && $rule['ip-values'] === 'is-not') ? 'SELECTED' : ''; ?>><?php _e('IP Is Not', 'if-so'); ?></option>
+                    <option value="not-contains" <?php echo (isset($rule['ip-values']) && $rule['ip-values'] === 'not-contains') ? 'SELECTED' : ''; ?>><?php _e('IP Does Not Contain', 'if-so'); ?></option>
+                    <option value="starts-with" <?php echo (isset($rule['ip-values']) && $rule['ip-values'] === 'starts-with') ? 'SELECTED' : ''; ?>><?php _e('IP Starts with', 'if-so'); ?></option>
                 </select>
                 </div>
                 <input placeholder="<?php _e('Type an IP Address', 'if-so'); ?>" name="repeater[<?php echo $current_version_index; ?>][IpVal] data-symbol="PAGEURL" class="page-visit-autocomplete ifso-input-autocomplete form-control referrer-custom <?php echo (!empty($rule['ip-input'])) ? 'show-selection' : ''; ?>" data-field="user-ip" autocomplete="off"

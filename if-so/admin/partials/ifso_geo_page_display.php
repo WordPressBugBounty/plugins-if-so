@@ -11,16 +11,12 @@
 	$expires = get_option( 'edd_ifso_geo_license_expires' );
 	// $item_name = get_option( 'edd_ifso_license_item_name' );
 
-	function is_license_valid($status) {
-		return ( $status !== false && $status == 'valid' );
-	}
-
 	function is_plusgeo_license_exist($geoData) {
-		return ( isset($geoData['has_plusgeo_key']) && $geoData['has_plusgeo_key'] == true );
+		return ( isset($geoData['has_plusgeo_key']) && $geoData['has_plusgeo_key'] );
 	}
 
 	function is_pro_license_exist($geoData) {
-		return ( isset($geoData['has_pro_key']) && $geoData['has_pro_key'] == true );
+		return ( isset($geoData['has_pro_key']) && $geoData['has_pro_key'] );
 	}
 
 	function get_subscription($geoData) {
@@ -38,10 +34,10 @@
 	}
 
 	function is_geo_data_valid($geoData) {
-		return ( isset($geoData['success']) && $geoData['success'] == true );
+		return ( isset($geoData['success']) && $geoData['success'] );
 	}
 
-	function get_queries_left($geoData) {	//This actually shows the USED queries(not the ones left)
+	function get_used_queries($geoData) {
 		if ( is_geo_data_valid($geoData) ) {
 			return intval($geoData['realizations']);
 		}
@@ -67,16 +63,8 @@
 		return date_i18n( "{$month_format} j, Y", strtotime( $date, current_time( 'timestamp' ) ) );
 	}
 
-	function get_pro_purchase_date($geoData) {
-		return get_key($geoData, 'pro_purchase_date');
-	}
-
 	function get_pro_renewal_date($geoData) {
 		return get_key($geoData, 'pro_renewal_date');
-	}
-
-	function get_plusgeo_purchase_date($geoData) {
-		return get_key($geoData, 'plusgeo_purchase_date');
 	}
 
 	function get_plusgeo_renewal_date($geoData) {
@@ -120,9 +108,7 @@
 	$geo_subscription = get_subscription($geoData, $license, $status);
 	$geo_monthly_queries = number_format(get_monthly_queries($geoData));
 	$geo_int_monthly_queries = get_monthly_queries($geoData);
-	$geo_queries_left = number_format(get_queries_left($geoData));
-	$geo_queries_left_send = get_queries_left($geoData);
-	$geo_pro_purchase_date = get_pro_purchase_date($geoData);
+	$geo_queries_used = get_used_queries($geoData);
 	$separateRealizations = get_pro_and_geo_realizations($geoData);
 	$pro_license_type = (isset($geoData['pro_license_type']) && !empty($geoData['pro_license_type'])) ? $geoData['pro_license_type'] : false;
 	$geo_license_type = (isset($geoData['geo_license_type']) && !empty($geoData['geo_license_type'])) ? $geoData['geo_license_type'] : false;
@@ -154,7 +140,7 @@
 
 	if(isset($_POST['update_notifications'])) {
         $wpdb->query($wpdb->prepare("REPLACE INTO {$table} SET id = %d,user_email = %s,user_sessions = %d,user_bank = %d,alert_values = %s",
-            [$data['record_id'],$sent_user_email,$geo_queries_left_send,$geo_int_monthly_queries,$set_alert_values]));
+            [$data['record_id'],$sent_user_email,$geo_queries_used,$geo_int_monthly_queries,$set_alert_values]));
         $form_alert_values = get_notification_data()["alert_values"];
         if($data['alert_values']!==$form_alert_values)      //alert values were changed
             GeolocationService\GeolocationService::get_instance()->reset_notifications();
@@ -168,66 +154,6 @@
 
 <!-- TEMPORARY inner css! -->
 <style>
-    /* old table style - for the table that still remains in the geo tab - START */
-    #customers {
-        font-family: "Trebuchet MS", Arial, Helvetica, sans-serif;
-        border-collapse: collapse;
-        width: 100%;
-        text-align: center;
-        font-size: 14px;
-    }
-    #outer-div {
-        width: 50%;
-        /* box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19); */
-    }
-    .outer-table {
-        /*
-        border: 1px solid #cccccc;
-        border-bottom: 0;*/
-    }
-    #upper-table {
-        width: 100%;
-        text-align: center;
-        background-color: #e5e5e5;
-        font-family: "Trebuchet MS", Arial, Helvetica, sans-serif;
-        font-size: 14px;
-        color: white;
-    }
-    .outer-table th{
-        width: 50%;
-        color: #333;
-        padding: 10px 0;
-    }
-    .outer-table th:first-child{
-        border-right: 1px dashed #ccc;
-    }
-    #customers {
-      /* border-style: hidden; */
-    }
-    #customers td, #customers th {
-        padding: 8px;
-        width: 50%;
-        border: 1px solid #ddd;
-    }
-    #customers p:nth-child(1){
-        padding: 10px 0;
-        color: #5787f9;
-        font-size: 16px;
-        font-weight:bold;
-    }
-    #customers p:nth-child(2){
-        color: #a9a8a8;
-        padding: 0 60px;
-    }
-    .inner-table {
-        width:100%;
-        /* overflow-y:scroll; */
-    }
-    #customers tr {
-      background-color: white;
-    }
-    /* old table style - for the table that still remains in the geo tab - END */
-
     .percentage {
       font-weight:700;
     }
@@ -454,16 +380,17 @@
     .geo-info-cards .geo-info-card.your-subscription .geo-info-card-content .subsctiption-name, .geo-info-cards .geo-info-card.next-renewal .geo-info-card-content span{
         font-weight: 700;
     }
-    .geo-info-cards .geo-info-card-content.error-label {
-        color: red;
+    .error-label {
+        color: #E46A69;
     }
     .geo-info-cards .geo-info-card-link.error-label {
-        color: red;
         margin-top: -30px;
     }
-
     .geo-info-cards .geo-info-card-link{
         font-size:14px;
+    }
+    .geo-info-cards .geo-info-card.next-renewal .geo-info-card-content .error-label{
+        font-weight: normal;
     }
     /*new info tab styles - end*/
 
@@ -816,7 +743,7 @@
                                 <?php _e('Used Monthly Sessions'); ?>
                             </p>
                             <p class="geo-info-card-content">
-                                <?php echo number_format($geo_queries_left_send); ?>
+                                <?php echo number_format($geo_queries_used); ?>
                             </p>
                             <a class="geo-info-card-link" href="https://www.if-so.com/faq-items/how-do-we-define-a-geolocation-session/?utm_source=Plugin&utm_medium=message&utm_campaign=geolocation&utm_term=info-tab&utm_content=session" target="_blank">
                                 <?php _e('What is a session?'); ?>
@@ -827,7 +754,7 @@
                                 <?php _e('Remaining Monthly Sessions'); ?>
                             </p>
                             <p class="geo-info-card-content">
-                                <?php echo number_format($geo_int_monthly_queries - $geo_queries_left_send); ?>
+                                <?php echo number_format($geo_int_monthly_queries - $geo_queries_used); ?>
                             </p>
                         </div>
                         <?php if(is_geo_data_valid($geoData)): ?>
@@ -837,12 +764,29 @@
                             </p>
                             <p class="geo-info-card-content">
                                 <?php
+                                $renewal_date_format = 'd-m-Y';
+                                $pro_license_expiration = !empty($geoData['pro_expiration']) ? new \DateTime('@' . (int)$geoData['pro_expiration']) : false;
+                                $geo_license_expiration = !empty($geoData['geo_expiration']) ? new \DateTime('@' . (int)$geoData['geo_expiration']) : false;
                                 $geo_renewal_date = get_plusgeo_renewal_date($geoData) ? get_plusgeo_renewal_date($geoData) : '';
                                 $pro_renewal_date = get_pro_renewal_date($geoData) ? get_pro_renewal_date($geoData) : '';
                                 $pro_license_name = $pro_license_type ? ucfirst($pro_license_type) : "Product";
                                 $geo_license_name = $geo_license_type ? ucfirst($geo_license_type) : "Geo";
-                                echo !empty($pro_renewal_date) ? "<span> {$pro_license_name} : </span>" . get_date_i18n($pro_renewal_date,true) . '<br>' : '';
-                                echo !empty($geo_renewal_date) ? "<span> {$geo_license_name} : </span>" . get_date_i18n($geo_renewal_date,true) : '';
+
+                                $license_renewal_message = function($expiration_date,$renewal_date) use ($renewal_date_format){
+                                    if($expiration_date){
+                                        $expiration_date_str = get_date_i18n($expiration_date->format($renewal_date_format),true);
+                                        if($expiration_date < new \DateTime('now') )
+                                            return '<span class="error-label">Expired on ' . $expiration_date_str . '</span>';
+                                        if($expiration_date < $renewal_date)
+                                            return '<span class="error-label">Expires on ' . $expiration_date_str . '</span>';
+                                    }
+                                    return get_date_i18n($renewal_date->format($renewal_date_format),true);
+                                };
+
+                                echo !empty($pro_renewal_date) ? "<span> {$pro_license_name} : </span>" .
+                                    $license_renewal_message($pro_license_expiration,\DateTime::createFromFormat($renewal_date_format,$pro_renewal_date)) . '<br>' : '';
+                                echo !empty($geo_renewal_date) ? "<span> {$geo_license_name} : </span>" .
+                                    $license_renewal_message($geo_license_expiration,\DateTime::createFromFormat($renewal_date_format,$geo_renewal_date)) : '';
                                 ?>
                             </p>
                         </div>
@@ -1176,7 +1120,7 @@
 
                 <div>
                     <?php if(!is_geo_data_valid($geoData)){ ?>
-                        <span class="error-label" style="color:red;padding-left:10px;">Communication failure! <a href="https://www.if-so.com/help/communication-failure/?utm_source=Plugin&utm_medium=error&utm_campaign=geolocation&utm_term=comm_failure&utm_content=a" target="_blank">Click to solve</a> </span>
+                        <span class="error-label" style="padding-left:10px;">Communication failure! <a href="https://www.if-so.com/help/communication-failure/?utm_source=Plugin&utm_medium=error&utm_campaign=geolocation&utm_term=comm_failure&utm_content=a" target="_blank">Click to solve</a> </span>
                     <?php } ?>
                 </div>
 

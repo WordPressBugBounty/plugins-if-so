@@ -25,7 +25,7 @@ class IfSoHttpGetRequest{
         }
         else{
             $this->requestURL = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? "https" : "http") . "://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]";
-            $this->params = $_GET;
+            $this->params = array_map('stripslashes',$_GET);
             $this->referrer = '';
             if (isset($_SERVER['HTTP_REFERER']))
                 $this->referrer = $_SERVER['HTTP_REFERER'];

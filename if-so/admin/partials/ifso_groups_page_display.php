@@ -2,27 +2,6 @@
 $groups_service = IfSo\PublicFace\Services\GroupsService\GroupsService::get_instance();
 $groups_list = $groups_service->get_groups();
 $extra_tabs = apply_filters('ifso_groups_page_display_extra_tabs',[]);
-
-function generate_version_symbol($version_number) {
-    //This function appears in multiple places - move to a utility class - DRY
-    $version_number += 65;
-    $num_of_characters_in_abc = 26;
-    $base_ascii = 64;
-    $version_number = intval($version_number) - $base_ascii;
-
-    $postfix = '';
-    if ($version_number > $num_of_characters_in_abc) {
-        $postfix = intval($version_number / $num_of_characters_in_abc) + 1;
-        $version_number %= $num_of_characters_in_abc;
-        if ($version_number == 0) {
-            $version_number = $num_of_characters_in_abc;
-            $postfix -= 1;
-        }
-    }
-
-    $version_number += $base_ascii;
-    return chr($version_number) . strval($postfix);
-}
 ?>
 <style type="text/css">
     #ifso-all-groups-table thead th {
@@ -38,7 +17,7 @@ function generate_version_symbol($version_number) {
     }
     .ass_instructions {
         padding: 10px 20px 20px;
-        margin: 80px 0 10px 0;
+        margin: 46px 0 40px 0;
         border: 1px solid rgb(195, 196, 199);
     }
     .ass_instructions ul {
@@ -137,7 +116,22 @@ function generate_version_symbol($version_number) {
             ?>
         </ul>
     </div>
-    <div class="ifso-audiences-main-tab">
+    <div class="ifso-audiences-main-tab softnodisplay">
+        <div class="ass_instructions">
+            <h3>Getting started with Audiences</h3>
+            <ol>
+                <li>Give your audience a name and click Create to get started.</li>
+                <li>
+                    You can add or remove users from the audience using any of the following methods:
+                    <ul>
+                        <li>- Automatically, when a condition is met</li>
+                        <li>- By using a shortcode</li>
+                        <li>- Through a self-selection form <a href=”https://www.if-so.com/self-selection-form/” target=”_blank”>(Add-on required)</a></li>
+                    </ul>
+                </li>
+            </ol>
+            <a href="https://www.if-so.com/help/documentation/segments/?utm_source=Plugin&utm_medium=audiencePage&utm_campaign=creatingAtrigger" target="_blank">More about Audiences</a>
+        </div>
         <form class="add_new_group" method="post"  action="<?php echo admin_url('admin-ajax.php'); ?>" >
             <h2 class="add_new_group_title">Create a New Audience</h2>
             <input name="group_name" type="text" required placeholder="<?php _e('Audience Name', 'if-so');?>">
@@ -169,7 +163,7 @@ function generate_version_symbol($version_number) {
                         $versionsText='';
                         if(isset($occ['versions']) && is_array($occ['versions'])){
                             foreach($occ['versions'] as $version=>$action){
-                                $versionName = generate_version_symbol($version);
+                                $versionName = \IfSo\Admin\Services\InterfaceModService\InterfaceModService::get_instance()->generate_version_symbol($version);
                                 $versionsText .= "Version {$versionName} ({$action}), ";
                             }
                             $versionsText = substr($versionsText, 0, -2);
@@ -211,20 +205,6 @@ function generate_version_symbol($version_number) {
         if(!isset($groups_list) || empty($groups_list))
             echo "<p style='text-align:center;font-style:italic;font-size: 18px;color:#a00;'>You haven't created any audiences yet</p>";
         ?>
-        <div class="ass_instructions">
-            <h3>Getting started with Audiences</h3>
-            <ol>
-                <li>Enter an audience name and click the 'Create' button.</li>
-                <li>Add or remove users from the audience using one of the following methods:
-                    <ul>
-                        <li>- When a condition is met</li>
-                        <li>- Through a shortcode</li>
-                        <li>- Via a self-selection form</li>
-                    </ul>
-                </li>
-            </ol>
-            <a href="https://www.if-so.com/help/documentation/segments/?utm_source=Plugin&utm_medium=audiencePage&utm_campaign=creatingAtrigger" target="_blank">More about Audiences</a>
-        </div>
     </div>
     <?php
         if(!empty($extra_tabs)){

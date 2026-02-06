@@ -36,6 +36,8 @@ class AjaxTriggersService{
     }
 
     public function get_request(){
+        if(empty($this->request))
+            $this->request = IfsoRequest\IfSoHttpGetRequest::create();
         return $this->request;
     }
 

@@ -18,8 +18,8 @@ class DataRulesModel {
      * @var      array    $conditions    An array of conditions available to triggers in the plugin
      */
     protected $conditions = [
-        'general' => ['trigger_type','testing-mode','freeze-mode','recurrence_option','recurrence_custom_units','recurrence_custom_value','recurrence-override','views','recurrence_views','conversion','add_to_group','remove_from_group','version_name'],
-        'AB-Testing' => ['AB-Testing', 'ab-testing-sessions','ab-testing-custom-no-sessions','number_of_views'],
+        'general' => ['trigger_type','testing-mode','freeze-mode','recurrence_option','recurrence_custom_units','recurrence_custom_value','recurrence-override','views','recurrence_views','conversion','add_to_group','remove_from_group','version_name','version_uid'],
+        'AB-Testing' => ['AB-Testing', 'ab-testing-sessions','ab-testing-custom-no-sessions'],
         'advertising-platforms' => ['advertising_platforms_option', 'advertising_platforms'],
         'Cookie' => ['cookie-or-session','cookie-relationship','cookie-input','cookie-value-input'],
         'Device' => ['user-behavior-device-mobile','user-behavior-device-tablet','user-behavior-device-desktop'],
@@ -29,7 +29,7 @@ class DataRulesModel {
         'PageUrl' => ['page-url-operator','page-url-compare','page-url-ignore-case'],
         'PageVisit' => ['page_visit_data'],
         'referrer' => ['trigger','page','chosen-common-referrers','custom','operator','compare','page-category-operator','page-category'],
-        'Time-Date' => ['Time-Date-Schedule-Selection','Date-Time-Schedule','Time-Date-Start','Time-Date-End','time-date-end-date','time-date-start-date'],
+        'Time-Date' => ['Time-Date-Schedule-Selection','Date-Time-User-Timezone','Date-Time-Schedule','Time-Date-Start','Time-Date-End','time-date-start-date','time-date-end-date'],
         'User-Behavior' => ['User-Behavior','user-behavior-browser-language-primary-lang','user-behavior-browser-language','user-behavior-logged','user-behavior-returning','user-behavior-retn-custom'],
         'Utm' => ['utm-type','utm-relation','utm-value'],
         'Groups' => ['user-group-relation','group-name'],

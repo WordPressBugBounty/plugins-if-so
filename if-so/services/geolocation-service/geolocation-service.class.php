@@ -121,6 +121,7 @@ class GeolocationService {
                 We wanted to inform you that your website has reached {$notif_threshold}% of its monthly geolocation sessions quota ({$local_user_data->user_bank} sessions).<br> <br>
                 A report detailing your usage, quota, and renewal date is available on your <a href='$user_domain/wp-admin/admin.php?page=wpcdd_admin_geo_license' target='_blank'>website's admin panel</a>.<br> <br>
                 If you need to, you can upgrade your Geolocation Sessions at any time. <a href='https://www.if-so.com/plans/geolocation-plans/' target='_blank'>Upgrade</a>.<br> <br>
+                Please note: if the number of sessions consumed is significantly higher than the number of visits shown in Google Analytics, it is most likely caused by bot traffic. In that case, please follow the instructions in <a href='https://www.if-so.com/faq-items/the-geolocation-session-count-doesnt-seem-to-behave-as-expected/' target='_blank'>this guide</a> <br> <br>
                 Feel free to contact us with any questions or concerns.<br> <br>
                 Sincerely,<br> <br>
                 The If-So Team<br> <br>";

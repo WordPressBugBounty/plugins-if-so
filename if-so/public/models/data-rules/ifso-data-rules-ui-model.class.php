@@ -119,7 +119,7 @@ class DataRulesUiModel{
                     case 'UserIp':
                         if ($rule === 'ip-values') {
                             $ret->$rule = new ConditionUIElement($rule, 'User Ip' . $this->make_question_mark_link('https://www.if-so.com/help/documentation/user-ip/'), 'select',
-                                true, [new ConditionUIOption('is', 'IP Is'), new ConditionUIOption('contains', 'IP Contains'), new ConditionUIOption('is-not', 'IP is not'), new ConditionUIOption('not-contains', 'IP doesn\'t contain')]);
+                                true, [new ConditionUIOption('is', 'IP Is'), new ConditionUIOption('contains', 'IP Contains'), new ConditionUIOption('is-not', 'IP is not'), new ConditionUIOption('not-contains', 'IP doesn\'t contain'), new ConditionUIOption('starts-with','Starts with')]);
                         }
 
                         if ($rule === 'ip-input') {
@@ -224,6 +224,18 @@ class DataRulesUiModel{
                         }
                         break;
                     case 'Time-Date':
+                        if($rule==='Time-Date-Schedule-Selection'){
+                            $ret->$rule = new ConditionUIElement($rule,'Condition type','select',true,[new ConditionUIOption('Start-End-Date','Start/End Date')]);
+                        }
+                        if($rule==='Date-Time-User-Timezone'){
+                            $ret->$rule = new ConditionUIElement($rule,'Timezone','select',true,[new ConditionUIOption('server','Server Time'),new ConditionUIOption('user-geo','User\'s Local Time Zone')]);
+                        }
+                        if($rule==='time-date-start-date'){
+                            $ret->$rule = new ConditionUIElement($rule,'Start Date (yyyy/mm/dd hh:mm Or hh:mm)' . $this->make_question_mark_link('https://www.if-so.com/help/documentation/start-end-date/'),'text',false,);
+                        }
+                        if($rule==='time-date-end-date'){
+                            $ret->$rule = new ConditionUIElement($rule,'End Date (yyyy/mm/dd hh:mm Or hh:mm)' . $this->make_question_mark_link('https://www.if-so.com/help/documentation/start-end-date/'),'text',false);
+                        }
                         break;
                     case 'User-Behavior':
                         if($rule==='User-Behavior'){
@@ -718,7 +730,7 @@ class NoticeBoxColors{
     const LIGHTYELLOW = '#FFFCF4';
     const RED = '#E46A69';
     const LIGHTRED = '#FDF7F7';
-    const GREEN = '##78D59E';
+    const GREEN = '#78D59E';
     const LIGHTGREEN = '#F7FDFA';
     const GREY = '#6D7882';
 }

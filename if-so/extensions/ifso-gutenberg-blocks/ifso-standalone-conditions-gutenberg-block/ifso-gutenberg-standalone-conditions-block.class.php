@@ -34,7 +34,7 @@ class IfsoGutenbergStandaloneConditionBlock extends IfSoGutenbergBlockBase{
         if($this->gutenberg_exists){
             wp_register_script(
                 'ifso-standalone-conditions-block',
-                plugin_dir_url( __FILE__ ) . './ifso-standalone-conditions-gutenberg-block.js',
+                plugin_dir_url( __FILE__ ) . '/ifso-standalone-conditions-gutenberg-block.js',
                 array( 'wp-blocks', 'wp-element', 'wp-data','wp-hooks','wp-editor','wp-edit-post'),
                 IFSO_WP_VERSION
             );
@@ -43,7 +43,7 @@ class IfsoGutenbergStandaloneConditionBlock extends IfSoGutenbergBlockBase{
 
             wp_register_style(
                 'ifso-standalone-conditions-block',
-                plugin_dir_url( __FILE__ ) . './ifso-standalone-conditions-gutenberg-block.css',
+                plugin_dir_url( __FILE__ ) . '/ifso-standalone-conditions-gutenberg-block.css',
                 array(),
                 IFSO_WP_VERSION
             );

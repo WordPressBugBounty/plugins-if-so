@@ -26,7 +26,7 @@ class GeoLicenseService extends LicenseServiceBase {
     }
 
     protected function init_plans() : array {
-        return array(9132, 9129, 8261, 6530, 4872638);
+        return array(9132, 9129, 8261, 6530, 4872638, 5226694);
     }
 
 	// Helper function that returns the proper messages to the client

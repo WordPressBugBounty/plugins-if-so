@@ -66,6 +66,7 @@ ifso_scope.DispatchAjaxContentLoaded  =  function () {document.dispatchEvent(aja
 					this[ifso_scope_member_name] = ifso_scope[ifso_scope_member_name];
 				}
 			}
+			ifso_scope.public_instance = this;
 		}
 
 		if_so_public.prototype = {
