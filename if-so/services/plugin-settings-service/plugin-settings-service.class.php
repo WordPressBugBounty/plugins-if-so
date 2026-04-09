@@ -48,6 +48,8 @@ class PluginSettingsService {
         'ifso_settings_enable_visit_count_option';
     const RENDER_STANDALONE_VIA_AJAX =
         'ifso_settings_render_standalone_via_ajax_option';
+    const SHOW_AB_TESTING_ADMIN_NOTICE =
+        'ifso_settings_show_ab_testing_notice_option';
 
 	private static $instance;
 
@@ -73,6 +75,7 @@ class PluginSettingsService {
     public $enableVisitCount;
     public $extraOptions;
     public $renderStandaloneViaAjax;
+    public $showABTestingNotice;
 
 	private function __construct() {
 		$this->pagesVisitedOption = 
@@ -117,6 +120,8 @@ class PluginSettingsService {
             $this->create_enable_visit_count_option();
         $this->renderStandaloneViaAjax =
             $this->create_render_standalone_via_ajax_option();
+        $this->showABTestingNotice =
+            $this->create_show_abtesting_notice_option();
 
         add_action('plugins_loaded',function (){
             $this->extraOptions = apply_filters("ifso_extra_settings_options",new \StdClass());
@@ -356,6 +361,17 @@ class PluginSettingsService {
         return  $option;
     }
 
+    private function create_show_abtesting_notice_option() {
+        $default = true;
+        $postName = 'ifso_settings_show_ab_testing_notice';
+        $option = new IfSoSettingsYesNoOption(
+            self::SHOW_AB_TESTING_ADMIN_NOTICE,
+            $default,
+            $postName
+        );
+        return $option;
+    }
+
 	public static function get_instance() {
 		if ( NULL == self::$instance )
 			self::$instance = new PluginSettingsService();
@@ -391,6 +407,7 @@ class PluginSettingsService {
             $this->tmceForceWrapper->apply($_POST);
             $this->enableVisitCount->apply($_POST);
             $this->renderStandaloneViaAjax->apply($_POST);
+            $this->showABTestingNotice->apply($_POST);
 
             foreach ($this->extraOptions as $extension){
                 foreach($extension as $option){

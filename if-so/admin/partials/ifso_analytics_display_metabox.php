@@ -98,16 +98,16 @@ $current_post_id =  $published ? get_the_ID() : 0;
         }
         .ifso-conversion-info-modal .conversion-settings{
             color: #585960;
-            margin: 15px 0;
+            margin: 23px 0 15px 0;
         }
         .ifso-conversion-info-modal .conversion-settings h4{
             margin:0;
         }
         .ifso-conversion-info-modal .conversion-settings p{
-            margin:10px 0;
+            margin:0 0 10px 0;
         }
         .ifso-conversion-info-modal-contents{
-            padding:40px;
+            padding:11px 40px 40px 40px;
         }
         .ifso-conversion-info-modal-contents:not(.insideModal){
             display:none;
@@ -178,7 +178,7 @@ $current_post_id =  $published ? get_the_ID() : 0;
 </div>
 
 <div class="ifso-conversion-info-modal-contents">
-    <h2><?php _e('See how your content performs');?></h2>
+    <h2><?php _e('Configure a conversion');?></h2>
     <p>
         <?php _e('Paste the shortcode into your conversion page (thank-you page, signup or purchase confirmation, etc.).', 'if-so');?>
         <br><br>

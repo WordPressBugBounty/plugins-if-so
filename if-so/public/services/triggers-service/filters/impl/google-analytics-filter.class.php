@@ -15,6 +15,7 @@ class GoogleAnalyticsFilter extends FilterBase {
             $trigger_id = $trigger_data->get_trigger_id();
             $version = $trigger_data->get_version_index();
             $unique_id = $trigger_data->get_data_rules()[$version]['version_uid'] ? $trigger_data->get_data_rules()[$version]['version_uid'] : null;
+            $unique_id = ($unique_id===null && $trigger_data->get_version_index()==='DEFAULT') ? 'DEFAULT' : $unique_id;
             if($unique_id===null) return $text;
             $version_name = !empty($trigger_data->get_data_rules()[$version]['version_name']) ? $trigger_data->get_data_rules()[$version]['version_name'] : null;
             $text .= $an_service->render_google_analytics_event_element(['trigger'=>$trigger_id,'version'=>$unique_id,'version_name'=>$version_name]);

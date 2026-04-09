@@ -6,14 +6,14 @@ class ExtendedShortcodesUIModel{
     public $shortcodes = [];
     public function __construct(){
         $dki_sc = new ShortcodeUI('ifsoDKI','DKI','','');
-        $dki_geo_type = new ShortcodeUIType('geo','Geolocation','Display the visitor`s location name (country, state, city, etc.). <a target="_blank" href="https://www.if-so.com/geolocation-dki/?utm_source=Plugin&utm_medium=DKIModal&utm_campaign=shortcodeDescription">Demo.</a>',self::ICON_DIR_URL . 'geo.svg');
+        $dki_geo_type = new ShortcodeUIType('geo','Geolocation','Display the visitor`s location name (country, state, city, etc.). <a target="_blank" href="https://www.if-so.com/geolocation-dki/?utm_source=Plugin&utm_medium=DKIModal&utm_campaign=shortcodeDescription">See it in action.</a>',self::ICON_DIR_URL . 'geo.svg');
         $dki_geo_type->add_field(new AttributeUI('show','Location Type','',
             [new OptionUI('country'),new OptionUI('state'),new OptionUI('city'),new OptionUI('continent'),new OptionUI('timezone')]));
         $dki_language_type = new ShortcodeUIType('language','Browser Language','Display the visitor`s browser-defined language/s.',self::ICON_DIR_URL . 'language.svg');
         $dki_language_type->add_field(new AttributeUI('show','Language(s) to show','',
             [new OptionUI('primary-only','Primary Only'),new OptionUI('all','All'),new OptionUI('all-except-primary','All Except Primary'),
             new OptionUI('count','Count'),new OptionUI('count-without-primary','Count Without Primary')]));
-        $dki_referrer_type = new ShortcodeUIType('referrer','Referrer','Display the referring URL or domain that led the user to the site. <a target="_blank" href="https://www.if-so.com/what-is-your-referrer/?utm_source=Plugin&utm_medium=DKIModal&utm_campaign=shortcodeDescription">Demo.</a>',self::ICON_DIR_URL . 'referrer.svg');
+        $dki_referrer_type = new ShortcodeUIType('referrer','Referrer','Display the referring URL or domain that led the user to the site. <a target="_blank" href="https://www.if-so.com/what-is-your-referrer/?utm_source=Plugin&utm_medium=DKIModal&utm_campaign=shortcodeDescription">See it in action.</a>',self::ICON_DIR_URL . 'referrer.svg');
         $dki_referrer_type->add_field(new AttributeUI('show','Show','',
             [new OptionUI('full','Full URL'),new OptionUI('domain-only','Domain Only')]));
         $dki_viewcount_type = new ShortcodeUIType('viewcount','View Count','Visit Count – The total number of pages visited by a specific user.<br> Trigger View Count – The number of times a specific trigger was seen by a visitor.
@@ -21,7 +21,7 @@ class ExtendedShortcodesUIModel{
         $dki_viewcount_type->add_field(new AttributeUI('show','Show','',
             [new OptionUI('visit-count','Visit Count'),new OptionUI('post-viewcount','Trigger View Count')]));
         $dki_viewcount_type->add_field(new AttributeUI('id','Trigger ID','For trigger view count only.'));
-        $dki_qs_type = new ShortcodeUIType('querystring','Query String','Displays a value from a URL parameter. Example: domain.com?firstname=<b>David</b> – shows “David”. <a target="_blank" href="https://www.if-so.com/conditional-content/inline-name/?utm_source=Plugin&utm_medium=DKIModal&utm_campaign=shortcodeDescription">Demo.</a> 
+        $dki_qs_type = new ShortcodeUIType('querystring','Query String','Displays a value from a URL parameter. Example: domain.com?firstname=<b>David</b> – shows “David”. <a target="_blank" href="https://www.if-so.com/conditional-content/inline-name/?utm_source=Plugin&utm_medium=DKIModal&utm_campaign=shortcodeDescription">See it in action.</a> 
 ',self::ICON_DIR_URL . 'querystring.svg');
         $dki_qs_type->add_field(new AttributeUI('parameter','Parameter','The parameter name without the “?” or “&” prefix. For instance: example.com?<span style="color:#6665E7;">param</span>=value'));
         $dki_qs_type->add_field(new AttributeCheckboxUI('persist','Persist','Once the dynamic value is displayed, it will be saved and shown across all pages.','yes'));
@@ -29,7 +29,7 @@ class ExtendedShortcodesUIModel{
         $dki_google_ads_type->add_field(new AttributeUI('parameter','Parameter','The parameter name without the “?” or “&” prefix. For instance: example.com?<span style="color:#6665E7;">param</span>=value'));
         $dki_google_ads_type->add_field(new AttributeCheckboxUI('persist','Persist','Once the dynamic value is displayed, it will be saved and shown across all pages.','yes'));
         $dki_day_of_week_type = new ShortcodeUIType('day-of-week','Day of the Week','Insert the current day (e.g. ' . date('l') .').',self::ICON_DIR_URL . 'day-of-week.svg');
-        $dki_time_type = new ShortcodeUIType('time','Local Time Display','Automatically shows the event time in the visitor’s local timezone.<a target="_blank" href="https://www.if-so.com/auto-local-time-display/?utm_source=Plugin&utm_medium=DKIModal&utm_campaign=shortcodeDescription">Demo.</a>',self::ICON_DIR_URL . 'time.svg');
+        $dki_time_type = new ShortcodeUIType('time','Local Time Display','Automatically shows the event time in the visitor’s local timezone.<a target="_blank" href="https://www.if-so.com/auto-local-time-display/?utm_source=Plugin&utm_medium=DKIModal&utm_campaign=shortcodeDescription">See it in action.</a>',self::ICON_DIR_URL . 'time.svg');
         $dki_time_type->add_field(new AttributeUI('show','Show',
             '"user-geo-timezone-sensitive" shows the site visitor\'s local time, according to the Geolocation service and consumes a session',
             [/*new OptionUI('site-timezone','Site Timezone'),*/new OptionUI('user-geo-timezone-sensitive','Auto-Local Timezone')]));

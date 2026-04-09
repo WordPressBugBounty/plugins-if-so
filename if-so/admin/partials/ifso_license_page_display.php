@@ -18,10 +18,8 @@
 		return ( $status === 'valid' );
 	}
     function make_dummy_license($key){
-        $dummy_license = $key;
-        $dummy_license = substr($dummy_license ,18);
-        $dummy_license = "❊❊❊❊-❊❊❊❊-❊❊❊❊-❊❊❊".$dummy_license;
-        return $dummy_license;
+        $dummy_license = substr($key ,18);
+        return  "❊❊❊❊-❊❊❊❊-❊❊❊❊-❊❊❊".$dummy_license;
     }
     function get_date_i18n($date,$shorten_month=false) {
         $month_format = $shorten_month ? 'M' : 'F';
@@ -32,9 +30,14 @@
 <div class="wrap">
     <h2 style="display:none;"></h2> <!--MOVING THE ADMIN NOTICES ABOVE THE REAL TITLE-->
     <h1><?php _e('License','if-so'); ?></h1>
+    <?php if ($status === 'valid' || $geo_status ==='valid' ): ?>
+        <div class="approved_license_message">
+            <?php _e('<strong>Thank you for using If-So Dynamic Content!</strong> Please feel free to contact our team with any questions you may have.','if-so') ?>
+        </div>
+    <?php endif; ?>
 	<div class="ifso-license-wrapper">
-        <h1 style="margin-top:20px;"><?php _e('Pro License', 'if-so'); ?></h1>
-        <p><?php _e("Activate a pro or a free trial license key to unlock all features. No session limit except for the geolocation condition. ", 'if-so'); ?><a href="https://www.if-so.com/plans?utm_source=Plugin&utm_medium=licensePage&utm_campaign=proLicense" target="_blank"><?php _e('Get a pro license.', 'if-so'); ?></a></p>
+        <h1><?php _e('Pro License', 'if-so'); ?></h1>
+        <p><?php _e("Activate a Pro or Free Trial license to unlock all features. No session limits - except for the geolocation condition. ", 'if-so'); ?><a href="https://www.if-so.com/plans?utm_source=Plugin&utm_medium=licensePage&utm_campaign=proLicense" target="_blank"><?php _e('Get a pro license.', 'if-so'); ?></a></p>
         <div class="ifso-license-tabs-wrapper">
             <div class="license-tab-wrapper">
             <?php if (!is_license_valid( $status )): ?>
@@ -48,6 +51,8 @@
                             <th class="licenseTable" scope="row" valign="top">
                                 <?php _e('License Key','if-so'); ?>
                             </th>
+                        </tr>
+                        <tr valign="top">
                             <td>
                                 <input id="edd_ifso_license_key" <?php echo ( is_license_valid( $status ) ) ? "readonly":""; ?>
                                 name="edd_ifso_license_key" type="text" class="regular-text" placeholder=<?php echo ($license) ? esc_attr($dummy_license) : '&nbsp;';?>
@@ -75,9 +80,6 @@
                             </td>
                         </tr>
                         <tr valign="top">
-                            <th class="licenseTable" scope="row" valign="top">
-                                <!--<?php _e('Activate License'); ?>-->
-                            </th>
                             <td>
                                 <?php if( $status === 'valid' ) { ?>
                                     <?php wp_nonce_field( 'edd_ifso_nonce', 'edd_ifso_nonce' ); ?>
@@ -102,19 +104,13 @@
                 <?php } ?>
             </form>
 
-            <?php if ($status === 'valid' ): ?>
-                <div class="approved_license_message">
-                    <?php _e('<strong>Thank you for using If-So Dynamic Content!</strong> Please feel free to contact our team with any questions you may have.','if-so') ?>
-                </div>
-            <?php endif; ?>
-
 			</div> <!-- end of license-tab-wrapper -->
 		</div> <!-- end of ifso-settings-tabs-wrapper -->
 	</div>
 
     <div class="geo-license-section">
-        <h1 style="margin-top:20px;"><?php _e('Geolocation License', 'if-so'); ?></h1>
-        <p><?php _e('A geolocation license key allows you to upgrade your monthly geolocation session limit. A geolocation license can be activated alone or in addition to a pro license.', 'if-so'); ?> <a href="https://www.if-so.com/plans/geolocation-plans?utm_source=Plugin&utm_medium=licensePage&utm_campaign=geoLicense" target="_blank"><?php _e('Get a geolocation license.', 'if-so'); ?></a></p>
+        <h1><?php _e('Geolocation License', 'if-so'); ?></h1>
+        <p><?php _e('Upgrade your monthly geolocation session limit with a geolocation license. Activate it independently or in combination with a Pro license.', 'if-so'); ?> <a href="https://www.if-so.com/geolocation-wordpress-plugin/geolocation-pricing/?utm_source=Plugin&utm_medium=licensePage&utm_campaign=geoLicense" target="_blank"><?php _e('Get a geolocation license.', 'if-so'); ?></a></p>
         <div class="ifso-license-tabs-wrapper">
             <form method="post" action="options.php" class="license-form">
                 <?php settings_fields('edd_ifso_license'); ?>
@@ -122,10 +118,12 @@
                     <tbody>
                     <tr valign="top">
                         <th class="licenseTable" scope="row" valign="top">
-                            <?php _e('License Key'); ?>
+                            <?php _e('License Key','if-so'); ?>
                         </th>
+                    </tr>
+                    <tr valign="top">
                         <td>
-                            <input id="edd_ifso_license_key" <?php echo ( is_license_valid( $geo_status ) ) ? "readonly":""; ?>
+                            <input id="edd_ifso_geo_license_key" <?php echo ( is_license_valid( $geo_status ) ) ? "readonly":""; ?>
                                    name="edd_ifso_license_key" value="<?php echo ($geo_license) ? esc_attr($geo_dummy_license):"";?>" type="text" class="regular-text" placeholder=<?php echo ($geo_license) ? esc_attr($geo_dummy_license) : '&nbsp;';?>>
                             <?php
                             if ( $this->edd_ifso_is_in_activations_process() ) {
@@ -149,9 +147,6 @@
                         </td>
                     </tr>
                     <tr valign="top">
-                        <th class="licenseTable" scope="row" valign="top">
-                            <!--<?php _e('Activate License'); ?>-->
-                        </th>
                         <td>
                             <?php if( $geo_status === 'valid' ) { ?>
                                 <?php wp_nonce_field( 'edd_ifso_nonce', 'edd_ifso_nonce' ); ?>

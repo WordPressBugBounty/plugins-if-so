@@ -20,5 +20,5 @@ define("IFSO_PLUGIN_SERVICES_BASE_DIR",
 define('IFSO_PLUGIN_DIR_URL',
     plugin_dir_url(dirname(__FILE__)));
 
-define("IFSO_WP_VERSION", '1.9.6');
+define("IFSO_WP_VERSION", '1.9.7');
 define("IFSO_API_VERSION", 'v3');

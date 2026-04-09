@@ -60,6 +60,8 @@
     $enable_visit_count  = $settingsServiceInstance->enableVisitCount->get();
 
     $renderStandaloneViaAjax = $settingsServiceInstance->renderStandaloneViaAjax->get();
+
+    $showABTestingNotice = $settingsServiceInstance->showABTestingNotice->get();
 ?>
 <style>
     .ifso-settings-form .form-table tbody tr[valign] td+td{
@@ -475,10 +477,29 @@
                                         value="<?php echo $scheduleInterval; ?>" /><span> Minutes.</span>
                                 <i><?php _e('Select the duration for each timeslot in the schedule condition table.','if-so'); ?></i>
                             </td>
+
+                        <tr class="ifso-settings-title" valign="top">
+                            <th class="ifso-settings-td" scope="row" valign="top">
+                                <?php _e('A/B TESTING CONDITION', 'if-so'); ?>
+                            </th>
                         </tr>
+
+                        <tr valign="top">
+                            <td class="ifso-settings-td" scope="row" valign="baseline">
+                                <b><?php _e('Enable admin view notification', 'if-so'); ?></b>
+                            </td>
+                            <td valign="baseline">
+                                <input
+                                        name="ifso_settings_show_ab_testing_notice"
+                                        <?php echo $showABTestingNotice ? "CHECKED" : ""; ?>
+                                        type="checkbox"
+                                        class="ifso_settings_page_option"
+                                <i><?php _e('Display a front-end notice to logged-in administrators when A/B testing is active on the page.','if-so'); ?></i>
+                            </td>
                     </tbody>
 
                     <tbody class="ifso-admin-page-tab-content addons-tab">
+                        <td colspan="2">Enhance your experience with powerful add-ons. Unlock advanced features and extend the plugin’s capabilities to fit your needs. <a target="_blank" href="https://www.if-so.com/add-ons-and-integrations/?utm_source=Plugin&utm_medium=settings&utm_campaign=addons ">View all available add-ons</a>.</td>
                         <?php do_action('ifso_extra_settings_display_ui'); ?>
                     </tbody>
 

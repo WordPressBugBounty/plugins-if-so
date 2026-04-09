@@ -214,7 +214,7 @@ class If_So_Admin {
 
                 wp_enqueue_script( $this->plugin_name.'-admin-triggerpage', plugin_dir_url( __FILE__ ) . 'js/if-so-admin-triggerpage.js', array( 'jquery',$this->plugin_name.'-Admin',$this->plugin_name.'TinyModal' ), $this->version, false );
 
-                wp_deregister_script( 'postbox' );    //Prevent trigger page metaboxes from being draggable
+                //wp_deregister_script( 'postbox' );    //Prevent trigger page metaboxes from being draggable
             }
 
         }

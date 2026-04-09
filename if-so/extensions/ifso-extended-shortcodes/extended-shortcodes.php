@@ -502,7 +502,7 @@ class ExtendedShortcodes {
                 ob_start();
                 add_action('wp_footer',function()use($message){
                     ob_end_clean();
-                    echo "<div class='ifso_block_site_content_message' style='position: absolute;top:50%;left:50%;transform:translate(-50%,-50%);'>{$message}</div>";
+                    echo "<style>*{visibility:hidden;}</style><div class='ifso_block_site_content_message' style='position: absolute;top:50%;left:50%;transform:translate(-50%,-50%);visibility:visible'>{$message}</div>";
                 },PHP_INT_MAX);
             }
         });

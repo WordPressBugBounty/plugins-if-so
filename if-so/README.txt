@@ -4,7 +4,7 @@ Donate link: https://www.if-so.com/?utm_source=WordPress&utm_medium=Readme&utm_c
 Tags: Dynamic content, personalization, conditional, geolocatargeting, location
 Requires at least: 4.0.1
 Tested up to: 6.9
-Stable tag: 1.9.5.1
+Stable tag: 1.9.6
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -295,10 +295,17 @@ You sure can! So far, we have not come across any WordPress themes that If-So Dy
 
 == Changelog ==
 
-= 1.9.6 =
-Added a new ifso_cookie_category filter that allows you to change the cookie consent category of cookies added by If-So. The filter receives two arguments: the cookie type (necessary, statistics, marketing, preferences) and the cookie name (<a href="https://www.if-so.com/faq-items/can-i-change-the-category-of-if-so-cookies/?utm_source=WordPress&utm_medium=Readme&utm_campaign=v2&utm_term=cookiefilter" target="_blank">Learn more</a>).
+= 1.9.7 =
+* Added a new shortcode - [ifso_hide_site_content] which allows you to display a message instead of the site's content.
+* If-So GA4 Extension compatibility.
+* UI improvements.
+* Bug fixes and PHP 8.4 compatibility improvemnts.
 
-Added a new DKI shortcode that lets you block users from accessing the site based on If-So conditions (for example, country-based blocking; <a href="https://www.if-so.com/geolocation-wordpress-plugin/wordpress-country-block/?utm_source=WordPress&utm_medium=Readme&utm_campaign=v2&utm_term=cookiefilter" target="_blank">Learn more</a>).
+
+= 1.9.6 =
+* Added a new ifso_cookie_category filter that allows you to change the cookie consent category of cookies added by If-So. The filter receives two arguments: the cookie type (necessary, statistics, marketing, preferences) and the cookie name (<a href="https://www.if-so.com/faq-items/can-i-change-the-category-of-if-so-cookies/?utm_source=WordPress&utm_medium=Readme&utm_campaign=v2&utm_term=cookiefilter" target="_blank">Learn more</a>).
+
+* Added a new DKI shortcode that lets you block users from accessing the site based on If-So conditions (for example, country-based blocking; <a href="https://www.if-so.com/geolocation-wordpress-plugin/wordpress-country-block/?utm_source=WordPress&utm_medium=Readme&utm_campaign=v2&utm_term=cookiefilter" target="_blank">Learn more</a>).
 
 = 1.9.5.1 =
 

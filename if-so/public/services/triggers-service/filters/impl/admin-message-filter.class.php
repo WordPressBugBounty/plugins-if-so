@@ -2,12 +2,15 @@
 
 namespace IfSo\PublicFace\Services\TriggersService\Filters;
 
+use IfSo\Services\PluginSettingsService\PluginSettingsService;
+
 require_once( plugin_dir_path ( __DIR__ ) . 'filter-base.class.php');
 
 class AdminMessageFilter extends FilterBase {
     private static array $viewed_notices = [];
     public function change_text($text,$trigger_data=null) {
-        if (current_user_can('administrator') && !empty($trigger_data) && $trigger_data->get_version_index()!=='DEFAULT'){
+        if (current_user_can('administrator') && !empty($trigger_data) && $trigger_data->get_version_index()!=='DEFAULT' &&
+            PluginSettingsService::get_instance()->showABTestingNotice->get()){
             $trigger_type = $trigger_data->get_rule()['trigger_type'];
             if($trigger_type==='AB-Testing'){
                 if(!in_array($trigger_type,self::$viewed_notices)){

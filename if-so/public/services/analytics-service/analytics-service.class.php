@@ -362,6 +362,7 @@ class AnalyticsService {
     }
 
     public function render_google_analytics_event_element($attrs,$event='ifso-trigger-viewed'){
+        $attrs = apply_filters('ifso_ga4_event_attrs',$attrs,$event);
         $event_data_attr = esc_attr(json_encode($attrs));
         return "<ifsoTriggerAnalyticsEvent event_data='{$event_data_attr}' event_name='{$event}'></ifsoTriggerAnalyticsEvent>";
     }

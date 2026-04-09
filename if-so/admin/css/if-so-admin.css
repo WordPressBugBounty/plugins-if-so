@@ -53,8 +53,50 @@ body {
 }
 
 .license-tbl tbody {
-    padding: 10px;
+    padding: 10px 10px 30px 10px;
     display: block;
+}
+
+.license-tbl tr th{
+    width:unset!important;
+    padding:20px 0 0 20px!important;
+}
+.license-tbl tr td{
+    padding:10px 0 0 20px !important
+}
+
+@media screen and (min-width: 1050px) {
+    .if-so_page_wpcdd_admin_menu_license .wrap{
+        display: flex;
+        flex-wrap:wrap;
+    }
+    .if-so_page_wpcdd_admin_menu_license .wrap>*:not(.ifso-license-wrapper, .geo-license-section){
+        width:100%;
+    }
+    .ifso-license-wrapper, .geo-license-section{
+        width: calc(50% - 2px);
+        display: inline-block;
+        box-sizing: border-box;
+        margin-top:28px;
+    }
+    .ifso-license-wrapper>h1, .geo-license-section>h1{
+        padding-top:0;
+    }
+    .ifso-license-wrapper{
+        padding:0 50px 0 10px;
+        border-right: 1px solid rgb(140, 143, 148);
+    }
+    .geo-license-section{
+        padding:0 10px 0 50px;
+    }
+    .ifso-license-wrapper>p,.geo-license-section>p{
+        min-height:40px;
+    }
+    @media screen and (max-width: 1350px){
+        .ifso-license-wrapper > p, .geo-license-section > p{
+            min-height: 60px;
+        }
+    }
 }
 
 .license_expires_message {
@@ -81,11 +123,6 @@ body {
 box-shadow: none;
 }
 
-.licenseTable {
-	width:130px !important;
-	padding: 20px 10px 20px 20px !important;
-}
-
 .ifso-settings-td {
     padding: 20px 10px 20px 20px !important;   
     vertical-align:baseline !important;
@@ -96,7 +133,7 @@ box-shadow: none;
     border: 1px solid #46b450;
     color: #46b450;
     padding: 7px;
-    margin-top: 10px;
+    margin:10px 0 30px 0;
     font-size:14px;
 }
 
@@ -184,6 +221,7 @@ box-shadow: none;
 }
 .postbox .postbox-header .hndle{
     cursor:default;
+    pointer-events: none;
 }
 .postbox .postbox-header .handle-actions{
     display:none;

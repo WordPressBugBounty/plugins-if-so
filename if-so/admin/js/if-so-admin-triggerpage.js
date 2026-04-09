@@ -137,7 +137,10 @@
 				phpCodeModal.openModal();
 			});
 		}
-		
+
+		//Make sure that the "Publish" metabox is visible
+		$('#submitdiv').removeClass('closed');
+
 		// Enable Time/Day Schedule
 		$(".date-time-schedule").dayScheduleSelector(scheduleSettings);
 		// Enable DateTimePicker
