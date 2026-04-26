@@ -3,8 +3,8 @@ Contributors: ifso
 Donate link: https://www.if-so.com/?utm_source=WordPress&utm_medium=Readme&utm_campaign=Donate%20link
 Tags: Dynamic content, personalization, conditional, geolocatargeting, location
 Requires at least: 4.0.1
-Tested up to: 6.9
-Stable tag: 1.9.6
+Tested up to: 6.9.4
+Stable tag: 1.9.7
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -294,6 +294,11 @@ You sure can! So far, we have not come across any WordPress themes that If-So Dy
 
 
 == Changelog ==
+
+= 1.9.8 =
+* PHP 8.4 compatibility improvemnts.
+* WordPress 7.0 compatibility fixes.
+
 
 = 1.9.7 =
 * Added a new shortcode - [ifso_hide_site_content] which allows you to display a message instead of the site's content.

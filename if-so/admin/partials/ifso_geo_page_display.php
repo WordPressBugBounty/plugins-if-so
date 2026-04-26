@@ -724,7 +724,7 @@
                                 <p class="geo-info-card-link error-label">
                                     Communication failure
                                     <br>
-                                    <a class="geo-info-card-link error-label" href="https://www.if-so.com/help/communication-failure/?utm_source=Plugin&utm_medium=error&utm_campaign=geolocation&utm_term=comm_failure&utm_content=a" target="_blank">
+                                    <a class="geo-info-card-link error-label" href="https://www.if-so.com/help/communication-failure/?utm_source=Plugin&utm_medium=error&utm_campaign=geolocation&utm_term=comm_failure&utm_content=a&website_url=<?php echo urlencode(home_url()); ?>" target="_blank">
                                         Click to solve
                                     </a>
                                 </p>
@@ -1120,7 +1120,7 @@
 
                 <div>
                     <?php if(!is_geo_data_valid($geoData)){ ?>
-                        <span class="error-label" style="padding-left:10px;">Communication failure! <a href="https://www.if-so.com/help/communication-failure/?utm_source=Plugin&utm_medium=error&utm_campaign=geolocation&utm_term=comm_failure&utm_content=a" target="_blank">Click to solve</a> </span>
+                        <span class="error-label" style="padding-left:10px;">Communication failure! <a href="https://www.if-so.com/help/communication-failure/?utm_source=Plugin&utm_medium=error&utm_campaign=geolocation&utm_term=comm_failure&utm_content=a&website_url=<?php echo urlencode(home_url()); ?>" target="_blank">Click to solve</a> </span>
                     <?php } ?>
                 </div>
 

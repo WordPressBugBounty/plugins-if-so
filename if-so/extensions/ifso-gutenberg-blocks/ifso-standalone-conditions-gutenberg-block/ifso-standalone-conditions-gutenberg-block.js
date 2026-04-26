@@ -470,7 +470,7 @@
                 [
                     el(
                         BlockEdit,
-                        {...props,key:'blockEdit'}
+                        {...props}
                     ),
                     el(wp.blockEditor.InspectorControls,
                         {key:'ifso-standalone-cond-widget'},

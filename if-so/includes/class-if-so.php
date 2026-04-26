@@ -347,6 +347,7 @@ class If_So {
         /*Enqueue ifso block assets*/
         $this->loader->add_action( 'init', $triggers_gutenberg_block, 'enqueue_block_assets' );
         $this->loader->add_action( 'enqueue_block_editor_assets', $standalone_conditions_gutenberg_block, 'enqueue_block_assets' , 1 );
+        $this->loader->add_action( 'enqueue_block_assets', $standalone_conditions_gutenberg_block, 'enqueue_block_styles' , 1 );
         $this->loader->add_action('wp_loaded',$standalone_conditions_gutenberg_block,'add_ifso_standalone_attributes_to_all_block_types');
 	}
 

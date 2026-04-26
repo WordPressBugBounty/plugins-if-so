@@ -38,9 +38,13 @@ class IfsoGutenbergStandaloneConditionBlock extends IfSoGutenbergBlockBase{
                 array( 'wp-blocks', 'wp-element', 'wp-data','wp-hooks','wp-editor','wp-edit-post'),
                 IFSO_WP_VERSION
             );
-
             $this->pass_data_to_js('ifso-standalone-conditions-block');
+            wp_enqueue_script('ifso-standalone-conditions-block');
+        }
+    }
 
+    public function enqueue_block_styles(){
+        if($this->gutenberg_exists && is_admin()){
             wp_register_style(
                 'ifso-standalone-conditions-block',
                 plugin_dir_url( __FILE__ ) . '/ifso-standalone-conditions-gutenberg-block.css',
@@ -48,19 +52,7 @@ class IfsoGutenbergStandaloneConditionBlock extends IfSoGutenbergBlockBase{
                 IFSO_WP_VERSION
             );
 
-            wp_enqueue_script('ifso-standalone-conditions-block');
             wp_enqueue_style('ifso-standalone-conditions-block');
-
-        }
-    }
-
-    public function enqueue_block_styles(){
-        if($this->gutenberg_exists){
-            wp_enqueue_style(
-                'ifso-standalone-conditions-block',
-                plugin_dir_url( __FILE__ ) . './ifso-gutenberg-block.css',
-                array()
-            );
         }
     }
 

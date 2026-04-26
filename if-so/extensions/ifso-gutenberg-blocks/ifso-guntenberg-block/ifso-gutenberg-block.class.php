@@ -39,11 +39,6 @@ class IfSoTriggerGutenbergBlock extends IfSoGutenbergBlockBase {
 
     public function enqueue_block_styles(){
         if($this->gutenberg_exists){
-            wp_enqueue_style(
-                'ifso-gutenberg-block',
-                plugin_dir_url( __FILE__ ) . './ifso-gutenberg-block.css',
-                array()
-            );
         }
     }
 
