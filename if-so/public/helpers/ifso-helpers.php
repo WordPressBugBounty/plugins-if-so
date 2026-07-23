@@ -24,7 +24,7 @@ class CookieConsent{
     private static $instance;
     private $cookie_types = [
         'necessary'=>[],
-        'statistics'=>['ifso_last_viewed','ifso_viewing_triggers'],
+        'statistics'=>['_ifso_last_viewed','ifso_viewing_triggers'],
         'marketing'=>[],
         'preferences'=>['ifso_page_visits','ifso_recurrence_data','ifso_visit_counts','ifsoGroup','ifso_geo_data','ifso_viewed_triggers','ifso_group_name']
     ];
@@ -97,7 +97,7 @@ class CookieConsent{
     }
 
     private function hu_compliance_is_category_allowed($category){
-        if(!Cookie_Notice()::cookies_accepted()) return false;
+        if(!Cookie_Notice()::cookies_accepted()) return ($category==='necessary');
         if(!isset($_COOKIE["hu-consent"])) return true;
         $CookieConsent = $this->get_object_from_cookie('hu-consent');
         $category_matcher = ['necessary'=>"1",'statistics'=>"2",'preferences'=>"3",'marketing'=>"4"];

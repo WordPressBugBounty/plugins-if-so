@@ -38,6 +38,7 @@ function ifso_delete_plugin() {
     require_once plugin_dir_path( __FILE__ ) . 'includes/ifso-constants.php';
     require_once IFSO_PLUGIN_BASE_DIR . 'services/license-service/license-service.class.php';
     require_once IFSO_PLUGIN_BASE_DIR . 'services/license-service/geo-license-service.class.php';
+    require_once(IFSO_PLUGIN_BASE_DIR. 'public/services/analytics-service/analytics-service.class.php');
 
 	global $wpdb;
 
@@ -57,8 +58,10 @@ function ifso_delete_plugin() {
 
 	Services\LicenseService\LicenseService::get_instance()->clear_license();
     Services\GeoLicenseService\GeoLicenseService::get_instance()->clear_license();
+    $an_db = \IfSo\PublicFace\Services\AnalyticsService\AnalyticsService::get_instance()->records;
 
-    $tables_created_by_ifso = ["{$wpdb->prefix}ifso_local_user","{$wpdb->prefix}ifso_daily_sessions"];
+    $tables_created_by_ifso = [$an_db->conversions_table_name,$an_db->conversions_events_table_name,
+                    $an_db->conversion_urls_table_name,"{$wpdb->prefix}ifso_local_user","{$wpdb->prefix}ifso_daily_sessions"];
     foreach($tables_created_by_ifso as $table){
         $wpdb->query("DROP TABLE IF EXISTS {$table}");
     }

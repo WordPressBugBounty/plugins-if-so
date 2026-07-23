@@ -56,33 +56,7 @@
 	    return String.fromCharCode(versionNumber) + postfix.toString();
 	}
 	// Enable tooltip
-	function activeTooltip(items) {	
-		items = "." + items;
-		$(document).tooltip({
-			items: items,
-			track: true,
-			show: null, // show immediately
-			open: function(event, ui) {
-			    if (typeof(event.originalEvent) === 'undefined') {
-			        return false;
-			    }
-			    var $id = $(ui.tooltip).attr('id');
-			    // close any lingering tooltips
-			    $('div.ui-tooltip').not('#' + $id).remove();
-			    // ajax function to pull in data and add it to the tooltip goes here
-			},
-			close: function(event, ui) {
-			    ui.tooltip.hover(function() {
-			        $(this).stop(true).fadeTo(400, 1); 
-			    },
-			    function() {
-			        $(this).fadeOut('400', function() {
-			            $(this).remove();
-			        });
-			    });
-			}
-		});
-	}
+
 	function activateFreezeTooltip() {
 		var freezeTooltipClass = ".ifso-freeze-overlay";
 		var freezeTooltipStyleClass = "ifso_freeze_tooltip_styling";
@@ -119,7 +93,6 @@
 			}
 		});	
 	}
-	activeTooltip("ifso_tooltip");
 	activateFreezeTooltip();
 	 
 	$(document).ready(function () {
@@ -655,7 +628,7 @@
 			$ancParent.append(overlayFreezeHTML);
 			$parent.addClass("freeze-overlay-active-container");
 			$elem.find(".text").html('<i class="fa fa-play" aria-hidden="true">');
-			activeTooltip("ifso_tooltip");
+			activeIfSoTooltip("ifso_tooltip");
 			activateFreezeTooltip();
 		}
 	});
@@ -684,15 +657,6 @@
 		}
 		$this.toggleClass("groups-expander-show");
 	});
-
-	//Custom version name toggle
-	$(document).on("click", ".ifso-btn-version-name", function(e) {
-		if(e.target.tagName==='INPUT')
-			return;
-		this.querySelector('.ifso-form-group').classList.toggle('nodisplay')
-	});
-
-
 
 		/* Utils Funcs */
 	function scrollToElement($elem) {

@@ -9,20 +9,19 @@
 namespace IfSo\PublicFace\Services\AnalyticsService;
 
 use IfSo\PublicFace\Helpers\CookieConsent;
+use IfSo\PublicFace\Services\AjaxTriggersService\AjaxTriggersService;
 
 require_once(IFSO_PLUGIN_BASE_DIR . 'services/plugin-settings-service/plugin-settings-service.class.php');
-
+require_once (__DIR__ . '/analytics-records.class.php');
 
 class AnalyticsService {
     private static $instance;
 
-    public static $analytics_fields = ['views','conversion','recurrence_views'];
-
-    private $trigger_rules_field_name = 'ifso_trigger_rules';
-
-    public $last_viewed_version_cookie_name = 'ifso_last_viewed';
+    public $last_viewed_version_cookie_name = '_ifso_last_viewed';
 
     public $currently_viewing_cookie_name = 'ifso_viewing_triggers';
+
+    public $records;
 
     private static $viewed_triggers =[];
 
@@ -34,8 +33,6 @@ class AnalyticsService {
 
     public $allow_counting = true;   //Allow counting of current user's views/conversions
 
-    protected $temp_field;
-
     protected $settings_service;
 
     private function __construct(){
@@ -43,12 +40,14 @@ class AnalyticsService {
         $this->isOn = !$this->settings_service->disableAnalytics->get();
         if(defined('REST_REQUEST') && REST_REQUEST ) $this->isOn =  false;   //Disable analytics if its a request to the wp REST API (to avoid gutenberg from activating analytics)
         $this->useAjax = $this->settings_service->ajaxAnalytics->get();
+        $this->records = new AnalyticsRecords();
 
         $th = $this;
         add_action('plugins_loaded',function() use (&$th){
             if (current_user_can('administrator')) $th->allow_counting = false;   //Disalow counting for administrators
         });
 
+        add_action('wp_footer',[$this,'conversions_if_url_is_required']);
     }
 
     public static function get_instance(){
@@ -58,252 +57,58 @@ class AnalyticsService {
         return self::$instance;
     }
 
-
-    private function get_rules_data($postid){
-        if($this->isOn && isset($postid)){
-            $dataStr = get_post_meta($postid,$this->trigger_rules_field_name,true);
-            if($dataStr){
-                $data = json_decode($dataStr,true);
-                if($data) return $data;
-            }
+    public function make_trigger_report_default_data($tid){
+        $data_rules = \IfSo\PublicFace\Services\TriggersService\TriggerContextLoader::load_context(['id'=>$tid],null)->get_data_rules();
+        if($data_rules===null) return false;
+        $ret = [];
+        $i=0;
+        foreach($data_rules as $rule){
+            $symbol = \IfSo\Admin\Services\InterfaceModService\InterfaceModService::get_instance()->generate_version_symbol($i++);
+            $name = !empty($rule['version_name']) ? $rule['version_name'] : '';
+            $ret[$rule['version_uid']] = ['symbol'=>$symbol,'conversions'=>0,'name'=>$name,'views'=>0,'recurr_views'=>0];
         }
-        return false;
+        $ret['default'] = ['symbol'=>'Default','name'=>'','conversions'=>0,'views'=>0,'recurr_views'=>0];
+        return $ret;
     }
 
-    private function set_rules_data($postid,$data){
-        if($this->isOn && isset($postid) && isset($data)){
-            $dataStr = json_encode($data,JSON_UNESCAPED_UNICODE);
-            if($dataStr){
-                $prepared_dataStr = str_replace("\\", "\\\\\\",$dataStr);
-                update_post_meta($postid, $this->trigger_rules_field_name,$prepared_dataStr);
-            }
-        }
-    }
-
-    /*functions for handling  the default case start*/
-    private function get_default_an_data($postid){
-        $this->temp_field = $this->trigger_rules_field_name;
-        $this->trigger_rules_field_name = 'ifso_default_analytics';
-        $ret =  $this->get_rules_data($postid);
-        $this->trigger_rules_field_name = $this->temp_field;
-        if(!empty($ret)) return $ret;
-        return [];
-    }
-
-    private function set_default_an_data($postid,$data){
-        $this->temp_field = $this->trigger_rules_field_name;
-        $this->trigger_rules_field_name = 'ifso_default_analytics';
-        $this->set_rules_data($postid,$data);
-        $this->trigger_rules_field_name = $this->temp_field;
-    }
-
-    public function get_default_analytics_field($postid,$field){
-        if(isset($postid) && isset($field) && in_array($field,self::$analytics_fields)){
-            $data = $this->get_default_an_data($postid);
-            if($data && isset($data[$field])){
-                return $data[$field];
-            }
-        }
-        return false;
-    }
-
-    public function get_default_analytics_fields($postid){
-        if(isset($postid)){
-            $res = [];
-            $data = $this->get_default_an_data($postid);
-            //if($data){
-                foreach(self::$analytics_fields as $field){
-                    if(isset($data[$field]))
-                        $res[$field] = $data[$field];
-                    else
-                        $res[$field] = 0;
-                }
-            //}
-            return $res;
-        }
-        return false;
-    }
-
-    public function update_default_analytics_field($postid,$field,$val=1){
-        if(isset($postid) && isset($field) && in_array($field,self::$analytics_fields)){
-            $data = $this->get_default_an_data($postid);
-            if(!$data) $data = [];
-            $data[$field] = $val;
-            $this->set_default_an_data($postid,$data);
-        }
-        return false;
-    }
-
-    public function increment_default_analytics_field($postid,$field){
-        if(isset($postid) && isset($field) && in_array($field,self::$analytics_fields)){
-            $data = $this->get_default_an_data($postid);
-            if($data && isset($data[$field]) && is_int($data[$field])) $data[$field] =  ++$data[$field];
-            else $data[$field] = 1;
-            $this->set_default_an_data($postid,$data);
-        }
-    }
-
-    public function decrement_default_analytics_field($postid,$field){
-        if(isset($postid) && isset($field) && in_array($field,self::$analytics_fields)){
-            $data = $this->get_default_an_data($postid);
-            if($data && isset($data[$field]) && is_int($data[$field]) && $data[$field]>0) $data[$field] =  --$data[$field];
-            else $data[$field] = 0;
-            $this->set_default_an_data($postid,$data);
-        }
-    }
-
-    /*functions for handling  the default case END*/
-
-    public function create_analytics_meta_fields($postid,$current_rules){
-        $rules = $current_rules;
-        foreach($rules as &$ver){
-            foreach(self::$analytics_fields as $field){
-                $ver[$field] = 0;
-            }
-        }
-        $this->set_rules_data($postid,$rules);
-    }
-
-    public function get_analytics_field($postid,$versionid,$field){
-        if(isset($postid) && isset($versionid) && isset($field) && in_array($field,self::$analytics_fields)){
-            $data = $this->get_rules_data($postid);
-            if($data){
-                if(isset($data[$versionid][$field])) return $data[$versionid][$field];
-            }
-        }
-        return false;
-    }
-
-    public function get_analytics_fields($postid,$versionid=false,$inject_version_name=false){
-        //Get an associative array of analytics fields and their values of a version. If versionid is not defined, get an array of such arrays for each version of a trigger
-        if(isset($postid)){
-            $ret = [];
-
-            if($versionid!==false){
-                foreach(self::$analytics_fields as $field){
-                    $ret[$field] = $this->get_analytics_field($postid,$versionid,$field);
-                }
-                if($inject_version_name) $ret['version_name'] = \IfSo\Admin\Services\InterfaceModService\InterfaceModService::get_instance()->generate_version_symbol($versionid);
-                return $ret;
-            }
-            else{
-                $versions = $this->get_rules_data($postid);
-                if(is_array($versions)){
-                    foreach($versions as $key=>$value){
-                        $ret[$key] = $this->get_analytics_fields($postid,$key,$inject_version_name);
-                    }
-                }
-                $def = $this->get_default_analytics_fields($postid); //Add the "DEFAULT" version
-                $def['version_name']='Default';
-                $ret[] = $def;
-                return $ret;
-            }
-
-        }
-    }
-
-    public function update_analytics_field($postid,$versionid,$field,$val){
-        if(isset($postid) && isset($versionid) && isset($val) && isset($field) && in_array($field,self::$analytics_fields)){
-            $data = $this->get_rules_data($postid);
-            if( $data && isset($data[$versionid]) ){
-                $data[$versionid][$field] = (int) $val;
-                $this->set_rules_data($postid,$data);
-            }
-        }
-        return false;
-    }
-
-    public function increment_analytics_field($postid,$versionid,$field){
-        if(isset($postid) && isset($versionid) && isset($field) && in_array($field,self::$analytics_fields)){
-            $data = $this->get_rules_data($postid);
-            if( $data && isset($data[$versionid]) ){
-                $current = $data[$versionid][$field];
-                if(is_numeric($current)) $data[$versionid][$field] =  ++$current;
-                else $data[$versionid][$field] = 1;
-                $this->set_rules_data($postid,$data);
-            }
-        }
-        return false;
-    }
-
-    public function decrement_analytics_field($postid,$versionid,$field){
-        if(isset($postid) && isset($versionid) && isset($field) && in_array($field,self::$analytics_fields)){
-            $data = $this->get_rules_data($postid);
-            if( $data && isset($data[$versionid]) ){
-                $current = $data[$versionid][$field];
-                if(is_numeric($current) && $current>0) $data[$versionid][$field] =  --$current;
-                else $data[$versionid][$field] = 0;
-                $this->set_rules_data($postid,$data);
-            }
-        }
-        return false;
-    }
-
-    public function reset_analytics_field($postid,$versionid,$field){
-        if(isset($postid) && isset($versionid) && isset($field)){
-            $this->update_analytics_field($postid,$versionid,$field,0);
-        }
-    }
-
-    public function reset_analytics_fields($postid,$version=false){
-        if(isset($postid)){
-            $data = $this->get_rules_data($postid);
-            if($data){
-                if($version!==false){
-                    if($version!='default'){
-                        if(isset($data[$version])){
-                            foreach(self::$analytics_fields as $field){
-                                $this->reset_analytics_field($postid,$version,$field);
-                            }
-                        }
-                    }
-                    else{
-                        foreach(self::$analytics_fields as $field){
-                            $this->update_default_analytics_field($postid,$field,0); //reset the default version fields
-                        }
-                    }
-
-                }
-                else{
-                    foreach($data as $key=>$value){
-                        $this->reset_analytics_fields($postid,(string) $key);
-                    }
-                    $this->reset_analytics_fields($postid,'default');
-                }
-
-            }
-        }
-    }
-
-    public function reset_all_triggers_analytics_fields(){
-        $args = [
-            'post_type'=>'ifso_triggers',
-            'posts_per_page' => -1,
-        ];
-        $query = new \WP_Query($args);
-        if($query->have_posts()){
-            while($query->have_posts()) {
-                $query->the_post();
-                // Loop in here
-                $this->reset_analytics_fields(get_the_id());
-            }
-            wp_reset_postdata();
-        }
-    }
-
-    private function set_last_viewed_version_cookie($postid,$versionid){
+    private function set_last_viewed_version_cookie($postid,$versionid,$versionUid){
+        if($postid===0) return;
         //Set cookie indicating the triggers/versions seen during the current session to use in bounce/conversion callbacks etc - can be moved to a separate class later on
         if(isset($postid) && isset($versionid)){
             $viewed_arr = [];
             if(isset($_COOKIE[$this->last_viewed_version_cookie_name]) && is_array(json_decode(stripslashes($_COOKIE[$this->last_viewed_version_cookie_name]),true)))
                 $viewed_arr = json_decode(stripslashes($_COOKIE[$this->last_viewed_version_cookie_name]),true);
-            $viewed_arr[$postid] = $versionid;
+            $viewed_arr[$postid] = ['id'=>$versionid,'uid'=>$versionUid];
             $_COOKIE[$this->last_viewed_version_cookie_name] = json_encode($viewed_arr);
-            CookieConsent::get_instance()->set_cookie($this->last_viewed_version_cookie_name,json_encode($viewed_arr),0,'/');
+            $cookie_expiration = $this->settings_service->analyticsCookieExpiration->get()===0 ? 0 : time() + $this->settings_service->analyticsCookieExpiration->get();
+            CookieConsent::get_instance()->set_cookie($this->last_viewed_version_cookie_name,json_encode($viewed_arr),$cookie_expiration,'/');
         }
     }
 
-    public function do_conversion($triggers,$allowed,$disallowed,$once_per_time=null,$name=null){
+    public function get_last_viewed_versions(){
+        if(!empty($_COOKIE[$this->last_viewed_version_cookie_name]))
+            return json_decode(stripslashes($_COOKIE[$this->last_viewed_version_cookie_name]),true);
+        return [];
+    }
+
+    public function do_conversion($type,$triggers,$allowed=[],$disallowed=[],$once_per_time=null,$name=null){
+        $type_id = $type!==null ? (int)$type : 0;
+        $name = $type_id;
+        if($type_id!==0){
+            $conversion_data = $this->records->get_conversion($type);
+            if(isset($conversion_data->once_per)) $once_per_time = $conversion_data->once_per;
+            if(!empty($conversion_data->trigger_filter)){
+                $tf = json_decode($conversion_data->trigger_filter,true);
+                if(!empty($tf)){
+                    if($tf['type']==='exclude')
+                        $disallowed = $tf['triggers'];
+                    if($tf['type']==='include'){
+                        $allowed = $tf['triggers'];
+                        if(empty($allowed)) return;
+                    }
+                }
+            }
+        }
         if($once_per_time!==null && $name!==null){
             $convs = [];
             $limited_conversions_cookie_name = 'ifso-limited-conversions';
@@ -318,12 +123,26 @@ class AnalyticsService {
             CookieConsent::get_instance()->set_cookie($limited_conversions_cookie_name,json_encode($convs),intval(end($convs)),'/','preferences');
         }
         foreach ($triggers as $trigger=>$version){
-            if(!isset(self::$already_had_conversion[$trigger]) && !in_array($trigger,$disallowed) && (!$allowed || is_array($allowed) && in_array($trigger,$allowed))){
-                if($version!=='default')
-                    $this->increment_analytics_field($trigger,$version,'conversion');
-                else
-                    $this->increment_default_analytics_field($trigger,'conversion');
-                self::$already_had_conversion[$trigger] = $version;
+            if(empty($version['uid'])) continue;
+            if(!isset(self::$already_had_conversion[$type_id][$trigger]) && !in_array($trigger,$disallowed) && (!$allowed || is_array($allowed) && in_array($trigger,$allowed))){
+                $this->records->create_conversion_event($trigger,$version['uid'],$type_id===0?null:$type_id);
+                self::$already_had_conversion[$type_id][$trigger] = $version;
+            }
+        }
+    }
+
+    public function conversions_if_url_is_required(){
+        if($this->isOn && $this->allow_counting && !is_admin() && (!defined('DOING_AJAX') || !DOING_AJAX)){
+            $current_url = AjaxTriggersService::get_instance()->get_current_request()->getRequestURL();
+            $parsed_current_url = parse_url($current_url);
+            $conversions = $this->records->get_url_conversions($current_url,!empty($parsed_current_url['query']));
+            if(!empty($conversions)){
+                foreach($conversions as $conversion){
+                    $old_use_ajax_val = $this->useAjax;
+                    $this->useAjax = true;
+                    echo do_shortcode("[ifso_conversion conversion='{$conversion->conv_id}']'");
+                    $this->useAjax = $old_use_ajax_val;
+                }
             }
         }
     }
@@ -332,15 +151,13 @@ class AnalyticsService {
         if($this->isOn){
             if(!isset(self::$viewed_triggers[$rule_data->get_trigger_id()]) && $this->allow_counting){
                 $tid = $rule_data->get_trigger_id();
-                self::$viewed_triggers[$tid] = $rule_data->get_version_index();
-                $this->set_last_viewed_version_cookie($tid,$rule_data->get_version_index());
-                if(!$this->useAjax){
-                    $view_field = ($rule_data->get_rendering_recurrence_version()!==null) ? 'recurrence_views' : 'views';
-                    $this->increment_analytics_field($tid,$rule_data->get_version_index(),$view_field);
-                }
-                else{
+                $is_recurrence_view = ($rule_data->get_rendering_recurrence_version()!==null);
+                self::$viewed_triggers[$tid] = ['id'=>$rule_data->get_version_index(),'uid'=>$rule_data->get_version_uid(),'recurrence'=>$is_recurrence_view];
+                $this->set_last_viewed_version_cookie($tid,$rule_data->get_version_index(),$rule_data->get_version_uid());
+                if(!$this->useAjax)
+                    $this->records->create_view_event($tid,$rule_data->get_version_uid(),$is_recurrence_view);
+                else
                     CookieConsent::get_instance()->set_cookie($this->currently_viewing_cookie_name,json_encode(self::$viewed_triggers),0,'/');
-                }
             }
         }
     }
@@ -349,14 +166,12 @@ class AnalyticsService {
         if($this->isOn){
             if(!isset(self::$viewed_triggers[$rule_data->get_trigger_id()]) && $this->allow_counting){
                 $tid = $rule_data->get_trigger_id();
-                self::$viewed_triggers[$tid] = 'default';
-                $this->set_last_viewed_version_cookie($tid, 'default');
-                if(!$this->useAjax){
-                    $this->increment_default_analytics_field($tid, 'views');
-                }
-                else{
+                self::$viewed_triggers[$tid] = ['id'=>'default','uid'=>$rule_data->get_version_uid(),'recurrence'=>false];
+                $this->set_last_viewed_version_cookie($tid, 'default','default');
+                if(!$this->useAjax)
+                    $this->records->create_view_event($tid,'default',false);
+                else
                     CookieConsent::get_instance()->set_cookie($this->currently_viewing_cookie_name,json_encode(self::$viewed_triggers),0,'/');
-                }
             }
         }
     }
@@ -366,7 +181,4 @@ class AnalyticsService {
         $event_data_attr = esc_attr(json_encode($attrs));
         return "<ifsoTriggerAnalyticsEvent event_data='{$event_data_attr}' event_name='{$event}'></ifsoTriggerAnalyticsEvent>";
     }
-
-
-
 }

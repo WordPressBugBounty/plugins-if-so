@@ -64,6 +64,12 @@ class TriggerData {
 		return $this->version_index;
 	}
 
+    public function get_version_uid(){
+        if(!empty($this->rule['version_uid']))
+            return $this->rule['version_uid'];
+        return null;
+    }
+
 	public function &get_data_rules() {
 		return $this->data_rules;
 	}

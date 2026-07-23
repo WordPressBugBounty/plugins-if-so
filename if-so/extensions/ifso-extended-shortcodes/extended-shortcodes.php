@@ -179,17 +179,8 @@ class ExtendedShortcodes {
             }
             else{
                 $pid = (isset($atts['id'])) ? $atts['id'] : false;
-                if($pid){
-                    $analytics_service = AnalyticsService::get_instance();
-                    $fields = $analytics_service->get_analytics_fields($pid);
-                    $ret = 0;
-                    if($fields){
-                        foreach($fields as $version){
-                            $ret += (int) $version['views'];
-                        }
-                        return $ret;
-                    }
-                }
+                if($pid)
+                    return AnalyticsService::get_instance()->records->count_trigger_views($pid,false);
             }
         }
         elseif($type==='querystring' || $type === 'google-ads'){
@@ -264,23 +255,29 @@ class ExtendedShortcodes {
                 $analytics_service = AnalyticsService::get_instance();
                 $allowed_triggers = (isset($atts['triggers']) && strtolower($atts['triggers'])!='all') ? explode(',',$atts['triggers'])  : false;
                 $disallowed_triggers = (isset($atts['exclude'])) ? explode(',',$atts['exclude'])  : [];
+                $conversion_type = (isset($atts['conversion'])) ? $atts['conversion'] : null;
                 if(isset($atts['do_once_per'])){
                     $once_per_time = strtolower($atts['do_once_per']) === 'session' ? 0 : intval($atts['do_once_per']);
                     $name = !empty($atts['name']) ? esc_attr($atts['name']) : 'default-conversion';
+                    $name = !$conversion_type!==null ?  $conversion_type : $name;
                 }
                 if($analytics_service->isOn && $analytics_service->allow_counting){
                     if($analytics_service->useAjax){
                         $once_per_attrs = isset($once_per_time) ? "once_per_time='{$once_per_time}' ifso_name='{$name}'" : "";
-                        $el = "<div class='ifso-conversion-complete' {$once_per_attrs} ". ($allowed_triggers ? 'allowed_triggers="' . esc_attr(implode(',',$allowed_triggers)) . '"' : '')  . ($disallowed_triggers ? 'disallowed_triggers="' . esc_attr(implode(',',$disallowed_triggers)) . '"' : '') . ' style="display:none;height:0;"></div>';  //public javascript file catches uses this div as trigger for conversion to fire
+                        $conversion_type_attr = !empty($conversion_type) ? "conversion_type='{$conversion_type}' " : '';
+                        $el = "<div class='ifso-conversion-complete' {$conversion_type_attr} {$once_per_attrs} ".
+                            ($allowed_triggers ? 'allowed_triggers="' . esc_attr(implode(',',$allowed_triggers)) . '"' : '')  .
+                            ($disallowed_triggers ? 'disallowed_triggers="' . esc_attr(implode(',',$disallowed_triggers)) . '"' : '') .
+                            ' style="display:none;height:0;"></div>';  //public javascript file catches uses this div as trigger for conversion to fire
                         return $el;
                     }
                     else{
                         if(!empty($_COOKIE[$analytics_service->last_viewed_version_cookie_name])){
-                            $viewed_arr = json_decode(stripslashes($_COOKIE[$analytics_service->last_viewed_version_cookie_name]),true);
+                            $viewed_arr = $analytics_service->get_last_viewed_versions();
                             if(is_array($viewed_arr)){
                                 if(isset($once_per_time))
-                                    $analytics_service->do_conversion($viewed_arr,$allowed_triggers,$disallowed_triggers,$once_per_time,$name);
-                                $analytics_service->do_conversion($viewed_arr,$allowed_triggers,$disallowed_triggers);
+                                    $analytics_service->do_conversion($conversion_type,$viewed_arr,$allowed_triggers,$disallowed_triggers,$once_per_time,$name);
+                                $analytics_service->do_conversion($conversion_type,$viewed_arr,$allowed_triggers,$disallowed_triggers);
                             }
                         }
                     }
@@ -481,10 +478,8 @@ class ExtendedShortcodes {
 
     public function do_google_analytics_event_shortcode(){
         add_shortcode('ifso-GA4-event',function ($atts){
-            if(!empty($atts['ga4_event_type'])){
-                $analytics_service = AnalyticsService::get_instance();
-                return $analytics_service->render_google_analytics_event_element($atts,'custom');
-            }
+            if(!empty($atts['ga4_event_type']))
+                return AnalyticsService::get_instance()->render_google_analytics_event_element($atts,'custom');
         });
     }
 

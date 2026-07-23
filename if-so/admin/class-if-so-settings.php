@@ -97,6 +97,10 @@ class If_So_Admin_Settings {
 		require_once('partials/ifso_groups_page_display.php');
 	}
 
+    public function display_admin_menu_analytics_page(){
+        require_once('partials/ifso_analytics_page_display.php');
+    }
+
     public function display_location_generator_page($post){
         require_once('partials/ifso_location_generator_page_display.php');
     }
@@ -193,9 +197,18 @@ class If_So_Admin_Settings {
 			__('Audiences', 'if-so'),
 			__('Audiences', 'if-so'),
 			'publish_posts',
-			'wpcdd_admin_menu_groups_list',
+            EDD_IFSO_PLUGIN_GROUPS_PAGE,
 			array($this, 'display_admin_menu_groups_page')
 		);
+
+        add_submenu_page(
+            'if-so',
+            __('Analytics', 'if-so'),
+            __('Analytics', 'if-so'),
+            'publish_posts',
+            EDD_IFSO_PLUGIN_ANALYTICS_PAGE,
+            array($this, 'display_admin_menu_analytics_page')
+        );
 
 		do_action('ifso_extra_sumbenu_items');
 
@@ -204,7 +217,7 @@ class If_So_Admin_Settings {
 			__('Geolocation', 'if-so'),
 			__('Geolocation', 'if-so'),
 			'manage_options',
-			'wpcdd_admin_geo_license',
+            EDD_IFSO_PLUGIN_GEO_PAGE,
 			array( $this, 'display_admin_menu_geo_page' )
 		);
 
@@ -221,7 +234,7 @@ class If_So_Admin_Settings {
 			__('Settings', 'if-so'),
 			__('Settings', 'if-so'),
 			'manage_options',
-			'wpcdd_admin_menu_settings',
+            EDD_IFSO_PLUGIN_SETTINGS_PAGE,
 			array( $this, 'display_admin_menu_settings_page' )
 		);
 
@@ -230,7 +243,7 @@ class If_So_Admin_Settings {
 			__('License', 'if-so'),
 			__('License', 'if-so'),
 			'manage_options',
-			'wpcdd_admin_menu_license',
+            EDD_IFSO_PLUGIN_LICENSE_PAGE,
 			array( $this, 'display_admin_menu_license_page' )
 		);
 
@@ -522,9 +535,6 @@ class If_So_Admin_Settings {
 		// Load default's version metadata
 		$default_version_metadata = $this->load_default_version_metadata($post_id);
 
-		require_once(IFSO_PLUGIN_BASE_DIR. 'public/services/analytics-service/analytics-service.class.php'); //including the analytics service to later pull the relevant fields out of it;
-		$analytics_service = IfSo\PublicFace\Services\AnalyticsService\AnalyticsService::get_instance();
-
 		require_once(IFSO_PLUGIN_BASE_DIR. 'public/models/data-rules/ifso-data-rules-model.class.php');
 		$data_rules_model  = new IfSo\PublicFace\Models\DataRulesModel\DataRulesModel;
 
@@ -728,9 +738,6 @@ class If_So_Admin_Settings {
 
             $new_version_rules = apply_filters('ifso_custom_conditions_new_rule_data_extension',$new_version_rules,$group_item);    //For custom triggers extension
 
-			foreach($analytics_service::$analytics_fields as $field){
-				$new_version_rules[$field] = $analytics_service->get_analytics_field($post_id,$index,$field);
-			}
 			//Remove all the fields that are irrelevant to this version
 			$new_version_rules = $data_rules_model->trim_version_data_rules($new_version_rules);
 

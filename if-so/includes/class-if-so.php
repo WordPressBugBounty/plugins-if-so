@@ -260,6 +260,8 @@ class If_So {
          */
 
         $this->loader->add_action('admin_init', $after_upgrade,'handle');
+        add_filter('cron_schedules', function($schedules){return array_merge($schedules,['every_three_mins'=>['interval'=>60*3,'display'=>'Every Three Minutes']]);});
+        add_action('analytics_import_cron_hook', [$after_upgrade,'try_convert_trigger_data_for_new_analytics_system']);
 
 
 		/**
@@ -287,6 +289,7 @@ class If_So {
 		/* Ajax Actions */
 		$this->loader->add_action( 'wp_ajax_load_tinymce_repeater', $plugin_settings, 'load_tinymce' );
         $this->loader->add_action( 'wp_ajax_ifso_analytics_req', $analytics_ajax_handler, 'handle' );
+        $this->loader->add_action( 'wp_ajax_ifso_conversions_req', $analytics_ajax_handler, 'conversions_handle' );
         $this->loader->add_action( 'wp_ajax_trigger_export_req', $trigger_port_handler, 'handle' );     //Import/Export/Duplicate actions handler
         $this->loader->add_action( 'wp_ajax_trigger_scan_req', $interface_mod, 'trigger_scan_page' );     //"Scan posts for if-so triggers" page
         $this->loader->add_action('wp_ajax_ifso_groups_req',$groups_handler,'handle');  //If-So groups actions handler

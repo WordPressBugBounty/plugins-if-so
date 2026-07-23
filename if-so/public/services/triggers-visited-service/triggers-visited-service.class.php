@@ -23,7 +23,7 @@ class TriggersVisitedService {
 
     private function __construct() {
         $settings_service = PluginSettingsService::get_instance();
-        $this->max_saved_triggers = (int) $settings_service->triggersVisitedNumber->get();
+        $this->max_saved_triggers = $settings_service->triggersVisitedNumber->get();
         $this->use_cookie = $settings_service->triggersVisitedOn->get();
 
         $this->cookie_name = 'ifso_viewed_triggers';

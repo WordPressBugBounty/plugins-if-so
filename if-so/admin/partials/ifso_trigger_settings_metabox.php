@@ -4,6 +4,9 @@ use IfSo\Services\PluginSettingsService;
 
 if ( ! defined( 'ABSPATH' ) ) exit;
 
+if(empty(get_option('ifso_updated_analytics_db')))
+    echo '<div class="notice notice-warning"><p>If-So analytics data is being imported into its new analytics system. Updating the trigger while the process is running can cause loss of analytics data.</p></div>';
+
 // get trigger rules data
 $data = array();
 global $data_versions, $available_pages, $post_status, $languages, $data_rules, $displayClosedFeature, $freeTriggers, $isLicenseValid, $allowedTriggersForRecurrence, $notAllowedTriggersForGroups,  $timezones, $removePagesVisitedCookie,$enableVisitCount,$triggersVisitedOn;
@@ -371,6 +374,9 @@ function get_rule_item($index, $rule=array(), $is_template = false) {
                 </h3>
 
                 <div class="toolbar-buttons-wrap">
+                    <div class="ifso-form-group ifso-custom-version-name" title="Version Name">
+                        <input class="form-control" type="text" placeholder="<?php _e('Version Name', 'if-so'); ?>" name="repeater[<?php echo $current_version_index; ?>][version_name]" <?php if(!empty($rule['version_name'])) echo "value='{$rule['version_name']}'"; ?> >
+                    </div>
                     <button type="button" data-repeater-delete class="repeater-delete btn btn-delete" title=<?php _e('Delete', 'if-so')?>><i class="fa fa-trash-o" aria-hidden="true"></i></button>
                     <!-- begin freeze mode section -->
                     <?php if ((isset($rule['freeze-mode']) &&
@@ -392,15 +398,6 @@ function get_rule_item($index, $rule=array(), $is_template = false) {
                         <span class="text"><i class="fa fa fa-arrows-alt ifso-draggable-icon" aria-hidden="true"></i></span>
                     </div>
                     <!-- end draggable section -->
-
-                    <!-- begin custom name section -->
-                    <div class="btn ifso-btn-version-name" style="position:relative;" title="<?php _e('Custom Version Name', 'if-so')?>">
-                        <div class="ifso-form-group ifso-custom-version-name <?php if(empty($rule['version_name'])) echo 'nodisplay'; ?>">
-                            <input class="form-control" type="text" placeholder="<?php _e('Version Name', 'if-so'); ?>" name="repeater[<?php echo $current_version_index; ?>][version_name]" <?php if(!empty($rule['version_name'])) echo "value='{$rule['version_name']}'"; ?> >
-                        </div>
-                        <span class="text"><i class="fa fa-pencil" aria-hidden="true"></i></span>
-                    </div>
-                    <!-- end custom name section -->
                 </div>
 
 
@@ -800,7 +797,7 @@ function get_rule_item($index, $rule=array(), $is_template = false) {
                                                    onFocus="" type="text">
                                         </div>
 
-                                        <h3 style="font-weight:normal;" class="select-city-container ifso-autocomplete-container">Manual City Entry (Advanced)<a href="https://www.if-so.com/manual-city-targeting/" target="_blank" title="" class="general-tool-tip ifso_tooltip">?</a></h3>
+                                        <h3 style="font-weight:normal;" class="select-city-container ifso-autocomplete-container">Manual City Entry (Advanced)<a href="https://www.if-so.com/manual-city-targeting/?utm_souce=Plugin&utm_medium=Instructions&utm_campaign=tooltip" target="_blank" title="" class="general-tool-tip ifso_tooltip">?</a></h3>
                                         <div class="select-manual-city-container ifso-autocomplete-container select-city-container">
                                             <input class="" placeholder="City (manual entry)" cond_type="city"
                                                    onFocus="" type="text">
@@ -826,7 +823,7 @@ function get_rule_item($index, $rule=array(), $is_template = false) {
                                             <input placeholder="State (start typing)" class="states-autocomplete ifso-input-autocomplete" data-symbol="STATE" autocomplete="off"/>
                                         </div>
 
-                                        <h3 style="font-weight:normal;" class="ifso-autocomplete-state ifso-autocomplete-container">Manual State Entry (Advanced)<a href="https://www.if-so.com/manual-city-targeting/" target="_blank" title="" class="general-tool-tip ifso_tooltip">?</a></h3>
+                                        <h3 style="font-weight:normal;" class="ifso-autocomplete-state ifso-autocomplete-container">Manual State Entry (Advanced)<a href="https://www.if-so.com/manual-city-targeting/?utm_souce=Plugin&utm_medium=Instructions&utm_campaign=tooltip" target="_blank" title="" class="general-tool-tip ifso_tooltip">?</a></h3>
                                         <div class="select-manual-state-container ifso-autocomplete-container ifso-autocomplete-state">
                                             <input class="" placeholder="State (manual entry)" cond_type="state"
                                                    onFocus="" type="text">
@@ -859,7 +856,7 @@ function get_rule_item($index, $rule=array(), $is_template = false) {
                                 <?php if (!isset($_COOKIE['set_geo_instructions'])): ?>
                         <div class="ifso-form-group">
                             <div data-field="" class="geo-info-container nodisplay <?php echo (isset($rule['trigger_type']) && $rule['trigger_type'] == 'Geolocation') ? 'show-selection' : ''; ?>">
-                                <div class="setgeoinstructions purple-noticebox"><span class="closeX">X</span><p><?php _e('Dynamic content at the city level might not be 100% accurate.','if-so'); ?> <a href="https://www.if-so.com/geo-targeting#geoAccuracy" target="_blank"><?php _e('Read more','if-so') ?> >></a></p></div>
+                                <div class="setgeoinstructions purple-noticebox"><span class="closeX">X</span><p><?php _e('Dynamic content at the city level might not be 100% accurate.','if-so'); ?> <a href="https://www.if-so.com/geo-targeting?utm_souce=Plugin&utm_medium=message&utm_campaign=geoAccuracy#geoAccuracy" target="_blank"><?php _e('Read more','if-so') ?> >></a></p></div>
                             </div>
                         </div>
                     <?php endif; ?>
@@ -1663,7 +1660,7 @@ if (!isset($_COOKIE['ifso_hide_caching_modal']) && defined('WP_CACHE') && WP_CAC
             <div class="too-many-conditions-notif yellow-noticebox nodisplay">
                 <span class="closeX">X</span>
                 <p>
-                    <?php _e("If-So allows you to create as many versions as you want. Depending on your server configuration, some of the versions may disappear after updating a trigger with many versions. In the case that you face this issue, it can be fixed by simply increasing the \"max_input_vars\" value in your php.ini.",'if-so');?> <a href="https://www.if-so.com/?post_type=faq-items&p=32007" target="_blank"><?php _e('Learn More','if-so');?></a>.
+                    <?php _e("If-So allows you to create as many versions as you want. Depending on your server configuration, some of the versions may disappear after updating a trigger with many versions. In the case that you face this issue, it can be fixed by simply increasing the \"max_input_vars\" value in your php.ini.",'if-so');?> <a href="https://www.if-so.com/?post_type=faq-items&p=32007&utm_source=Plugin&utm_medium=Instructions&utm_campaign=tooManyVersions" target="_blank"><?php _e('Learn More','if-so');?></a>.
                 </p>
             </div>
         <?php endif; ?>

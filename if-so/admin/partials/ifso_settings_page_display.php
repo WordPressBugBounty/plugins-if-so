@@ -6,49 +6,28 @@
 
 	use IfSo\Services\PluginSettingsService;
 
-	$settingsServiceInstance
-	    = PluginSettingsService\PluginSettingsService::get_instance();
+	$settingsServiceInstance = PluginSettingsService\PluginSettingsService::get_instance();
 
 	$pagesVisitedOption = 
 		$settingsServiceInstance->pagesVisitedOption->get();
 	$durationValue = $pagesVisitedOption->get_duration_value();
 	$durationType = $pagesVisitedOption->get_duration_type();
 
-	$removePluginDataOption = 
-		$settingsServiceInstance->removePluginDataOption->get();
-
-	$applyTheContentFilterOption = 
-		$settingsServiceInstance->applyTheContentFilterOption->get();
-
-	$removeAutoPTagOption = 
-		$settingsServiceInstance->removeAutoPTagOption->get();
-
-	$removePageVisitsCookie =
-		$settingsServiceInstance->removePageVisitsCookie->get();
-
-	$allowShortcodesInTitle = 
-		$settingsServiceInstance->allowShortcodesInTitle->get();
-
+	$removePluginDataOption = $settingsServiceInstance->removePluginDataOption->get();
+	$applyTheContentFilterOption = $settingsServiceInstance->applyTheContentFilterOption->get();
+	$removeAutoPTagOption = $settingsServiceInstance->removeAutoPTagOption->get();
+	$removePageVisitsCookie = $settingsServiceInstance->removePageVisitsCookie->get();
+	$allowShortcodesInTitle = $settingsServiceInstance->allowShortcodesInTitle->get();
 	$ajaxAnalytics = $settingsServiceInstance->ajaxAnalytics->get();
-
 	$disableAnalytics = $settingsServiceInstance->disableAnalytics->get();
-
 	$userGroupLimit = $settingsServiceInstance->userGroupLimit->get();
-
 	$groupsCookieLifespan = $settingsServiceInstance->groupsCookieLifespan->get();
-
 	$renderTriggersViaAjax = $settingsServiceInstance->renderTriggersViaAjax->get();
-
 	$preventNocacheHeaders = $settingsServiceInstance->preventNocacheHeaders->get();
-
 	$forceDoShortcode = $settingsServiceInstance->forceDoShortcode->get();
-
 	$disableSessions = $settingsServiceInstance->disableSessions->get();
-
 	$scheduleInterval = $settingsServiceInstance->scheduleInterval->get();
-
 	$triggersVisitedOn = $settingsServiceInstance->triggersVisitedOn->get();
-
     $triggersVisitedNumber = $settingsServiceInstance->triggersVisitedNumber->get();
 
     $ajaxLoaderType = $settingsServiceInstance->ajaxLoaderAnimationType->get();
@@ -56,12 +35,10 @@
     $ajax_loaders = \IfSo\PublicFace\Services\AjaxTriggersService\AjaxTriggersService::get_instance()->get_ajax_loader_list('prettynames');
 
     $tmce_force_wrapper = $settingsServiceInstance->tmceForceWrapper->get();
-
     $enable_visit_count  = $settingsServiceInstance->enableVisitCount->get();
-
     $renderStandaloneViaAjax = $settingsServiceInstance->renderStandaloneViaAjax->get();
-
     $showABTestingNotice = $settingsServiceInstance->showABTestingNotice->get();
+    $analyticsCookieExpiration = $settingsServiceInstance->analyticsCookieExpiration->get();
 ?>
 <style>
     .ifso-settings-form .form-table tbody tr[valign] td+td{
@@ -252,6 +229,23 @@
                                     name="ifso_settings_pages_analytics_with_ajax"
                                     class="ifso_settings_page_option" />
                                 <i><?php _e('When this box is checked data collection will be performed using Ajax. Uncheck the box to perform collection during the rendering of the page. Keep this box checked if you are using the Gutenberg editor.', 'if-so'); ?> <a href="https://www.if-so.com/help/documentation/analytics/?utm_source=Plugin&utm_medium=settings&utm_campaign=analyticsAjax-learnMore#anc_ajax-vs-rendering" target="_blank"><?php _e('Learn more.', 'if-so');?></a></i>
+                            </td>
+                        </tr>
+                        <tr valign="top">
+                            <td class="ifso-settings-td" scope="row" valign="baseline">
+                                <b><?php _e('Conversion Attribution Window', 'if-so'); ?></b>
+                            </td>
+                            <td valign="baseline">
+                                <select name="ifso_settings_cookie_expiration">
+                                    <option <?php if($analyticsCookieExpiration===0) echo 'SELECTED'; ?> value="0">Session</option>
+                                    <option <?php if($analyticsCookieExpiration===86400) echo 'SELECTED'; ?> value="86400">1 Day</option>
+                                    <option <?php if($analyticsCookieExpiration===86400*3) echo 'SELECTED'; ?> value="<?php echo 86400*3;?>">3 Days</option>
+                                    <option <?php if($analyticsCookieExpiration===86400*7) echo 'SELECTED'; ?> value="<?php echo 86400*7;?>">1 Week</option>
+                                    <option <?php if($analyticsCookieExpiration===86400*14) echo 'SELECTED'; ?> value="<?php echo 86400*14;?>">2 Weeks</option>
+                                    <option <?php if($analyticsCookieExpiration===86400*30) echo 'SELECTED'; ?> value="<?php echo 86400*30;?>">1 Month</option>
+                                    <option <?php if($analyticsCookieExpiration===86400*365) echo 'SELECTED'; ?> value="<?php echo 86400*365;?>">1 Year</option>
+                                </select>
+                                <i>The time during which a conversion is credited to a trigger. The window resets each time the visitor encounters a trigger.</i>
                             </td>
                         </tr>
                         <tr valign="top">

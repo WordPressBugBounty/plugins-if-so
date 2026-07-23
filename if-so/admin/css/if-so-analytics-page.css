@@ -1,0 +1,292 @@
+.conversion_setup_modal input:not([type="radio"],[type="checkbox"]), .conversion_setup_modal select, .conversion_setup_modal .button,
+.wrap.analytics-conversions-page input:not([type="radio"],[type="checkbox"]), .wrap.analytics-conversions-page select, .wrap.analytics-conversions-page .button{
+    min-height:32px;
+    line-height:2.1;
+}
+.conversion_action_buttons button{
+    background:transparent;
+    cursor:pointer;
+    border:none;
+    color:unset;
+}
+.conversion_display_tbl{
+    background:#fff;
+    border-collapse: collapse;
+    margin-bottom:50px;
+}
+.conversion_display_tbl td, .conversion_display_tbl th{
+    padding: 5px 10px;
+    text-align:center;
+    border:1px solid #F1F1F1;
+}
+.conversion_display_tbl tr .conv_urls .conversion_url .xmore{
+    margin-left:8px;
+    text-decoration:underline;
+    text-decoration-style:dotted;
+    font-size:0.8em;
+    white-space: nowrap;
+    display:inline-block;
+    cursor:pointer;
+}
+[name="report_type_switch"][checked]{
+    pointer-events:none;
+}
+.report-controls{
+    position:relative;
+    background: #fff;
+    padding: 20px;
+    margin:20px 0 30px 0;
+    border-top: 1px solid #e2e2e2;
+}
+.report-controls>.report-controls-mainrow,.report-controls>.report-controls-mainrow .report-controls-date{
+    display: flex;
+    align-items: center;
+    gap:18px;
+    flex-wrap:wrap;
+}
+.report-controls>.report-controls-mainrow .report-controls-date{
+    gap:9px;
+}
+@media screen and (max-width: 1380px) {
+    .report-controls>.report-controls-mainrow{
+        gap:8px;
+    }
+    .report-controls > .report-controls-mainrow .report-controls-date{
+        gap:4px;
+    }
+}
+.trigger-report-actions{
+    display: inline-block;
+    position: absolute;
+    width: 180px;
+    background: #fff;
+    right: -30px;
+    top: 50px;
+    z-index:999;
+    text-align:left;
+    padding:0 10px;
+    box-shadow: 0 0 3px 1px #ccc9c9;
+}
+th:not(.hamburger-open) .trigger-report-actions, .trigger_analytics_report_meta:not(.hamburger-open) .trigger-report-actions{
+    display:none;
+}
+.hamburger{
+    position:absolute;
+    right:8px;
+    cursor:pointer;
+}
+.trigger-report-actions a{
+    margin:10px auto;
+    display:block;
+    color:#3c434a;
+    font-size:12px;
+    text-decoration:none;
+    font-weight:normal;
+}
+trigger-report-actions a i{
+    margin-right:5px;
+}
+.report-controls-date label, .conversions_filter_wrap span{
+    font-weight:600;
+}
+.report-controls>.report-controls-mainrow button[type='submit']{
+    height: 30px;
+    padding:0 40px
+}
+.trigger-filter-wrap,.recurrence-views-wrap{
+    display: inline-block;
+    position:relative;
+}
+.trigger-filter-wrap img, .recurrence-views-wrap i{
+    position: absolute;
+    font-size: 14px;
+    transform: translate(36%,80%);
+    width:14px;
+    left:4px;
+}
+.trigger-filter-wrap select, .recurrence-views-wrap select{
+    padding-left:24px;
+}
+.conversions_filter_wrap span{
+    vertical-align:bottom;
+}
+.conversions_filter_wrap label{
+    margin-right:18px;
+}
+.triggers_wrap .trigger_analytics_report_wrap{
+    width:fit-content;
+    box-sizing:border-box;
+}
+.conversions_wrap .conversion_meta_wrap, .triggers_wrap .trigger_analytics_report_meta{
+    background: #d9daf2;
+    padding: 12px 20px;
+    margin: 10px 0;
+    position:relative;
+}
+.triggers_wrap .trigger_analytics_report_meta{
+    width:100%;
+    margin-bottom:0;
+    box-sizing:border-box;
+}
+.triggers_wrap .trigger_analytics_report_meta .trigger_name{
+    margin-right:20px;
+}
+.triggers_wrap .trigger_analytics_report_meta .trigger_id{
+    margin-right:20px;
+}
+.conversions_wrap .conversion_meta_wrap .conversion_report_extend_btn{
+    display: inline-block;
+    margin-right: 10px;
+    cursor: pointer;
+    transform: rotate(90deg);
+    user-select:none;
+}
+.conversions_wrap .conversion_meta_wrap.hidereports+.conversion_trigger_reports_wrap{
+    display:none;
+}
+.conversions_wrap .conversion_meta_wrap.hidereports .conversion_report_extend_btn{
+    transform: rotate(0);
+}
+.conversions_wrap .conversion_meta_wrap .conversion_action_buttons, .triggers_wrap .trigger_analytics_report_meta .trigger-links{
+    position: relative;
+    float: right;
+    right: 0;
+    transform: translateY(5%);
+}
+.triggers_wrap .trigger_analytics_report_meta .trigger-links a{
+    color: #434549;
+    padding: 0 5px;
+    box-shadow: none;
+    font-size: 16px;
+}
+.conversions_wrap .trigger-conversion-report{
+    display:inline-block;
+    margin:0 10px 10px 0;
+    text-align:center;
+    vertical-align: top;
+}
+.triggers_wrap .trigger-analytics-report{
+    text-align:center;
+    width:100%;
+}
+.conversions_wrap .trigger-conversion-report tr:nth-of-type(odd), .triggers_wrap .trigger-analytics-report tr:nth-of-type(odd){
+    background:#f9f9f9;
+}
+.conversions_wrap .trigger-conversion-report tr, .triggers_wrap .trigger-analytics-report tr{
+    background:#fff;
+}
+.triggers_wrap .trigger-analytics-report tr:nth-of-type(odd) td:nth-child(4n+4),.triggers_wrap .trigger-analytics-report tr:nth-of-type(odd) td:nth-child(4n+5){
+    background:#F2F2F6;
+}
+.triggers_wrap .trigger-analytics-report td:nth-child(4n+4),.triggers_wrap .trigger-analytics-report td:nth-child(4n+5),
+.triggers_wrap .trigger-analytics-report .column_head_row th:nth-child(4n+4),.triggers_wrap .trigger-analytics-report .column_head_row th:nth-child(4n+5),
+.triggers_wrap .trigger-analytics-report .conversion_name_row th:nth-child(2n+2){
+    background:#F6F6FB;
+}
+.conversions_wrap .trigger-conversion-report td, .triggers_wrap .trigger-analytics-report td{
+    padding:4px;
+}
+.conversions_wrap .trigger-conversion-report th, .triggers_wrap .trigger-analytics-report th{
+    background:#fff;
+    padding:10px 5px;
+    position:relative;
+}
+.conversions_wrap .trigger-conversion-report tr:nth-of-type(2) th,.conversions_wrap .trigger-conversion-report .trigger_name span{
+    font-weight:600;
+}
+.triggers_wrap .to-all-triggers-btn{
+    display:inline-block;
+    margin-top:30px;
+}
+.conversion_delete_modal,.exclude_trigger_form_conversion_modal,.conversion_reset_modal,.trigger_reset_modal{
+    text-align:center;
+    padding:20px;
+}
+.conversion_delete_modal button[type="submit"],.conversion_reset_modal button[type="submit"],.trigger_reset_modal button[type="submit"]{
+    background:#b32d2e!important;
+    border:none;
+}
+.setup_conversion.modalContent{
+    min-width:40vw;
+}
+.setup_conversion.only_create .only_edit, .setup_conversion.only_edit .only_create{
+    display:none;
+}
+.setup_conversion.general_conversion .form_option_wrap:not(.show_in_general){
+    display:none;
+}
+.conversion_setup_modal{
+    padding:20px 60px;
+}
+@media screen and (max-width: 600px) {
+    .conversion_setup_modal{
+        padding:20px;
+    }
+}
+.conversion_setup_modal input[type="text"]{
+    width:440px;
+}
+.conversion_setup_modal .form_option_wrap{
+    margin-bottom:10px;
+}
+.conversion_setup_modal .option_subtitle{
+    margin:0 0 10px 0;
+}
+.conversions_greybox{
+    margin-bottom: 10px;
+    border: 1px solid #dcdcdc;
+    padding: 10px;
+    border-radius: 2px;
+    background: #e8e8f2;
+}
+.conversion_greybox_description{
+    border-bottom: 1px solid #ada9a9;
+}
+.conversion_setup_modal .conversions_greybox .greybox_row{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-bottom: 1px solid #d3d3e3;
+}
+.conversion_setup_modal .conversions_greybox .greybox_row.template{
+    display:none;
+}
+.conversion_setup_modal .conversion_urls_greybox .greybox_row span:first-child{
+    flex-basis: 70%;
+}
+.conversion_setup_modal .delete-btn{
+    color: #d25134;
+    cursor:pointer;
+    font-weight:500;
+}
+.conversion_setup_modal .add_url_btn{
+    margin-top: 10px;
+}
+.conversion_setup_modal .no_triggers_message{
+    width: 0;
+    min-width: 100%;
+    box-sizing: border-box;
+}
+.need_license .report-controls>*:not(.need_license_message), .modalContent:not(.general_conversion) .need_license.conversion_setup_modal>*:not(.need_license_message){
+    opacity:0.5;
+    pointer-events:none;
+}
+.modalContent:not(.general_conversion) .need_license.conversion_setup_modal .submit_btn_option button{
+    background:#4c565d;
+}
+.need_license .need_license_message{
+    display:inline-block;
+    padding:10px;
+    color:#d25134;
+    border:1px solid #d25134;
+    text-decoration:none;
+    margin-bottom:15px;
+    box-shadow:none;
+}
+.general_conversion .need_license_message{
+    display: none;
+}
+.no-data-notice{
+    width:fit-content;
+    margin-top:15px;
+}

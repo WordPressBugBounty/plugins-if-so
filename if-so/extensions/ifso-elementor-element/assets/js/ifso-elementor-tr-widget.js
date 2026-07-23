@@ -17,21 +17,21 @@ function waitAndTryConstructAnalyticsUi(){
 }
 
 function getAnalyticsData(postid) {
-    ajaxPost({action: 'ifso_analytics_req', an_action: 'getFields', postid: postid}, buildAnalyticsDisplay)
+    ajaxPost({action: 'ifso_analytics_req', an_action: 'getTriggerReport', postid: postid}, buildAnalyticsDisplay)
 }
 
 function buildAnalyticsDisplay(res) {
     document.querySelector('#analytics-loading-notice-' + ifso_trigger_selected_pid).className = '';
     var container = document.querySelector('#analytics-container-' + ifso_trigger_selected_pid);
     container.innerHTML = '';
-    var data = JSON.parse(res);
+    var data = Object.values(JSON.parse(res));
+    var data_uids = data.length===0 ? [] : Object.keys(JSON.parse(res));
     container.appendChild(createRow(['Version', 'Views', 'Conversions', 'Conv.rate']));
     for (var x = 0; x <= data.length - 1; x++) {
-        var convRate = (Number(data[x]['views']) != 0) ? (Number(data[x]['conversion']) * 100 / Number(data[x]['views'])).toFixed(2) + '%' : '0.00%';
+        var convRate = (Number(data[x]['views']) != 0) ? (Number(data[x]['conversions']) * 100 / Number(data[x]['views'])).toFixed(2) + '%' : '0.00%';
         //var convRate = ( Number(data[x]['views'])!=0) ? Math.round((Number(data[x]['conversion'])*100/Number(data[x]['views']) )) + '%' : '0%';
-        var newrow = createRow([data[x]['version_name'], data[x]['views'], data[x]['conversion'], convRate]);
-        newrow.setAttribute('myversion', x);
-        if (data[x]['version_name'] == 'Default') newrow.setAttribute('myversion', 'default');
+        var newrow = createRow([data[x]['symbol'], data[x]['views'], data[x]['conversions'], convRate]);
+        newrow.setAttribute('myversion', data_uids[x]);
         if (x % 2 == 0) newrow.className += ' odd';
         newrow.addEventListener('click', function (e) {
             var version = e.currentTarget.getAttribute('myversion');

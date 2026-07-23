@@ -1867,17 +1867,18 @@ input.ifso-autocomplete-opener {
 
 .ui-tooltip{
     padding:0!important;
-    border:none;
-    box-shadow:none;
+    border:none!important;
+    box-shadow:none!important;
+    z-index:99999999!important;
 }
 
 .ui-tooltip-content{
     padding:16px;
-    background:#6665e7 ;
+    background:#6F6ED7;
     color:#fff;
     border-radius:4px;
+    white-space: pre-line;
 }
-
 
 .analytics-noticebox,.pagebuilders-noticebox{
     width: 100%;
@@ -2086,13 +2087,16 @@ input.pageurl-checkbox{
 .ifso-custom-version-name{
     position: relative;
     display: inline-block;
-    margin: 0 10px 0 0;
+    margin: 0 10px;
     width: 200px;
+    height: 100%;
 }
 
 .ifso-custom-version-name input{
     position: absolute;
-    top:-20px;
+    top:50%;
+    transform:translateY(-50%);
+    border-radius:3px;
 }
 
 #major-publishing-actions>*:not(#delete-action,#publishing-action),
@@ -2119,7 +2123,8 @@ input.pageurl-checkbox{
     background-color: transparent !important;
     border: 1px solid #515962;
     border-radius: 50%;
-    width: 20px !important;
+    width: 10px !important;
+    box-sizing: content-box;
     padding: 3px !important;
     top: 10px;
     right: 10px;

@@ -1,6 +1,7 @@
 <?php
 
 require_once(IFSO_PLUGIN_BASE_DIR . 'services/geolocation-service/geolocation-service.class.php');
+require_once(IFSO_PLUGIN_BASE_DIR . 'public/services/analytics-service/analytics-service.class.php');
 use IfSo\Services\GeolocationService;
 
 function is_geo_data($geoDatas) {
@@ -54,6 +55,7 @@ if(!function_exists('ifso_jal_install')){
 
         $license = get_option( 'edd_ifso_geo_license_key' );
         $geoDatas = GeolocationService\GeolocationService::get_instance()->get_status($license,false);
+        $analyticsRecords = \IfSo\PublicFace\Services\AnalyticsService\AnalyticsService::get_instance()->records;
         $geo_monthly_queries = get_monthly($geoDatas);
         $geo_queries_used = get_queries($geoDatas);
         $alert_values =$wpdb->get_var("SELECT alert_values FROM {$local_user_table_name}");
@@ -64,15 +66,50 @@ if(!function_exists('ifso_jal_install')){
         $wpdb->query($sql);
 
 
-        $sql = "CREATE TABLE IF NOT EXISTS {$daily_sessions_table_name} (
+        dbDelta("CREATE TABLE IF NOT EXISTS {$daily_sessions_table_name} (
 			`id` int(11) NOT NULL AUTO_INCREMENT,
 			`sessions_date` varchar(18) COLLATE utf8mb4_unicode_ci NOT NULL,
 			`num_of_sessions` int(11) NOT NULL,
 			PRIMARY KEY (`id`),
 			UNIQUE KEY `sessions_date` (`sessions_date`)
-			) $charset_collate;";
+			) $charset_collate;");
 
-        dbDelta( $sql );
+        dbDelta("CREATE TABLE {$analyticsRecords->conversions_table_name} (
+			`id` int(11) NOT NULL AUTO_INCREMENT,
+			`name` varchar(31) COLLATE utf8mb4_unicode_ci NOT NULL,
+			`once_per` int(11) NULL,
+			`trigger_filter` json NULL,
+			`created_at` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
+			PRIMARY KEY (`id`)
+			) $charset_collate;");
+
+        dbDelta("CREATE TABLE IF NOT EXISTS {$analyticsRecords->conversions_events_table_name} (
+			`id` int(11) NOT NULL AUTO_INCREMENT,
+			`trigger_id` int(11) NOT NULL,
+			`version_uid` varchar(31) COLLATE utf8mb4_unicode_ci NOT NULL,
+			`conversion_type` int(11) NULL,
+			`datetime` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
+			PRIMARY KEY (`id`)
+			) $charset_collate;");
+
+        dbDelta("CREATE TABLE IF NOT EXISTS {$analyticsRecords->views_events_table_name} (
+			`id` int(11) NOT NULL AUTO_INCREMENT,
+			`trigger_id` int(11) NOT NULL,
+			`version_uid` varchar(31) COLLATE utf8mb4_unicode_ci NOT NULL,
+            `is_recurrence` boolean NOT NULL DEFAULT false,
+			`datetime` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
+			PRIMARY KEY (`id`)
+			) $charset_collate;");
+
+        dbDelta("CREATE TABLE IF NOT EXISTS {$analyticsRecords->conversion_urls_table_name} (
+            `id` int(11) NOT NULL AUTO_INCREMENT,
+            `conv_id` int(11) NOT NULL,
+            `url` varchar(127) COLLATE utf8mb4_unicode_ci NOT NULL,
+            `with_query_string` boolean NOT NULL DEFAULT false,
+            CONSTRAINT items UNIQUE(conv_id, url, with_query_string),
+            PRIMARY KEY (`id`)
+            ) $charset_collate;");
+
         add_option( 'ifso_db_version', $db_version );
     }
 }

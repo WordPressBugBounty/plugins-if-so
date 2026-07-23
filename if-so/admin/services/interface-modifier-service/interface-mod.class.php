@@ -300,10 +300,10 @@ HTM;
     public function add_plugin_links($links,$flie){
         if($flie === basename(IFSO_PLUGIN_BASE_DIR) . '/' .basename(IFSO_PLUGIN_MAIN_FILE_NAME)){
             $new_links = [];
-            $new_links['faq'] = "<a href='https://www.if-so.com/help/?utm_source=Plugin&utm_medium=Help&utm_campaign=PluginsPage' target='_blank'>Docs & FAQs</a>";
-            $new_links['trigger_instructions'] = "<a href='https://www.if-so.com/help/documentation/how-to-create-dynamic-content-trigger/?utm_source=Plugin&utm_medium=Help&utm_campaign=PluginsPage' target='_blank'>Creating a Dynamic Trigger</a>";
-            $new_links['dki'] = "<a href='https://www.if-so.com/help/documentation/dynamic-keyword-insertion/?utm_source=Plugin&utm_medium=Help&utm_campaign=PluginsPage' target='_blank'>DKI</a>";
-            $new_links['extensions'] = "<a href='https://www.if-so.com/add-ons-and-integrations/?utm_source=Plugin&utm_medium=Help&utm_campaign=PluginsPage' target='_blank'>Extensions & Integrations</a>";
+            $new_links['faq'] = "<a href='https://www.if-so.com/help/?utm_source=Plugin&utm_medium=PluginsPage&utm_campaign=Help' target='_blank'>Docs & FAQs</a>";
+            $new_links['trigger_instructions'] = "<a href='https://www.if-so.com/help/documentation/how-to-create-dynamic-content-trigger/?utm_source=Plugin&utm_medium=PluginsPage&utm_campaign=Help' target='_blank'>Creating a Dynamic Trigger</a>";
+            $new_links['dki'] = "<a href='https://www.if-so.com/help/documentation/dynamic-keyword-insertion/?utm_source=Plugin&utm_medium=PluginsPage&utm_campaign=Help' target='_blank'>DKI</a>";
+            $new_links['extensions'] = "<a href='https://www.if-so.com/add-ons-and-integrations/?utm_source=Plugin&utm_medium=PluginsPage&utm_campaign=Help' target='_blank'>Extensions & Integrations</a>";
             return array_merge($links,$new_links);
         }
 

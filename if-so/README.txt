@@ -1,280 +1,166 @@
-=== If-So Dynamic Content Personalization===
+=== If-So Dynamic Content – Elementor & All Page Builders Personalization ===
 Contributors: ifso
-Donate link: https://www.if-so.com/?utm_source=WordPress&utm_medium=Readme&utm_campaign=Donate%20link
-Tags: Dynamic content, personalization, conditional, geolocatargeting, location
-Requires at least: 4.0.1
-Tested up to: 6.9.4
-Stable tag: 1.9.7
+Donate link: https://www.if-so.com/?utm_source=wordpress&utm_medium=readme&utm_campaign=v2&utm_content=donate
+Tags: elementor conditions, geolocation, display conditions, A/B Testing, conditional logic
+Requires at least: 5.6
+Tested up to: 7.0.2
+Stable tag: 1.10
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
-Personalize any content! Add or replace content according to the visitor's profile and interaction with the site. No coding required!
+
+The ultimate solution for personalization, A/B testing, and geolocation — easy to use with Elementor, Gutenberg, and all page builders.
 
 == Description ==
 
-Personalize any content! Add or replace content according to the visitor’s profile or interaction with the site.
+Looking for a simple yet powerful display conditions or visibility control solution (that actually works with page caching)?
 
-No coding required!
+**If-So** is the premier conditional logic and personalization plugin for WordPress. It lets you dynamically show, hide, or swap content based on who your visitor is, where they are located, and how they interact with your site. While generic visibility add-ons break under strict server caching or force you to exclude pages from your cache, If-So is built from the ground up to deliver fast, cache-immune marketing automation across all page builders.
 
-== FOUR WAYS TO CREATE DYNAMIC CONTENT ==
+[youtube https://www.youtube.com/watch?v=8kCPE1CH2GY]
 
-* Conditional triggers - works with every page builder - <a href="https://www.if-so.com/help/documentation/how-to-create-dynamic-content-trigger/?utm_source=WordPress&utm_medium=Readme&utm_campaign=v2&utm_term=dynamic-triggerTop">Watch</a>
-* Conditional Gutenberg blocks - <a href="https://www.if-so.com/conditional-gutenberg-blocks/?utm_source=WordPress&utm_medium=Readme&utm_campaign=v2&utm_term=gutenbergTop" target="_blank">Watch</a>
-* Conditional Elementor elements - <a href="https://www.if-so.com/elementor-personalization" target="_blank">Watch</a>
-* Dynamic Keyword Insertion (DKI) shortcodes - <a href="https://www.if-so.com/help/documentation/dynamic-keyword-insertion/?utm_source=WordPress&utm_medium=Readme&utm_campaign=v2&utm_term=DKITop" target="_blank">Watch</a>
+=== 🚀 Key Features at a Glance ===
+If-So is the most comprehensive geotargeting, personalization and conditional logic plugin for WordPress. It combines enterprise-level features with a simple, no-code setup:
+
+*   **Simple Setup** - Configure and launch your first campaign in under 60 seconds. No coding.
+*   **For All Page Builders** - Universal shortcode system brings dynamic functionality to any editor or theme setup.
+*   **Elementor and Gutenberg Integration** - For quick element, widget, and block visibility control.
+*   **360° Geolocation Solution** – Highly accurate IP-to-location, HTML5 geolocation, and visitor self-selection.
+*   **Advanced Conditional Logic** - Unlimited visibility rules based on visitor data.
+*   **WooCommerce Integration** - Target buyers by location, cart items, history, or total spend.
+*   **Built-in Analytics & A/B Testing** - Track real-time views, measure conversions, and optimize.
+*   **Behavioral Segmentation** - Assign visitors to dynamic audiences and deliver a cohesive, personalized journey across multiple pages.
+
+=== 🌍 360° Geolocation – Straight Out of the Box ===
+Deliver highly accurate localized experiences with absolutely no setup required. Enjoy **ultimate flexibility** in determining a visitor's location by combining premium IP-to-location mapping, a precise HTML5 geolocation API, and user self-selection forms.
+
+*   **Show, Hide, or Swap Content:** Instantly personalize text, banners, images, or pricing fields for specific countries, cities, states, or continents.
+*   **Geolocation Redirects:** Automatically route visitors to country-specific landing pages or localized subdomains.
+*   **Geo-Blocking:** Restrict, lock, or grant access to specific elements or pages based on geographic regions.
+*   **Geo Pop-ups:** Trigger lightweight, location-specific pop-up overlays tailored directly to local audiences.
+
+**And more;** take your personalization further with advanced options like Dynamic Keyword Insertion (Geo DKI), auto-local time displays, timezone-based scheduling, and more. <a href="https://www.if-so.com/location-based-content-wordpress-plugin/?utm_source=wordpress&utm_medium=readme&utm_campaign=v2&utm_content=geo-advanced" target="_blank">Discover all geolocation capabilities >></a>
+
+=== 🛠️ Elite Visibility Control for All Page Builders ===
+Compatible with **any page builder** and WordPress setup, If-So offers deep visual integration for top editors alongside a flexible shortcode system for everything else:
+
+*   **Elementor Native** - Adds a dedicated "If-So Display Conditions" tab to every widget, section, column, or flexbox container.
+*   **Gutenberg Native** - Set smart conditional visibility rules directly on core WordPress blocks.
+*   **For All Page Builders** - Use dynamic triggers and shortcodes to easily apply conditional content inside Divi, Bricks, Breakdance, and more.
 
 
-Watch a short video (1:36):
+=== 🧪 Built-In A/B Testing & Conversion Analytics ===
 
-[youtube https://www.youtube.com/watch?v=yRroTk7EDF8?rel=0]
+Run split tests on any page element and measure exactly which version converts better — directly inside WordPress, no third-party tools required.
+
+* **Test Anything** – Headlines, CTAs, images, entire sections, pop-ups, or any trigger-based content element.
+* **Built-In Conversion Tracking** – Define your own conversion goals and measure results per version, right inside your dashboard.
+* **Two Report Views** – Analyze results by conversion goal or by trigger, depending on what question you're trying to answer.
+* **Cache-Compatible** – Tests run reliably even on fully cached sites, with no impact on page speed.
+* **[Learn more about A/B Testing >>](https://www.if-so.com/ab-testing-wordpress/?utm_source=wordpress&utm_medium=readme&utm_campaign=v2&utm_content=abt)**
 
 
-== WHY IF-SO? ==
 
-* Simple to use - No coding is required
-* Works with any page builder
-* 100% compatible with all caching plugins (no need to disable the cache)
-* A simple way to improve engagement and conversion rates
-* New! Conditional Gutenberg Blocks and Elementor Widgets
 
-.....................................................................
+== WHY MARKETING EXPERTS CHOOSE IF-SO ==
+
+*   **100% Page Cache Immune:** Unlike generic visibility plugins that break when caching is enabled, If-So uses advanced page-load handling to ensure dynamic content renders perfectly alongside WP Rocket, LiteSpeed, Cloudflare, or server-level caching.
+* **Built-In A/B Testing & Analytics:** Run split tests on any page element and track exactly which version converts — views, conversions, and conversion rate per version, right inside your WordPress dashboard. No Google Analytics setup required.
+*   **Zero Complex Rules:** Create advanced multi-layered personalization loops in under 60 seconds without writing a single line of code.
+
+
 
 == HOW IT WORKS ==
 
-= All page builder users: =
+=== Using Elementor or Gutenberg ===
+1. Select any widget, element, or block in your editor.
+2. Open the **If-So Conditions panel** on the side menu.
+3. Choose your condition (e.g., *Geolocation -> Country is United States*) and input the variation.
 
-1. Create a trigger 
-2. Select a condition and set the personalized content version
-3. Optional - create more dynamic versions and set the default content
-4. Paste the shortcode wherever you want to display the content
-Every time a page with the shortcode is loaded, one of the content versions will be displayed accordingly.
+=== Using Any Other Page Builder ===
+1. Go to the If-So dashboard and click **Add New Trigger**.
+2. Select your target rules and enter the personalized version.
+3. Define your default fallback content.
+4. Copy the shortcode and place it anywhere on your layout.
 
-<a href="https://www.if-so.com/help/documentation/how-to-create-dynamic-content-trigger/?utm_source=WordPress&utm_medium=Readme&utm_campaign=v2&utm_term=dynamic-trigger" target="_blank">Learn more >></a>
-
-= Gutenberg and Elementor users =
-
-1. Select the block or element
-2. On the side menu, select the condition to display the block/element
-
-<a href="https://www.if-so.com/elementor-personalization/" target="_blank"> - More about conditional  Elementor Elements >></a>
-<a href="https://www.if-so.com/conditional-gutenberg-blocks/?utm_source=WordPress&utm_medium=Readme&utm_campaign=v2&utm_term=gutenberg" target="_blank"> - More about conditional  Gutenberg Blocks >></a>
-
-
-.....................................................................
-
-        
 == WHICH CONDITIONS CAN BE SET WITH IF-SO? ==
 
+=== 🎯 Powerful Display Conditions & Personalization Rules ===
+Choose from our massive library of native conditions to target your audience. You can combine multiple rules using smart conditional logic to build the ultimate personalized user experience.
 
-If-So offers a wide range of conditions. Here are examples of our most implemented conditions.
+**🌍 Geotargeting:**
+*   **Country-level detection** – Target visitors by country.
+*   **City-level precision** – Personalize down to specific cities.
+*   **State & Region tracking** – Adapt content by state or province.
+*   **Continent grouping** – Apply broad rules for entire continents.
+*   **IP Address & Ranges** – Filter or target specific IP networks.
 
-**Most popular**
+**📣 Traffic & Marketing:**
+*   **UTM Parameters** – Target by Source, Medium, Campaign, and Content.
+*   **Google Ads Campaigns** – Personalize dynamically via GCLID tracking.
+*   **Referral Site URL** – Display content based on the originating site.
+*   **Search Engine Referrers** – Adapt for Google, Bing, or Yahoo traffic.
+*   **URL Query Strings** – Read custom parameters straight from the URL.
 
-1. Geolocation - Show location-based content (<a href="https://www.if-so.com/location-based-content-wordpress-plugin/?utm_source=WordPress&utm_medium=Readme&utm_campaign=v2&utm_term=geolocation" target="_blank">examples >></a>)
-2. Google Ads - Show content based on the user’s search term on Google Ads or related to the Facebook Ad the user was referred from (<a href="https://www.if-so.com/google-ads/?utm_source=WordPress&utm_medium=Readme&utm_campaign=v2&utm_term=google-ads" target="_blank">examples >></a>)
-3. UTM Parameters - Show dynamic content based on UTM parameters or other query strings (<a href="https://www.if-so.com/help/documentation/utms/?utm_source=WordPress&utm_medium=Readme&utm_campaign=v2&utm_term=utm-parameters" target="_blank">examples >></a>)
- 
-<a href="https://www.if-so.com/personalization-examples?utm_source=WordPress&utm_medium=Readme&utm_campaign=1.5.1&utm_term=examples" target="_blank">More usage examples >></a>
+**👤 Visitor Behavior:**
+*   **Logged-in Status** – Swap elements for members vs. public guests.
+*   **WordPress User Roles** – Tailor views for Admins, Authors, or Customers.
+*   **New vs. Returning** – Welcome fresh eyes or reward repeat visitors.
+*   **Page View Frequency** – Trigger shifts based on site interaction history.
+*   **Dynamic A/B Testing** – Set automated split percentage distribution.
 
-**Geolocation**
+**🕒 Time & Context:**
+*   **Exact Date & Time** – Schedule time-sensitive sales or deadlines.
+*   **Weekly Schedules** – Set recurring hours or daily specials.
+*   **Local Time Zone** – Display schedules aligned with the visitor's clock.
+*   **Current Page Path** – Set contextual triggers for specific sections.
+*   **Custom Sessions** – Store temporary parameters during user visits.
 
-* City
-* State
-* Country
-* Continent
-* Time zone
+**💻 Technology & Data:**
+*   **Device Type** – Optimize explicitly for Mobile, Tablet, or Desktop.
+*   **Browser & OS** – Target Chrome, Safari, iOS, Android, and more.
+*   **Language Detection** – Read browser languages automatically.
+*   **Cookies & Local Storage** – Hook into your own custom browser data.
 
-**User Behavior**
+**🔌 E-Commerce & Extensions:**
+*   **Show/Hide Products by Location** – Restrict or display specific items based on regional availability.
+*   **WooCommerce Cart Products** – Target specific items chosen by shoppers.
+*   **WooCommerce Cart Value** – Upsell dynamically based on total cart value.
+*   **WooCommerce Order History** – Identify and reward high-value lifetime buyers.
+*   **Membership Tiers** – Native rules for MemberPress, Wishlist, and PMPro.
+*   **Advanced Data Sync** – Seamlessly read fields from ACF, Forms, and LearnDash.
 
-* Browser Language 
-* Returning Visitor (pro)
-* Device Type
-* Logged-in User
-* Days Since User Registration (pro)
-* Pages Visited (pro)
-* Referral Source (pro)
-* Browser Type (pro)
-* Operating System (pro)
-* Number of Version Views (pro)
+== 👤 Behavioral Audiences & User Segmentation ==
 
-**Date & Time**
+Don't just personalize a single element — build a cohesive user journey. If-So allows you to automatically assign visitors into predefined audiences based on their location, traffic source, or on-site interactions. Once grouped, you can deliver tailored content variations across multiple pages throughout their entire session. <a href="https://www.if-so.com/behavioral-segmentation-wordpress/?utm_source=wordpress&utm_medium=readme&utm_campaign=v2&utm_content=audiences" target="_blank">Learn more about Audiences >></a>
 
-* Start & End Date (pro)
-* Schedule (pro)
-* Day of the Month (pro)
+=== 🚀 Powerful Extra Features ===
+Discover the advanced tools that make If-So the ultimate conversion optimization suite for WordPress:
 
-**Marketing & Advertising**
-
-* Dynamic Link (pro)
-* Page URL (pro)
-* UTM Parameters (pro)
-* Google Ads / Facebook Ads (pro)
-
-**WooCommerce**
-
-* Products in the Cart (pro)
-* Products Purchased (pro)
-* Units in Stock (pro)
-* Total Spent (pro)
-* Average Order Value (pro)
-* Customer Details (pro)
-
-**Integrations (pro)**
-
-* WooCommerce Subscriptions
-* WooCommerce Memberships
-* MemberPress
-* WishList Member
-* WP Job Manager
-* LearDash
-* Easy Digital Downloads
-* AffiliateWP
-* Weglot
-
-
-<a href="https://www.if-so.com?utm_source=WordPress&utm_medium=Readme&utm_campaign=v2&utm_term=AboutTheConditions" target="_blank">**All conditions >>**</a>
-
-.....................................................................
-
-== Built-in stats ==
-
-Get clear insights into your content performance! See real-time results with a built-in analytics system - how many times each version was displayed and how it affected the conversion rate.
-
-.....................................................................
-
-== THE EXTRA OPTIONS THAT MADE If-So THE #1 PERSONALIZATION PLUGIN ==
-
-If-So is more than just an If-Then personalization solution. We consistently add new features so that no matter what your need is, you will be able to achieve it with If-So.
-
-
-**Audiences (segments)**
-Assign users into predefined audiences based on the user’s interaction with the site and then show content based on the user’s audience.
-<a href="https://www.if-so.com/help/documentation/segments/?utm_source=WordPress&utm_medium=Readme&utm_campaign=v2&utm_term=audiences" target="_blank">Learn more >></a>
-
-**User self-selection form:**
-Allow users to select the content they will see by assigning themselves to an audience (segment).
-<a href="https://www.if-so.com/dynamic-select-form/" target="_blank">Learn more >></a>
-
-**Conditional pop-ups**
-Create pop-ups that will be displayed based on any If-So condition.
-<a href="https://www.if-so.com/conditional-pop-ups/?utm_source=WordPress&utm_medium=Readme&utm_campaign=v2&utm_term=pop-ups" target="_blank">Learn more >></a>
-
-**Custom user profile fields (for logged-in users)**
-Create a new field in the user’s profile, assign a value to that field, and show content based on the value.
-<a href="https://www.if-so.com/custom-user-profile-fields-dynamic-content/" target="_blank">Learn more >></a>
-
-**Dynamic content from CSV**
-Create and manage thousands of dynamic content versions directly from a CSV file.
-<a href="https://www.if-so.com/dynamic-content-from-csv/" target="_blank">Learn more >></a>
-
-.....................................................................
-
-== DYNAMIC KEYWORD INSERTION (DKI) ==
-
-The Dynamic Keyword Insertion (DKI) option allows you to display values using shortcodes:
-* The user’s location: country, state, city, or continent
-* A value of a query string parameter
-* The user name
-* An event time – calculated according to the user time zone
-
-<a href="https://www.if-so.com/help/documentation/dynamic-keyword-insertion?utm_source=WordPress&utm_medium=Readme&utm_campaign=v2&utm_term=AllDKI" target="_blank">And more… for all DKI shortcodes >></a>
-
-= Examples for Dynamic Keyword Insertion shortcodes: =
-
-**User's Country**
-Display the user’s location: country, city, state, continent, or time zone.
-`
-[ifsoDKI type='geo' show='country']
-`
-<a href="https://www.if-so.com/geolocation-dki/?utm_source=WordPress&utm_medium=Readme&utm_campaign=v2&utm_term=geo-dki" target="_blank">More Geolocation DKI shortcode options >></a>
-
-
-**Query String DKI**
-Display the value of any query string.
-`
-[ifsoDKI type="querystring" parameter="YOUR-PARAMETER" fallback="Your default value (optional)"]
-`
-<a href="https://www.if-so.com/query-string-dki-shortcode/?utm_source=WordPress&utm_medium=Readme&utm_campaign=v2&utm_term=qs-dki" target="_blank">More Geolocation DKI shortcode options >></a>
-
-
-**Auto-Local Time Display**
-Show an event time calculated according to the user’s time zone.
-`
-[ifsoDKI type='time' show='user-geo-timezone-sensitive' time='04/25/2022 08:00' format='n/j/o, G:i']
-`
-
-<a href="https://www.if-so.com/auto-local-time-display/?utm_source=WordPress&utm_medium=Readme&utm_campaign=v2&utm_term=local-time-display-dki" target="_blank">More Geolocation DKI shortcode options >></a>
-
-
-
-
+*   **Dynamic Keyword Insertion (DKI)** – Drop real-time values instantly into your text blocks. Display the visitor's city/country, capture UTM parameters, or show auto-localized event times using smart shortcodes. <a href="https://www.if-so.com/dynamic-keyword-insertion/?utm_source=wordpress&utm_medium=readme&utm_campaign=v2&utm_content=dki" target="_blank">See DKI options >></a>
+*   **User Self-Selection Forms** – Let visitors choose their own experience. Embed intuitive dropdown filter forms that allow users to select their own segment or target audience choice. <a href="https://www.if-so.com/user-selection-form/?utm_source=wordpress&utm_medium=readme&utm_campaign=v2&utm_content=user-selection" target="_blank">Learn more >></a>
+*   **Conditional Pop-ups** – Launch lightweight, high-converting overlays that trigger dynamically based on any chosen If-So targeting condition. <a href="https://www.if-so.com/conditional-popups/?utm_source=wordpress&utm_medium=readme&utm_campaign=v2&utm_content=popups" target="_blank">Learn more >></a>
+*   **Dynamic Content from CSV** – Scale your personalization effortlessly. Manage thousands of geo-targeted locations, regional details, or translation variables using a simple spreadsheet upload. <a href="https://www.if-so.com/csv-bulk-loading/?utm_source=wordpress&utm_medium=readme&utm_campaign=v2&utm_content=csv" target="_blank">Learn more >></a>
 
 == Installation ==
 
-1. Go to your WordPress Control Panel
-1. Click "Plugins", then "Add New"
-1. Enter "ifso" as a search term and click "Search Plugins"
-1. Download and install the IfSo Dynamic Content plugin
-1. Click the "Activate Plugin" link
-1. On your WordPress menu under IfSo, click "Add new"
-1. Fill in the default content
-1. Select rule
-1. Choose the content you wish to display if the rule is met and press "Publish"
-
+1. Go to your WordPress Control Panel.
+2. Click "Plugins", then "Add New".
+3. Enter "ifso" as the search term and click "Search Plugins".
+4. Download and install the **If-So Dynamic Content** plugin.
+5. Click the "Activate Plugin" link.
+6. Find the "IfSo" tab on your WordPress admin menu and click "Add new" to start creating rules.
 
 == Frequently Asked Questions ==
 
-= Does If-So work with any page builder? =
-Yes, If-So works on every website, regardless of the page builder you are using.
+= How is If-So different from basic Elementor visibility add-ons? =
+Most Elementor add-ons simply use CSS to hide elements, meaning the code still loads behind the scenes, and server-side caching will often display the wrong version to the wrong user. If-So uses an optimized rendering architecture that completely bypasses static page-cache limits while maintaining blazing-fast performance.
 
-= Is there a session limit =
-No, the only condition that is limited by sessions is the Geolocation condition since we use a highly accurate, premium, IP-to-location database.
+= How accurate is the Geolocation tracking? =
+Extremely accurate. We use a premium, regularly updated IP-to-location database to ensure your visitors are correctly matched to their precise country, state, or city across global networks.
 
-= What content can be customized with If-So? =
-If-So allows you to customize any element on the website, including titles, texts, images, videos, menu items, and design.
-
-
-= How does If-So work? =
-
-If-So is very simple to use. All you have to do is select a condition (rule), set the content you would like to display if it is met, and set default content to be displayed when it is not.
-
-*All page builder users: *
-
-1. Create a trigger 
-2. Select a condition and set the personalized content version
-3. Optional - create more dynamic versions and set the default content
-4. Paste the shortcode wherever you want to display the content
-Every time a page with the shortcode is loaded, one of the content versions will be displayed accordingly.
-
-<a href="https://www.if-so.com/help/documentation/how-to-create-dynamic-content-trigger/?utm_source=WordPress&utm_medium=Readme&utm_campaign=v2&utm_term=dynamic-trigger" target="_blank">Learn more >></a>
-
-*Gutenberg and Elementor users*
-
-1. Select the block or element
-2. On the side menu, select the condition to display the block/element
-
-<a href="https://www.if-so.com/elementor-personalization/?utm_source=WordPress&utm_medium=Readme&utm_campaign=v2&utm_term=elementor" target="_blank"> - More about conditional  Elementor Elements >></a>
-<a href="https://www.if-so.com/conditional-gutenberg-blocks/?utm_source=WordPress&utm_medium=Readme&utm_campaign=v2&utm_term=gutenberg" target="_blank"> - More about conditional  Gutenberg Blocls >></a>
- 
-= Which conditions (rules) can I set with If-So? =
-
-You can choose from a variety of conditions. Here are a few examples:
-
-* Referral source - Show different content to users arriving through a specific domain or webpage.
-* In-site remarketing - Show different content to users who referred from a particular page on your website.
-* Logged-in users - Show different content to logged-in users.
-* New and returning visitors -  Show different content to returning / new visitors.
-* Browser language - Show customized messages to visitors according to their set browser language.
-* Dynamic Link- Create a dynamic website URL: send it to users or use it in Google Adwords, Facebook, and other advertising platforms. Visitors who arrive through the dynamic link will see unique content.
-* Schedule - Change selected parts of your website content according to the time and day.
-* Start and end date - Show content throughout selected dates.
-* UTM Parameters-based content - Add or replace content based on UTM (tracking parameters).
-
-<a href="https://www.if-so.com?utm_source=WordPress&utm_medium=Readme&utm_campaign=v2&utm_term=faq-list-of-conditions" target="_blank">**click here for the complete list of conditions**</a>
-
-= Can I use If-So WP Plugin with any WordPress theme? = 
-
-You sure can! So far, we have not come across any WordPress themes that If-So Dynamic Content can not work with. If for any reason it doesn’t work with your theme, we will work with you to resolve the issue.
+= Can I use If-So with any WordPress theme? =
+Yes. If-So operates independently of your theme architecture. It works flawlessly across all standard-compliant WordPress themes and custom setups.
 
 
 == Screenshots ==
@@ -294,6 +180,13 @@ You sure can! So far, we have not come across any WordPress themes that If-So Dy
 
 
 == Changelog ==
+
+= 1.10 =
+* **New: Built-In Analytics Dashboard** – Define custom conversion goals, track which trigger versions are driving results, and measure performance across all your A/B tests and personalization campaigns — directly inside WordPress, no third-party tools required. [Learn more](https://www.if-so.com/ab-testing-wordpress/analytics/?utm_source=wordpress&utm_medium=readme&utm_campaign=v2&utm_content=analytics)
+* **New: A/B Testing Analytics** – The analytics dashboard is built for A/B testing. Two report views let you analyze results by conversion goal or by trigger, with views, conversions, and conversion rate broken down per version. [Learn more about A/B Testing](https://www.if-so.com/ab-testing-wordpress/?utm_source=wordpress&utm_medium=readme&utm_campaign=v2&utm_content=abt)
+* **New: Conversion Attribution Window** – Configure how long after seeing a trigger a conversion can still be attributed to it. Options range from single session to 1 year.
+* Performance improvements and bug fixes.
+
 
 = 1.9.8 =
 * PHP 8.4 compatibility improvemnts.
@@ -516,333 +409,6 @@ Ex. [ifsoDKI type='geo' show='flag' width='50px' classname='class-you-choose']
 * Bug fixes
 
 
-
-
-= 1.5.9=
-* Gutenberg and Elementor widgets - an autocomplete option was added to the geolocation condition to ease the targeting of cities and states.
-* Post category condition - UI changes
-* AB Testing condition - added the option to create split testing with 5 versions.
-* Query-string DKI - added a hook to allow users to set the expiration of the "persist" cookie.
-* Settings  - an option to apply shortcodes to navigation menus was added.
-* Performance improvements
-* Bug fixes
-
-= 1.5.8=
-* Compatibility with various cookie consent plugins and systems was added: Cookiebot, Cookie Notice & Compliance for GDPR / CCPA(hu-compliance), Complianz.
-* [ifso-show-post] shortcode - Improved the shortcode while using WPBakery and Divi posts(templates). Adding the attributes type="WPB" or type="divi" to make sure the post content loads correctly.
-* WP filters for content resulting from rendering triggers/widgets were added: apply_filters( 'ifso_standalone_condition_content', string $content ), apply_filters('ifso_shortcode_content',string $content, array $atts).
-* [ifso-audience] shortcode - added ability to add/remove users from audiences based on query strings, either by using a URL param value as audience name or a condition to determine whether the user should be added/removed:
-    [ifso-audience type='add' from='query' param='myparam'] - will add the user to the group, whose name is the value of the "myparam" querystring parameter. default value for param is "ifso_audience".
-    [ifso-audience type='remove' from='query-condition' param='myparam' param_value='my-remove-parameter' audience='group1'] - will only remove the user from group "group1" if the "myparam" query string value equals "my-remove-parameter".
-* [ifsoDKI] shortcode - added "before" and "after" attrs that allow injecting text around the content while dynamic content is displayed(not fallback).
-* [ifsoDKI] shortcode - added "persist" attr for query-string DKI - to show content when the user browses other pages, even if the query string is not present anymore(during tone session).
-* Edit Trigger page - UI improvements.
-* SEO plugins compatibility - Allow using If-So shortcodes in the title and meta desc fields of YOAST and Rank Math.
-* New feature - find (scan for) If-So shortcodes on posts and pages' main content field
-* Added ability to exclude specific users from geolocation based on cookie or their IP,  using a new wp filter:
-    apply_filters('ifso_exclude_from_geo',array $excluded)   $excluded array format : ['cookie'=>['exclude_from_geo'],'ip'=>[]]
-* New condition - post category (works also on custom taxonomies and terms)
-* Elementor trigger element - added "Load with ajax" option
-* If-So content loaded via ajax - improve compatibility with page builder content by making sure the js code within it runs in the global scope
-* Bug fixes and performance improvements
-
-
-
-
-
-= 1.5.7.2=
-* Dynamic Keyword Insertion - an option to load the shortcodes with Ajax was added (add the parameter ajax="yes" to the shortcode)
-* Trigger Events extension compatibility - support the option to load triggers above the header on all pages (through the plugin's settings)
-* Bug fixes  
-
-
-= 1.5.7.1=
-* Bug fixes - Elementor triggers widget not displaying content in some cases 
-
-= 1.5.7 =
-* Conditional Gutenberg blocks - added the option to target multiple locations/pages visited in a single condition
-* Conditional Elementor elements (integration)- added compatibility to support the option to target multiple locations/pages visited in a single condition
-* Added the option to log geolocation requests for debugging
-* New Ajax loader animation - show the default content until the dynamic version loads using Ajax
-* Global ifso() function now allows 2 additional parameters, making its signature ifso($id,$atts=null,$return=false), where $atts is an array of attributes that can be passed to the if-so shortcode and $return is a boolean, which determines whether the function echoes or returns the result of the trigger
-* Added ability to load if-so shortcodes with "name" parameter instead of "id"(uses trigger title) - THE OPTION HEARTS LOADING TIMES - USE THE TRIGGER ID UNLESS YOU HAVE A REASON NOT TO
-* New DKI shortcode option, to display the user's IP : [ifsoDKI type='ip']
-* UI improvements
-* Geolocation service now supports IPV6 addresses
-* Added filter to allow users to set alternative IP detection - "ifso_user_ip"
-* Bug fixes
-
-
-= 1.5.6.2 =
-* Bug fixes
-
-
-= 1.5.6.1 =
-* Updated jquery-ui version in admin ui to 1.13.1
-* Fix geolocation caching in triggers loaded via ajax
-* Added option to cache the geolocation data in cookies(as opposed to sessions)
-* Bug fixes
-
-
-
-= 1.5.6 =
-* New condition - Session Variable: create conditional content based on a session variable. The option was added to the cookie condition.
-* Compatibility with our <a href="https://www.if-so.com/elementor-personalization/">Conditional Elementor Elements integration</a>
-* Ajax loading - an option to load conditional Gutenberg Blocks using Ajax 
-* Ajax loading - an option to load conditional Elementor elements using Ajax
-* Redirect shortcode: Create 301/302 or JS redirects using a shortcode. Insert the shortcode in the the dynamic version content field to create conditional redirects <a href="https://www.if-so.com/help/documentation/redirect-users-based-on-conditions/">Learn more</>
-* Bugfix: Use WordPress timezone for determining current day in schedule condition (problems occurred on specific scenarios)
-* Visit count is now performed only through an ajax request
-* Improved IP detection for geolocation functionality
-* Gutenberg standalone condition widget - changed the "If-So Active" indicator to be a colored border, to avoid breaking the appearance of some blocks in the editor
-* Security improvements
-* Bug fixes
-
-
-
-= 1.5.5.1 =
-* Added shortcode that sets/deletes a cookie value <a href="https://www.if-so.com/add-and-remove-cookies-using-shortcodes/" target="_blank">Learn more.</a>
-* Cloudflare Compatibility - The geolocation condition works with Cloudflare without having to use our Cloudflare integration
-* Divi modules compatibility improvements while loading content with Ajax
-* Page Caching Compatibility improvements - the referrer source condition is compatible with the Page Caching Compatibility (ajax) option
-* Gutenberg standalone conditions - fix conflict with jetpack contact form
-* Gutenberg standalone conditions - fix bug where the block inserter wasn't appearing when hovering between blocks
-* Bugfix - Removed calls to dysfunctional updater -  fixed bug which  caused an  "update  available" message  to  be shown
-* Bugfix - Audiences - fixed the handling of names with "special characters"
-
-
-
-= 1.5.5 =
-* The recurrence option was added to the user role condition
-* An option to disable the use of sessions was added to the settings (do not disable the sessions if you are using the geolocation condition)
-* Audience self-selection shortcode generator was added the audience page
-* added  the ability to defer the loading of  if-so triggers   via  ajax  (by adding the parameter defer="true" to the trigger's shortcode)
-* Added new option to disable the number of visit count cookie to the settings
-* Bugsfix - import triggers  - fixed  newlines being replaced  with "rn"
-* bugsfix - TinyMCE ediotr was reverted to HTML mode while dragging a version
-* (1) Security fix (Ajax vulnerability)
-
-
-
-
-=1.5.4.2 =
-* Bugfix - TinyMCE is no longer turning image URLs to be relative urls when changing versions order
-* TinyMCE - An option to prevent text nodes from being wrapped in <p> tags was added to the settings
-* Yoast SEO - Prevent if-so triggers (the "view trigger" pages) from being added to the sitemap
-* <a href="https://www.if-so.com/custom-user-profile-fields-dynamic-content/" target="_blank">Custom user profile extension</a> - a new option to assign a value using a query string
-* <a href="https://www.if-so.com/dynamic-content-from-csv/" target="_blank">CSV extension</a> - New conditions - Cookie ; geolocation ; IP
-* WordPress 5.8 compatiblity
-
-user details trigger - fix admin display bug
-
-= 1.5.4.1 =
-* New condition - Referral Category: Display dynamic content based on the referral page/post category (page or post on your site).
-* New condition - Trigger visited: Show dynamic content if a specific trigger was previously displayed to the user.
-* Ajax loading: an option to show a loader animation while the content is being loaded in Ajax mode (Page Caching Compatibility mode) .
-* The Geolocation Condition: An option to target a city manually (without autocomplete) - this option should be used to overcome problems with targeting cities whose names in Google Maps (the backend autocomplete service we use) are spelled differently from our IP-to-location database)
-* The Schedule Condition - More flexibility setting the times. You can now change the time intervals through the plugin's settings.
-* The Page URL Condition - An option to ignore case was added.
-* The User Role Condition - The option to set the recurrence option was added to the condition.  
-* New DKI shortcode - "Auto-Local Time Display":- Show an event time calculated according to the visitor's time zone.
-* Audiences - You can now add or remove users from an audience using a shortcode.
-* Bugfix - HTML mode was turning to visual mode while dragging a version.  
-* Performance - An option to disable the use of sessions was added to the settings (do not disable the sessions if you are using the geolocation condition).  
-* Extensions and integrations -The new version supports some of our <a href="https://www.if-so.com/add-ons-and-integrations/" target="_blank">latest extensions and integrations.</a>
-*Various bug fixes and performance improvements
-
-
-= 1.5.3.2 =
-* Hotfix- security vulnerability fixes
-
-= 1.5.3.1 =
-* WordPress 5.6 compatibility fixes
-
-
-= 1.5.2.4 =
-* WordPress 5.6 compatibility fixes
-
-= 1.5.2.2 =
-* Hot fix - Elementor compatibility - fail to load the Edit With Elementor screen using WordPress 5.6
-
-= 1.5.2.1 =
-* Bug fix - loading speed
-
-= 1.5.2 =
-* Display post content using a shortcode - create content using your page builder as a post. Use the shortcode [ifso-show-post id="###" show="content/title"] inside an If-So version to display the post content.
-* Content editor - Allowing inline JavaScript and SVG usage inside the trigger's wysiwyg editor
-* Bugfix - adding conditions to 3rd-party Gutenberg blocks 
-
-= 1.5.1 =
-* Gutenberg - option to set conditions directly in a block
-* Preventing no-cache headers from being sent as a result of If-So using PHP sessions
-* Shortcodes are now rendered when entered in YOAST and SEO Pack title meta filed.
-* New routine for detecting a user’s IP
-* Added WPDB prefix to the beginning of names in the tables used by If-So
-* Bugfix - The option to prevent Ajax calls was fixed.
-
-
-= 1.5.0.1 =
-* Ajax loading (page caching compatibility) - Load triggers after ther page loads from the cache. 
-* DKI - A new option to set the default content in the User name DKI shortcode.
-* Bugfix - Subscribers data is now collected by Built-in analytics.
-* Groups - The name was changed to "Audiences"
-* New DKI - name of the day.
-* Bugfix - The option to prevent Ajax calls was fixed.
-
-
-= 1.4.9.1 =
-* Bug fix - Geolocation - targeting city-states (Singapore, Monaco, etc.)
-* Bug fix - CSS and JS conflicts with 3rd party plugins.
-
-
-= 1.4.9 =
-* New Elementor Widget 
-* Geolocation DKI - An option to set a fallback was added
-* Bugs fix (visual editor issues)
-
-= 1.4.8 =
-* New DKI shortcode - display a value of a query string paremeter 
-* Improved the help box and help notifications
-* Bugs fix (visual editor issues)
-
-= 1.4.7 =
-* Geolocation dashboard improvements
-* Change the Time and date conditions to rely on local time.
-* Stop including admin views in the built-in analytics
-* Load time improvements
-* RTL fixes
-* Bugs fix (remove groups data on uninstall; Google places javascript issue;)
-
-= 1.4.6.1 =
-* WordPress 5.4 compatibility fixes (Gutenberg design)
-* Bugs fix (Conflict with SafeGard)
-
-= 1.4.6 =
-* New feature: Create groups; Add users to a group when the condition is met; Display group-based content.
-* New condition - user role. Add or replace content according to the user’s role (Administrator, Editor, Subscriber, or any other role you have on your website)
-* New feature - User’s Select - Let the users select the content they'll see. Add a select box or radio buttons with categories and show category-based content
-* Bugs fix
-
-
-= 1.4.5 =
-* If used in the page title, If-So’s shortcodes are now also rendered in the meta title of the page.
-* Allowing Editors to create and edit triggers
-* Gutenberg block - an indication showing if a trigger was deleted was added
-* Geolocation  - The user’s location will be checked again if the user’s IP has been changed - even if the session hasn’t been ended.
-* Bugs fix
-
-
-
-= 1.4.4 =
-* Gutenberg block
-* New condition: Content by cookie name and cookie value
-* Performance improvements.
-* Bugfixs.
-* Security updates.
-
-= 1.4.3 =
-
-* Built-in analytics was added - see how many time each version was displayed what effect does it have on the conversion rate.
-* UI improvements.
-* Security updates.
-* Bug fixes.
-
-= 1.4.2 =
-
-* An option to import and export triggers was added.
-* A new button that allows editing and embedding triggers was added to the content editor.
-* Import and export triggers.
-* Security updates.
-* Refactored + Bug fixes.
-
-
-
-= 1.4.1 =
-
-* New condition - Cookie Detection: - Show dynamic content based on existing cookies on the user's browser.
-* The License Key is now hidden
-* An option to allow shortcodes in the titles was add to the settings
-* Duplicate triggers option was added to the `All the triggers page`
-* An option to disable the `pages visited` cookie was added to the settings
-* A new option to overrdie recurrence was added to conditions with recurrence
-* Dynamic keyword Insertion is now an integral part of the plugin
-* Refactored + Bug fixes.
-
-= 1.4.0 =
-
-* New condition - Cookie Detection: Add or replace content according to UTM parameters
-* New condition - IP Detection: - Show dynamic content based on user IP.
-* Refactored + Bug fixes.
-
-
-
-= 1.3.3 =
-
-* Improved user experience at the advertising platforms condition (Google Ads, Facebook Ads and dynamic link)
-* Right to left support
-* A Russian translation was added
-* Refactored + Bugs fix
-
-= 1.3.2 =
-
-* Drag versions to change their order
-* Settings - An option to prevent WordPress from wrapping If-So shortcodes with <p> tags was added.
-* Settings - An option to choose not to remove If-So's data when the plugin is deleted was added.
-* Settings - An option to set The duration used by the 'pages visited' condition to track users’ visits was added.
-* Number of versions - There is now no limit to the number of versions that can be created.
-* A/B testing - An option to set a control group (will be displayed 100% of the reminder sessions) was added 
-* Refactored + Bugs fix
-
-= 1.3.1 =
-
-* New condition - Pages visited: Show dynamic content to visitors who have been visited a chosen page (or pages) on your website
-* Refactored + Bugs fix
-
-= 1.3.0 =
-
-* New condition - Page URL: Show dynamic content if the page URL is or consists a certain text string
-* Refactored + Bugs fix
-
-
-= 1.2.9 =
-
-* Thrive architect compatibility
-* New geolocation options: target visitors by continent, state, and time zone.
-* New feature for the browser language condition - choose to display custom content only when the user's language is set as the primary language (The option to target users when a language is not set as default is still available).
-* Reach snippets compatibility
-
-PLEASE NOTE - THE REFERRER SOURCE CONDITION IS NO LONGER  AVAILABLE FOR FREE. IF YOU ARE USING  A VERSION OLDER THAN 1.2.9, AND WOULD LIKE TO KEEP USING THE REFERRER SOURCE CONDITION, PLEASE CONTACT US.
-
-
-= 1.2.8 =
-
-* Recurrence - New options were added
-* Geolocation - New settings screen shows utilization details
-* Browser language - Dynamic version will be presented even if the user's browser language is not set as the main language in his browser settings.
-* Refactored + Fixed bugs
-
-
-= 1.2.7 =
-* Recurrence (New feature) - After the condition is met for the first time, the version will be displayed any time the visitor encounters the trigger. Recurrence works only if the visitor entered again from the same device and browser and did not delete cookies.
-
-= 1.2.6 =
-* New condition - Geolocation: Add or replace content according to the user's location - country or city
-
-= 1.2.5 =
-* Some conditions are now open to registered users only. Please note that if you already use the plugin only default content will be displayed unless you register (Free for one year).
-* The free conditions are: Logged-in users, device type, and referrer source.
-
-= 1.1.6 =
-* New conditions were added: Start & end date.
-* New conditions were added: Scheduling Content.
-* Pause mode - Users can now temporarily pause a version of the content.
-
-= 1.1.4 =
-* New condition added- Browser language
-* Testing mode - Force displaying of a chosen version of content.
-
-= 1.1.3 =
-* New condition added- New / Returning visitors
 
 
 == Upgrade Notice ==

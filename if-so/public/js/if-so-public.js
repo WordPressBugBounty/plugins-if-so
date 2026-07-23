@@ -198,7 +198,7 @@ ifso_scope.DispatchAjaxContentLoaded  =  function () {document.dispatchEvent(aja
 			},
 
 			initialize_last_viewed_globals : function(){
-				var cookie = this.getCookie('ifso_last_viewed');
+				var cookie = this.getCookie('_ifso_last_viewed');
 				try{
 					var cookieObj = JSON.parse(cookie);
 					ifso_viewed_triggers = cookieObj;
@@ -294,7 +294,10 @@ ifso_scope.DispatchAjaxContentLoaded  =  function () {document.dispatchEvent(aja
 					var disallowed_attr = value.getAttribute('disallowed_triggers');
 					var once_per_attr = value.getAttribute('once_per_time');
 					var name_attr = value.getAttribute('ifso_name');
+					var conv_type = value.getAttribute('conversion_type');
 					var conversion = {allowed:[],disallowed:[]};
+					if(conv_type!==null)
+						conversion.conversion_type = conv_type;
 					if(allowed_attr!=null && allowed_attr != 'all')
 						conversion.allowed = allowed_attr.split(',');
 					if(disallowed_attr!=null)

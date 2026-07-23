@@ -43,6 +43,7 @@ class If_So_Admin {
         EDD_IFSO_PLUGIN_GEO_PAGE,
         EDD_IFSO_PLUGIN_LICENSE_PAGE,
         EDD_IFSO_PLUGIN_DKI_PAGE,
+        EDD_IFSO_PLUGIN_ANALYTICS_PAGE,
         'wpcdd_admin_location_generator',
     ];
 
@@ -139,17 +140,14 @@ class If_So_Admin {
 		if($is_trigger_page || $this->is_ifso_admin_page()){
             //wp_enqueue_style( $this->plugin_name.'BootstrapCss', 'https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css', array(), $this->version, 'all' );
             wp_enqueue_style( $this->plugin_name.'FontAwesome', plugin_dir_url( __FILE__ ) . 'css/font-awesome-4.7.0/css/font-awesome.min.css', array(), $this->version, 'all' );
-
             wp_enqueue_style( $this->plugin_name.'TinyModal', plugin_dir_url( __FILE__ ) . 'css/modalStyle.css', array(), $this->version, 'all' );
-
             wp_enqueue_style( $this->plugin_name.'Style', plugin_dir_url( __FILE__ ) . 'css/if-so-admin.css', array(), $this->version, 'all' );
-
             wp_enqueue_style( $this->plugin_name.'JQueryUiMinCss', plugin_dir_url( __FILE__ ) . 'css/jquery-ui.min.css', array(), $this->version, 'all' );
-
             wp_enqueue_style( $this->plugin_name.'DateTimePickerCss', plugin_dir_url( __FILE__ ) . 'css/jquery.ifsodatetimepicker.css', array(), $this->version, 'all' );
-
             wp_enqueue_style( $this->plugin_name.'EasyAutoCompleteCSS', plugin_dir_url( __FILE__ ) . 'css/easy-autocomplete.min.css', array(), $this->version, 'all' );
         }
+        if($this->get_admin_page_key()===EDD_IFSO_PLUGIN_ANALYTICS_PAGE)
+            wp_enqueue_style( $this->plugin_name.'analytics-style', plugin_dir_url( __FILE__ ) . 'css/if-so-analytics-page.css', array(), $this->version, 'all' );
 
 		if($is_trigger_page && is_rtl()) {
 			wp_enqueue_style( $this->plugin_name.'StyleRtl', plugin_dir_url( __FILE__ ) . 'css/if-so-admin-rtl.css', array(), $this->version, 'all' );
@@ -189,36 +187,34 @@ class If_So_Admin {
 		    </script>";
             echo "<script> var scheduleIntervalSetting = {$schedule_interval};</script>";
 
+            if($this->is_trigger_page() || $this->get_admin_page_key()===EDD_IFSO_PLUGIN_ANALYTICS_PAGE){
+                if(version_compare($wp_version,'5.6')!== -1 || version_compare($wp_scripts->registered['jquery']->ver,'3.5.1')!==-1)    //wp 5.6 intrduced a new version of jquery
+                    wp_enqueue_script( $this->plugin_name.'JQueryMinUI', plugin_dir_url( __FILE__ ) . 'js/jquery-ui.min.js', array( 'jquery' ), $this->version, false );
+                else
+                    wp_enqueue_script( $this->plugin_name.'JQueryMinUIOld', plugin_dir_url( __FILE__ ) . 'js/jquery-ui-old.min.js', array( 'jquery' ), $this->version, false );
+            }
+            wp_enqueue_script( $this->plugin_name.'JQueryMinUI', plugin_dir_url( __FILE__ ) . 'js/jquery-ui.min.js', array( 'jquery' ), $this->version, false );
             wp_enqueue_script( $this->plugin_name.'-Admin', plugin_dir_url( __FILE__ ) . 'js/if-so-admin.js', array( 'jquery' ), $this->version, false );
 
-            if($this->is_trigger_page() || $this->get_admin_page_key('wpcdd_admin_location_generator')){
+            if($this->is_trigger_page() || $this->get_admin_page_key()==='wpcdd_admin_location_generator'){
                 wp_enqueue_script( $this->plugin_name.'IfSoHelpers', plugin_dir_url( __FILE__ ) . 'js/helpers.js', array(), $this->version, false );
                 wp_enqueue_script( $this->plugin_name.'GooglePlacesJS', plugin_dir_url( __FILE__ ) . 'js/if-so-google-places.js', array( 'jquery' ), $this->version, true );
                 wp_enqueue_script( $this->plugin_name.'EasyAutocompleteJS', plugin_dir_url( __FILE__ ) . 'js/jquery.easy-autocomplete.min.js', array( 'jquery' ), $this->version, false );
                 wp_enqueue_script( $this->plugin_name.'GooglePlacesAPI', 'https://maps.googleapis.com/maps/api/js?key='.IFSO_GMAPS_API_KEY.'&language=en&libraries=places&callback=initAutocomplete', array(), $this->version, true );
             }
 
+            wp_enqueue_script( $this->plugin_name.'TinyModal', plugin_dir_url( __FILE__ ) . 'js/modal.js', array(), $this->version, false );
+
             if($this->is_trigger_page()){
                 wp_enqueue_script( $this->plugin_name.'BootstrapJS', plugin_dir_url( __FILE__ ) . 'js/bootstrap.min.js', array( 'jquery' ), $this->version, false );
-
-                if(version_compare($wp_version,'5.6')!== -1 || version_compare($wp_scripts->registered['jquery']->ver,'3.5.1')!==-1)    //wp 5.6 intrduced a new version of jquery
-                    wp_enqueue_script( $this->plugin_name.'JQueryMinUI', plugin_dir_url( __FILE__ ) . 'js/jquery-ui.min.js', array( 'jquery' ), $this->version, false );
-                else
-                    wp_enqueue_script( $this->plugin_name.'JQueryMinUIOld', plugin_dir_url( __FILE__ ) . 'js/jquery-ui-old.min.js', array( 'jquery' ), $this->version, false );
-
                 wp_enqueue_script( $this->plugin_name.'BootstrapValidator', plugin_dir_url( __FILE__ ) . 'js/validator.min.js', array( 'jquery' ), $this->version, false );
                 wp_enqueue_script( $this->plugin_name.'DateTimePickerFullMinJs', plugin_dir_url( __FILE__ ) . 'js/jquery.ifsodatetimepicker.full.min.js', array( 'jquery' ), $this->version, false );
                 wp_enqueue_script( $this->plugin_name.'WeeklyScheduleMinJs', plugin_dir_url( __FILE__ ) . 'js/jquery.weekly-schedule-plugin.min.js', array( 'jquery' ), $this->version, false );
                 //wp_enqueue_script( $this->plugin_name.'RepeaterJs', plugin_dir_url( __FILE__ ) . 'js/repeater.js', array( 'jquery' ), $this->version, false );
-                wp_enqueue_script( $this->plugin_name.'TinyModal', plugin_dir_url( __FILE__ ) . 'js/modal.js', array(), $this->version, false );
-
                 wp_enqueue_script( $this->plugin_name.'-admin-triggerpage', plugin_dir_url( __FILE__ ) . 'js/if-so-admin-triggerpage.js', array( 'jquery',$this->plugin_name.'-Admin',$this->plugin_name.'TinyModal' ), $this->version, false );
-
                 //wp_deregister_script( 'postbox' );    //Prevent trigger page metaboxes from being draggable
             }
-
         }
-
 	}
 
     private function is_trigger_page() {

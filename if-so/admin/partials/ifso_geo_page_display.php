@@ -121,6 +121,7 @@
     $set_alert_values_array = (!empty($_POST['alert-checkbox-values'])) ? array_unique($_POST['alert-checkbox-values']) : [];
     sort($set_alert_values_array);
     $set_alert_values = implode(' ',$set_alert_values_array);
+    $my_domain = !empty(parse_url(home_url())['host']) ? parse_url(home_url())['host'] : parse_url(home_url())['host'];
 
     function get_notification_data() {
         global $wpdb, $sent_user_email;
@@ -146,7 +147,7 @@
             GeolocationService\GeolocationService::get_instance()->reset_notifications();
     }
     $form_alert_values = isset($form_alert_values) ? explode(" ",$form_alert_values) : explode(" ",$data['alert_values']);
-    $noLicenseMessageBox = '<div class="no_license_message">'. __("Enter a Geolocation License to gain extra sessions. ", 'if-so') . '<a href="https://www.if-so.com/plans/geolocation-plans/?ifso=geocredits" target="_blank">'. __("Click here to get a Geolocation license key", 'if-so') . '</a>.</div>';
+    $noLicenseMessageBox = '<div class="no_license_message">'. __("Enter a Geolocation License to gain extra sessions. ", 'if-so') . '<a href="https://www.if-so.com/plans/geolocation-plans/?ifso=geocredits&utm_source=Plugin&utm_medium=message&utm_campaign=geolocation" target="_blank">'. __("Click here to get a Geolocation license key", 'if-so') . '</a>.</div>';
 ?>
 <html>
 <head>
@@ -724,7 +725,7 @@
                                 <p class="geo-info-card-link error-label">
                                     Communication failure
                                     <br>
-                                    <a class="geo-info-card-link error-label" href="https://www.if-so.com/help/communication-failure/?utm_source=Plugin&utm_medium=error&utm_campaign=geolocation&utm_term=comm_failure&utm_content=a&website_url=<?php echo urlencode(home_url()); ?>" target="_blank">
+                                    <a class="geo-info-card-link error-label" href="https://www.if-so.com/help/communication-failure/?utm_source=Plugin&utm_medium=error&utm_campaign=geolocation&utm_term=comm_failure&utm_content=a&website_url=<?php echo urlencode($my_domain); ?>" target="_blank">
                                         Click to solve
                                     </a>
                                 </p>
@@ -1120,7 +1121,7 @@
 
                 <div>
                     <?php if(!is_geo_data_valid($geoData)){ ?>
-                        <span class="error-label" style="padding-left:10px;">Communication failure! <a href="https://www.if-so.com/help/communication-failure/?utm_source=Plugin&utm_medium=error&utm_campaign=geolocation&utm_term=comm_failure&utm_content=a&website_url=<?php echo urlencode(home_url()); ?>" target="_blank">Click to solve</a> </span>
+                        <span class="error-label" style="padding-left:10px;">Communication failure! <a href="https://www.if-so.com/help/communication-failure/?utm_source=Plugin&utm_medium=error&utm_campaign=geolocation&utm_term=comm_failure&utm_content=a&website_url=<?php echo urlencode($my_domain); ?>" target="_blank">Click to solve</a> </span>
                     <?php } ?>
                 </div>
 

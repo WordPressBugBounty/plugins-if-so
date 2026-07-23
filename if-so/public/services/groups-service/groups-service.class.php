@@ -31,8 +31,8 @@ class GroupsService{
 
     private function __construct(){
         $this->settings_service = SettingsService::get_instance();
-        $this->user_group_limit = (int) $this->settings_service->userGroupLimit->get();
-        $this->group_cookie_lifespan = (int) $this->settings_service->groupsCookieLifespan->get();
+        $this->user_group_limit = $this->settings_service->userGroupLimit->get();
+        $this->group_cookie_lifespan = $this->settings_service->groupsCookieLifespan->get();
     }
 
     public static function get_instance(){

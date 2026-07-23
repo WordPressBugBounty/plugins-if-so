@@ -126,7 +126,7 @@ $extra_tabs = apply_filters('ifso_groups_page_display_extra_tabs',[]);
                     <ul>
                         <li>- Automatically, when a condition is met</li>
                         <li>- By using a shortcode</li>
-                        <li>- Through a self-selection form <a href=”https://www.if-so.com/self-selection-form/” target=”_blank”>(Add-on required)</a></li>
+                        <li>- Through a self-selection form <a href=”https://www.if-so.com/self-selection-form/?utm_source=Plugin&utm_medium=audiencePage&utm_campaign=instructions” target=”_blank”>(Add-on required)</a></li>
                     </ul>
                 </li>
             </ol>

@@ -36,7 +36,6 @@ class TriggerImportService{
             $ins = wp_insert_post($postarr['postarr']);
             if($ins){
                 $this->add_missing_metas($ins,$postarr['missing']);
-                $this->analytics_service->reset_analytics_fields($ins); //Reset the imported trigger analytics
                 $this->create_js_post_rdr('success');
                 return true;
             }

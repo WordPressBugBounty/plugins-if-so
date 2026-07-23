@@ -93,12 +93,7 @@ class ABTestingTrigger extends TriggerBase {
     private function get_total_trigger_views($tid){
         if($this->cached_total_views!==null)
             return $this->cached_total_views;
-        $total = 0;
-        foreach(AnalyticsService::get_instance()->get_analytics_fields($tid) as $version_an){
-            if(!empty($version_an['views']))
-                $total += $version_an['views'];
-        }
-
+        $total = AnalyticsService::get_instance()->records->count_trigger_views($tid);
         $this->cached_total_views = $total;
 
         return $total;

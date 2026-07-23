@@ -50,6 +50,8 @@ class PluginSettingsService {
         'ifso_settings_render_standalone_via_ajax_option';
     const SHOW_AB_TESTING_ADMIN_NOTICE =
         'ifso_settings_show_ab_testing_notice_option';
+    const ANALYTICS_COOKIE_EXPIRATION =
+        'ifso_settings_cookie_expiration_option';
 
 	private static $instance;
 
@@ -76,6 +78,7 @@ class PluginSettingsService {
     public $extraOptions;
     public $renderStandaloneViaAjax;
     public $showABTestingNotice;
+    public $analyticsCookieExpiration;
 
 	private function __construct() {
 		$this->pagesVisitedOption = 
@@ -122,6 +125,8 @@ class PluginSettingsService {
             $this->create_render_standalone_via_ajax_option();
         $this->showABTestingNotice =
             $this->create_show_abtesting_notice_option();
+        $this->analyticsCookieExpiration =
+            $this->create_analytics_cookie_expiration_option();
 
         add_action('plugins_loaded',function (){
             $this->extraOptions = apply_filters("ifso_extra_settings_options",new \StdClass());
@@ -372,6 +377,17 @@ class PluginSettingsService {
         return $option;
     }
 
+    private function create_analytics_cookie_expiration_option(){
+        $default = 0;
+        $postName = 'ifso_settings_cookie_expiration';
+        $option = new IfSoSettingsNumberOption(
+            self::ANALYTICS_COOKIE_EXPIRATION,
+            $default,
+            $postName
+        );
+        return $option;
+    }
+
 	public static function get_instance() {
 		if ( NULL == self::$instance )
 			self::$instance = new PluginSettingsService();
@@ -408,6 +424,7 @@ class PluginSettingsService {
             $this->enableVisitCount->apply($_POST);
             $this->renderStandaloneViaAjax->apply($_POST);
             $this->showABTestingNotice->apply($_POST);
+            $this->analyticsCookieExpiration->apply($_POST);
 
             foreach ($this->extraOptions as $extension){
                 foreach($extension as $option){
@@ -586,7 +603,9 @@ class IfSoSettingsYesNoOption extends IfSoSettingsOptionBase {
 
             $this->set($value);
         }
-
+        public function get(){
+            return (int) parent::get();
+        }
         public function validate( $optionValue ) {
             return is_numeric($optionValue);
         }
@@ -608,6 +627,10 @@ class IfSoSettingsYesNoOption extends IfSoSettingsOptionBase {
         public function apply($post){
             $post = wp_unslash($post);
             parent::apply($post);
+        }
+
+        public function get(){
+            return IfSoSettingsOptionBase::get();
         }
 
         public function validate( $optionValue ) {
