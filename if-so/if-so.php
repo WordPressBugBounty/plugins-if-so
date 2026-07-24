@@ -16,7 +16,7 @@ ob_start();
  * Plugin Name:       If-So
  * Plugin URI:        https://www.if-so.com/?utm_source=Plugin&utm_medium=PluginsPage&utm_campaign=pluginURI
  * Description:       Display different content to different visitors. Simple to use, just select a condition and set content accordingly.
- * Version:           1.10
+ * Version:           1.10.0.1
  * Author:            If So Plugin
  * Author URI:        https://www.if-so.com/?utm_source=Plugin&utm_medium=PluginsPage&utm_campaign=authorURI
  * License:           GPL-2.0+

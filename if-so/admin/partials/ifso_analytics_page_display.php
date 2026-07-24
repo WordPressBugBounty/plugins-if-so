@@ -50,7 +50,7 @@ $get_hamburger_menu = function($view_url,$edit_url,$inject_menu_content='')use($
 
 function get_conversion_meta_el_attributes($conv){
     $conv_urls_json = json_encode(AnalyticsService::get_instance()->records->get_conversion_urls($conv->id));
-    $once_per_attr = !empty($conv->once_per) ? "once_per='{$conv->once_per}'" : '';
+    $once_per_attr = isset($conv->once_per) ? "once_per='{$conv->once_per}'" : '';
     $trigger_filter_attr = !empty($conv->trigger_filter) ? "data-trigger_filter='{$conv->trigger_filter}'" : '';
     return "data-urls='{$conv_urls_json}' conv_id='{$conv->id}' conv_name='{$conv->name}' {$once_per_attr} {$trigger_filter_attr}";
 }
@@ -127,9 +127,9 @@ function conversion_trigger_filter_allows_trigger($conv,$tid){
 <?php if(!$specific_trigger_mode){ ?>
     <p class="analytics_report_description">
         <input type="radio" onchange="location.href='<?php echo $switch_report_type_url;?>'" name="report_type_switch"<?php if($report_type==='conversions')echo 'checked';?>>
-        <label><b>Conversion report</b>- Break down each conversion goal by trigger and version</label><br>
+        <label><b>Conversion report</b> - Break down each conversion goal by trigger and version</label><br>
         <input type="radio" onchange="location.href='<?php echo $switch_report_type_url;?>'" name="report_type_switch"<?php if($report_type!=='conversions')echo 'checked';?>>
-        <label><b>Trigger report</b>- See how each trigger performs across all conversion goals</label>
+        <label><b>Trigger report</b> - See how each trigger performs across all conversion goals</label>
     </p>
 <?php } ?>
     <form method="post" class="report-controls">
@@ -137,10 +137,10 @@ function conversion_trigger_filter_allows_trigger($conv,$tid){
         <div class="report-controls-mainrow">
             <span class="report-controls-date">
                 <label for="start_date">Start Date</label>
-                <input required type="date" value="<?php echo $start_date; ?>" name="start_date">
+                <input required type="date" value="<?php echo esc_attr($start_date); ?>" name="start_date">
                 <img style="height:10px;" src="<?php echo IFSO_PLUGIN_DIR_URL . '/admin/images/right_arrow_long.svg';?>">
                 <label for="end_date">End Date</label>
-                <input required type="date" name="end_date" max="<?php echo $today; ?>" value="<?php echo $end_date; ?>" >
+                <input required type="date" name="end_date" max="<?php echo esc_attr($today); ?>" value="<?php echo esc_attr($end_date); ?>" >
             </span>
             <div class="trigger-filter-wrap">
                 <img src="<?php echo IFSO_PLUGIN_DIR_URL . '/admin/images/filter.svg';?>">

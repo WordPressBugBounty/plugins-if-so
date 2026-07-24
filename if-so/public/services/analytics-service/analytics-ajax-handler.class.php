@@ -8,7 +8,7 @@
  **/
 namespace IfSo\PublicFace\Services\AnalyticsService;
 
-require_once('analytics-service.class.php');
+require_once(__DIR__ . '/analytics-service.class.php');
 
 
 class AnalyticsAjaxHandler {
@@ -28,31 +28,30 @@ class AnalyticsAjaxHandler {
 
     public function handle(){
         //HANDLE IT
-        $allowed = ((current_user_can('administrator') || current_user_can('editor')) || (!empty($_REQUEST['page_url']) && strpos($_REQUEST['page_url'], admin_url()) === false));
-        $refcheck = (!empty($_REQUEST['_ifsononce']) && check_admin_referer('ifso-admin-nonce','_ifsononce')) || (!empty($_REQUEST['nonce']) && check_ajax_referer( 'ifso-nonce', 'nonce' ));
-        
-        if($allowed && $refcheck && wp_doing_ajax() && isset($_REQUEST['an_action'])  && isset($_REQUEST['postid'])){
-            $res = null;
-            switch ($_REQUEST['an_action']){
-                case 'getTriggerReport':
-                    $res = $this->get_trigger_report();
-                    break;
-                case 'resetFields':
-                    $this->reset_fields();
-                    if(!empty($_REQUEST['rdrback'])){wp_redirect(wp_get_referer());die();}
-                    break;
-                case 'doConversion':
-                    $this->do_conversion();
-                    break;
-                case 'ajaxViews':
-                    $this->ajax_views();
-                    break;
-                case 'resetAllAnalytics':
-                    $this->reset_all_triggers_analytics();
-                    break;
+        $allowed = (current_user_can('administrator') || current_user_can('editor'));
+        $refcheck = (!empty($_REQUEST['_ifsononce']) && check_admin_referer('ifso-admin-nonce','_ifsononce'));
+        $allowed_noadmin = (!empty($_REQUEST['page_url']) && strpos($_REQUEST['page_url'], admin_url()) === false);
+        $refcheck_noadmin = (!empty($_REQUEST['nonce']) && check_ajax_referer( 'ifso-nonce', 'nonce' ));
+        if(wp_doing_ajax() && isset($_REQUEST['an_action'])  && isset($_REQUEST['postid'])){
+            if(($allowed && $refcheck) || ($allowed_noadmin && $refcheck_noadmin)){
+                if($_REQUEST['an_action']==='doConversion') $this->do_conversion();
+                if($_REQUEST['an_action']==='ajaxViews') $this->ajax_views();
+                if($allowed && $refcheck){
+                    switch ($_REQUEST['an_action']){
+                        case 'getTriggerReport':
+                            $res = $this->get_trigger_report();
+                            if(!empty($res)) echo json_encode($res);
+                            break;
+                        case 'resetFields':
+                            $this->reset_fields();
+                            if(!empty($_REQUEST['rdrback'])){wp_redirect(wp_get_referer());die();}
+                            break;
+                        case 'resetAllAnalytics':
+                            $this->reset_all_triggers_analytics();
+                            break;
+                    }
+                }
             }
-            if(!empty($res))
-                echo json_encode($res);
         }
         wp_die();
     }
@@ -60,7 +59,6 @@ class AnalyticsAjaxHandler {
     public function public_handle(){
         //HANDLE IT
         if(check_ajax_referer( 'ifso-nonce', 'nonce' ) && wp_doing_ajax() && isset($_REQUEST['an_action'])){
-            $res = null;
             switch ($_REQUEST['an_action']){
                 case 'doConversion':
                     $this->do_conversion();
@@ -69,15 +67,13 @@ class AnalyticsAjaxHandler {
                     $this->ajax_views();
                     break;
             }
-            if(!empty($res))
-                echo json_encode($res);
         }
         wp_die();
     }
 
     public function conversions_handle(){
         $allowed = ((current_user_can('administrator') || current_user_can('editor')));
-        $refcheck = (!empty($_REQUEST['_ifsononce']) && check_admin_referer('ifso-admin-nonce','_ifsononce')) || (!empty($_REQUEST['nonce']) && check_ajax_referer( 'ifso-nonce', 'nonce' ));
+        $refcheck = (!empty($_REQUEST['_ifsononce']) && check_admin_referer('ifso-admin-nonce','_ifsononce'));
         if($allowed && $refcheck && wp_doing_ajax() && isset($_REQUEST['ifso_conversion_action'])){
             switch ($_REQUEST['ifso_conversion_action']) {
                 case 'delete_conversion':
@@ -124,7 +120,7 @@ class AnalyticsAjaxHandler {
         else
             $conv_id = $this->analytics_service->records->create_conversion($_REQUEST['conversion_name']);
         if(isset($_REQUEST['conversion_url_arr'])) $set_conversion_urls($conv_id,$_REQUEST['conversion_url_arr']);
-        $extra_fields = [];
+        $extra_fields = ['once_per'=>null];
         if(!empty($_REQUEST['conversion_once_per']) || $_REQUEST['conversion_once_per']==='0')
             $extra_fields['once_per'] = $_REQUEST['conversion_once_per'];
         if(!empty($_REQUEST['conversion_trigger_filter'])){

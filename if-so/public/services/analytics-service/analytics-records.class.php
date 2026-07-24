@@ -105,7 +105,7 @@ class AnalyticsRecords{
 
     public function get_conversion_events_counts_by_trigger($conv_type=null,$trigger_id=null, $start_time=null, $end_time=null){
         $datetime_condition = $this->make_datetime_condition_sql($start_time,$end_time);
-        $trigger_id_condition = $trigger_id===null ? '' : "trigger_id={$trigger_id}";
+        $trigger_id_condition = $trigger_id===null ? '' : $this->wpdb->prepare('trigger_id=%d',[$trigger_id]);
         if($conv_type===null) $conv_type_condition = '';
         else $conv_type_condition = $conv_type===0 ? 'conversion_type IS NULL' : $this->wpdb->prepare('conversion_type=%s',[$conv_type]);
         $condition_sql = $conv_type_condition . (!empty($conv_type_condition) && !empty($datetime_condition) ? ' AND ' : '') . $datetime_condition;
@@ -163,7 +163,8 @@ class AnalyticsRecords{
     }
 
     private function make_datetime_condition_sql($start_time,$end_time){
-        return $start_time!==null && $end_time!==null ? " datetime BETWEEN \"{$start_time}\" AND \"{$end_time} 23:59:59\"" : "";
+        return $start_time!==null && $end_time!==null ?
+            $this->wpdb->prepare(" datetime BETWEEN %s AND %s",[$start_time,"{$end_time} 23:59:59"]) : "";
     }
 
     public function make_trigger_conversion_report($tid){

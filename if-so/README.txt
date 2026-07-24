@@ -181,6 +181,10 @@ Yes. If-So operates independently of your theme architecture. It works flawlessl
 
 == Changelog ==
 
+= 1.10.0.1 =
+* UI & Microcopy Improvements
+* Bug Fixes
+
 = 1.10 =
 * **New: Built-In Analytics Dashboard** – Define custom conversion goals, track which trigger versions are driving results, and measure performance across all your A/B tests and personalization campaigns — directly inside WordPress, no third-party tools required. [Learn more](https://www.if-so.com/ab-testing-wordpress/analytics/?utm_source=wordpress&utm_medium=readme&utm_campaign=v2&utm_content=analytics)
 * **New: A/B Testing Analytics** – The analytics dashboard is built for A/B testing. Two report views let you analyze results by conversion goal or by trigger, with views, conversions, and conversion rate broken down per version. [Learn more about A/B Testing](https://www.if-so.com/ab-testing-wordpress/?utm_source=wordpress&utm_medium=readme&utm_campaign=v2&utm_content=abt)
