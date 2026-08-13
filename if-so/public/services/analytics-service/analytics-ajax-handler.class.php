@@ -195,7 +195,6 @@ class AnalyticsAjaxHandler {
                 }
             }
         }
-        \IfSo\PublicFace\Helpers\CookieConsent::get_instance()->set_cookie($this->analytics_service->currently_viewing_cookie_name,'',0,'/');
     }
 
     private function reset_all_triggers_analytics(){

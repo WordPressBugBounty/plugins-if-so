@@ -16,37 +16,39 @@ require_once (__DIR__ . '/analytics-records.class.php');
 
 class AnalyticsService {
     private static $instance;
-
     public $last_viewed_version_cookie_name = '_ifso_last_viewed';
-
-    public $currently_viewing_cookie_name = 'ifso_viewing_triggers';
-
     public $records;
-
     private static $viewed_triggers =[];
-
     private static $already_had_conversion = [];
-
     public $isOn = true;
-
     public $useAjax = true;
-
     public $allow_counting = true;   //Allow counting of current user's views/conversions
-
     protected $settings_service;
 
     private function __construct(){
         $this->settings_service = \IfSo\Services\PluginSettingsService\PluginSettingsService::get_instance();
         $this->isOn = !$this->settings_service->disableAnalytics->get();
         if(defined('REST_REQUEST') && REST_REQUEST ) $this->isOn =  false;   //Disable analytics if its a request to the wp REST API (to avoid gutenberg from activating analytics)
-        $this->useAjax = $this->settings_service->ajaxAnalytics->get();
+        $this->useAjax = !!$this->settings_service->ajaxAnalytics->get();
         $this->records = new AnalyticsRecords();
-
         $th = $this;
-        add_action('plugins_loaded',function() use (&$th){
-            if (current_user_can('administrator')) $th->allow_counting = false;   //Disalow counting for administrators
+        $cookieConsent = CookieConsent::get_instance();
+        if($this->settings_service->disableAnalyticsOnRejectCookies->get() &&
+            (!$cookieConsent->is_category_allowed('preferences') || !$cookieConsent->is_category_allowed('statistics')))
+            $this->isOn = false;
+        add_action('plugins_loaded',function() use (&$th){   //Disalow counting for administrators
+            if (current_user_can('administrator')) $th->allow_counting = false;
         });
-
+        add_action('current_screen',function() use (&$th){
+            if(get_current_screen()->is_block_editor()) $th->isOn = false;
+        });
+        add_action('transition_post_status',function() use (&$th){ $th->isOn = false; });
+        $disable_on_elementor_edit = function() use (&$th){
+            if($th->isOn && \Elementor\Plugin::$instance->editor->is_edit_mode() || \Elementor\Plugin::$instance->preview->is_preview_mode())
+                $th->isOn = false;
+        };
+        add_action('elementor/preview/init',$disable_on_elementor_edit);
+        add_action('elementor/widget/before_render_content',$disable_on_elementor_edit);
         add_action('wp_footer',[$this,'conversions_if_url_is_required']);
     }
 
@@ -138,10 +140,7 @@ class AnalyticsService {
             $conversions = $this->records->get_url_conversions($current_url,!empty($parsed_current_url['query']));
             if(!empty($conversions)){
                 foreach($conversions as $conversion){
-                    $old_use_ajax_val = $this->useAjax;
-                    $this->useAjax = true;
                     echo do_shortcode("[ifso_conversion conversion='{$conversion->conv_id}']'");
-                    $this->useAjax = $old_use_ajax_val;
                 }
             }
         }
@@ -154,10 +153,7 @@ class AnalyticsService {
                 $is_recurrence_view = ($rule_data->get_rendering_recurrence_version()!==null);
                 self::$viewed_triggers[$tid] = ['id'=>$rule_data->get_version_index(),'uid'=>$rule_data->get_version_uid(),'recurrence'=>$is_recurrence_view];
                 $this->set_last_viewed_version_cookie($tid,$rule_data->get_version_index(),$rule_data->get_version_uid());
-                if(!$this->useAjax)
-                    $this->records->create_view_event($tid,$rule_data->get_version_uid(),$is_recurrence_view);
-                else
-                    CookieConsent::get_instance()->set_cookie($this->currently_viewing_cookie_name,json_encode(self::$viewed_triggers),0,'/');
+                $this->records->create_view_event($tid,$rule_data->get_version_uid(),$is_recurrence_view);
             }
         }
     }
@@ -168,10 +164,7 @@ class AnalyticsService {
                 $tid = $rule_data->get_trigger_id();
                 self::$viewed_triggers[$tid] = ['id'=>'default','uid'=>$rule_data->get_version_uid(),'recurrence'=>false];
                 $this->set_last_viewed_version_cookie($tid, 'default','default');
-                if(!$this->useAjax)
-                    $this->records->create_view_event($tid,'default',false);
-                else
-                    CookieConsent::get_instance()->set_cookie($this->currently_viewing_cookie_name,json_encode(self::$viewed_triggers),0,'/');
+                $this->records->create_view_event($tid,'default',false);
             }
         }
     }

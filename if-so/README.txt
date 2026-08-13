@@ -4,12 +4,12 @@ Donate link: https://www.if-so.com/?utm_source=wordpress&utm_medium=readme&utm_c
 Tags: elementor conditions, geolocation, display conditions, A/B Testing, conditional logic
 Requires at least: 5.6
 Tested up to: 7.0.2
-Stable tag: 1.10
+Stable tag: 1.10.1
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
 
-The ultimate solution for personalization, A/B testing, and geolocation — easy to use with Elementor, Gutenberg, and all page builders.
+Personalization, A/B testing, and geolocation — easy to use with Elementor, Gutenberg, and all page builders.
 
 == Description ==
 
@@ -180,6 +180,12 @@ Yes. If-So operates independently of your theme architecture. It works flawlessl
 
 
 == Changelog ==
+
+= 1.10.1 =
+* Built-in Analytics & Cookie consent improvements: Added an option to prevent tracking views before consent is granted
+* UI & Microcopy Improvements
+* Bug Fixes
+
 
 = 1.10.0.1 =
 * UI & Microcopy Improvements

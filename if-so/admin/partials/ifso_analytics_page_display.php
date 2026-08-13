@@ -287,7 +287,7 @@ function conversion_trigger_filter_allows_trigger($conv,$tid){
                             foreach($displayed_conversions as $cid){
                                 $convNumber = !empty($vdata['conversions'][$cid]) ? $vdata['conversions'][$cid] : 0;
                                 $cRate = calculate_conversion_rate($convNumber,$views);
-                                echo "<td>{$convNumber}</td><td>{$cRate}</td>";
+                                echo "<td>{$convNumber}</td><td>{$cRate}%</td>";
                             }
                             echo "</tr>";
                         }

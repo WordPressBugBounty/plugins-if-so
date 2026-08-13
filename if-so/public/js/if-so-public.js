@@ -284,7 +284,6 @@ ifso_scope.DispatchAjaxContentLoaded  =  function () {document.dispatchEvent(aja
 
 		if(isAnalyticsOn){	//Passed from if-so public
 			ifso_public_instance.initialize_last_viewed_globals();
-			if(ifso_public_instance.getCookie('ifso_viewing_triggers')) ifso_public_instance.sendAjaxReq('ifso_analytics_req',{postid:666,an_action:'ajaxViews',data:ifso_public_instance.getCookie('ifso_viewing_triggers') });
 
 			if($('.ifso-conversion-complete').length>0){
 				var conversions = [];

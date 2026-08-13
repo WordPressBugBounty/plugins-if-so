@@ -19,7 +19,7 @@ class PluginSettingsService {
 	const ALLOW_SHORTCODES =
 		'ifso_settings_pages_allow_shortcodes_option';
     const AJAX_ANALYTICS =
-        'ifso_settings_pages_analytics_with_ajax_option';
+        'ifso_settings_pages_analytics_use_ajax_option';
     const DISABLE_ANALYTICS =
         'ifso_settings_pages_analytics_enabled_option';
     const USER_GROUP_LIMIT =
@@ -52,6 +52,8 @@ class PluginSettingsService {
         'ifso_settings_show_ab_testing_notice_option';
     const ANALYTICS_COOKIE_EXPIRATION =
         'ifso_settings_cookie_expiration_option';
+    const DISABLE_ANALYTICS_ON_REJECT_COOKIES =
+        'ifso_settings_disable_analytics_on_reject_cookie_option';
 
 	private static $instance;
 
@@ -79,6 +81,7 @@ class PluginSettingsService {
     public $renderStandaloneViaAjax;
     public $showABTestingNotice;
     public $analyticsCookieExpiration;
+    public $disableAnalyticsOnRejectCookies;
 
 	private function __construct() {
 		$this->pagesVisitedOption = 
@@ -127,6 +130,8 @@ class PluginSettingsService {
             $this->create_show_abtesting_notice_option();
         $this->analyticsCookieExpiration =
             $this->create_analytics_cookie_expiration_option();
+        $this->disableAnalyticsOnRejectCookies =
+            $this->create_disable_analytics_on_reject_cookie_option();
 
         add_action('plugins_loaded',function (){
             $this->extraOptions = apply_filters("ifso_extra_settings_options",new \StdClass());
@@ -136,45 +141,25 @@ class PluginSettingsService {
 	private function remove_visits_cookie_option() {
 		$default = true;
 		$postName = 'ifso_settings_pages_remove_visits_cookie';
-		$option = new IfSoSettingsYesNoOption(
-				self::REMOVE_COOKIE,
-				$default,
-				$postName
-			);
-		return $option;	
+		return new IfSoSettingsYesNoOption(self::REMOVE_COOKIE,$default,$postName);
 	}
 
 	private function create_remove_auto_p_tag_option() {
 		$default = true;
 		$postName = 'ifso_settings_pages_remove_auto_p_tag';
-		$option = new IfSoSettingsYesNoOption(
-				self::REMOVE_AUTO_P_TAG_OPTION,
-				$default,
-				$postName
-			);
-		return $option;	
+        return new IfSoSettingsYesNoOption(self::REMOVE_AUTO_P_TAG_OPTION,$default,$postName);
 	}
 
 	private function create_apply_the_content_filter_option() {
 		$default = true;
 		$postName = 'ifso_settings_pages_apply_the_content_filter';
-		$option = new IfSoSettingsYesNoOption(
-				self::APPLY_THE_CONTENT_FILTER_OPTION,
-				$default,
-				$postName
-			);
-		return $option;	
+        return new IfSoSettingsYesNoOption(self::APPLY_THE_CONTENT_FILTER_OPTION,$default,$postName);
 	}
 
 	private function create_remove_plugin_data_option() {
 		$default = false;
 		$postName = 'ifso_settings_pages_remove_data_uninstall';
-		$option = new IfSoSettingsYesNoOption(
-				self::REMOVE_PLUGIN_DATA_OPTION,
-				$default,
-				$postName
-			);
-		return $option;
+        return new IfSoSettingsYesNoOption(self::REMOVE_PLUGIN_DATA_OPTION,$default,$postName);
 	}
 
 	private function create_pages_visited_option() {
@@ -182,210 +167,122 @@ class PluginSettingsService {
 			'duration_type' => 'weeks',
 			'duration_value' => 2
 		);
-		$option = new IfSoSettingsPagesVisitedOption(
-				self::PAGES_VISITED_OPTION,
-				$default
-			);
-		return $option;
+        return new IfSoSettingsPagesVisitedOption(self::PAGES_VISITED_OPTION,$default);
 	}
 
 	private function create_allow_shortcodes_option() {
 		$default = false;
 		$postName = 'ifso_settings_pages_allow_shortcodes';
-		$option = new IfSoSettingsYesNoOption(
-				self::ALLOW_SHORTCODES,
-				$default,
-				$postName
-			);
-		return $option;	
+        return new IfSoSettingsYesNoOption(self::ALLOW_SHORTCODES,$default,$postName);
 	}
 
     private function create_disable_analytics_option() {
         $default = false;
         $postName = 'ifso_settings_pages_analytics_disabled';
-        $option = new IfSoSettingsYesNoOption(
-            self::DISABLE_ANALYTICS,
-            $default,
-            $postName
-        );
-        return $option;
+        return new IfSoSettingsYesNoOption(self::DISABLE_ANALYTICS,$default,$postName);
     }
 
     private function create_ajax_analytics_option() {
-        $default = false;
-        $postName = 'ifso_settings_pages_analytics_with_ajax';
-        $option = new IfSoSettingsYesNoOption(
-            self::AJAX_ANALYTICS,
-            $default,
-            $postName
-        );
-        return $option;
+        $default = true;
+        $postName = 'ifso_settings_pages_analytics_use_ajax';
+        return new IfSoSettingsYesNoOption(self::AJAX_ANALYTICS,$default,$postName);
     }
 
     private function create_user_group_limit_option(){
         $default = 5;
         $postName = 'ifso_settings_pages_user_group_limit';
-        $option = new IfSoSettingsNumberOption(
-            self::USER_GROUP_LIMIT,
-            $default,
-            $postName
-        );
-        return $option;
+        return new IfSoSettingsNumberOption(self::USER_GROUP_LIMIT, $default, $postName);
     }
 
     private function create_groups_cookie_lifespan_option(){
         $default = 365;
         $postName = 'ifso_settings_pages_groups_cookie_lifespan';
-        $option = new IfSoSettingsNumberOption(
-            self::GROUPS_COOKIE_LIFESPAN,
-            $default,
-            $postName
-        );
-        return $option;
+        return new IfSoSettingsNumberOption(self::GROUPS_COOKIE_LIFESPAN,$default,$postName);
     }
 
     private function create_render_triggers_via_ajax_option(){
         $default = false;
         $postName = 'ifso_settings_page_render_triggers_via_ajax';
-        $option = new IfSoSettingsYesNoOption(
-            self::RENDER_TRIGGERS_VIA_AJAX,
-            $default,
-            $postName
-        );
-        return $option;
+        return new IfSoSettingsYesNoOption(self::RENDER_TRIGGERS_VIA_AJAX,$default,$postName);
     }
 
     private function create_prevent_nocache_option(){
         $default = true;
         $postName ='ifso_settings_prevent_nocache_headers';
-        $option = new IfSoSettingsYesNoOption(
-            self::PREVENT_NOCACHE_HEADERS,
-            $default,
-            $postName
-        );
-        return $option;
+        return new IfSoSettingsYesNoOption(self::PREVENT_NOCACHE_HEADERS,$default,$postName);
     }
 
     private function create_force_do_shortcode_option(){
         $default = true;
         $postName ='ifso_settings_force_do_shortcode';
-        $option = new IfSoSettingsYesNoOption(
-            self::FORCE_DO_SHORTCODE,
-            $default,
-            $postName
-        );
-        return $option;
+        return new IfSoSettingsYesNoOption(self::FORCE_DO_SHORTCODE,$default,$postName);
     }
 
     private function create_disable_sessions_option(){
 	    $default = false;
 	    $postName = 'ifso_settings_disable_sessions';
-	    $option = new IfSoSettingsYesNoOption(
-	        self::DISABLE_SESSIONS,
-            $default,
-            $postName
-        );
-	    return $option;
+        return new IfSoSettingsYesNoOption(self::DISABLE_SESSIONS,$default,$postName);
     }
 
     private function create_schedule_interval_option(){
 	    $default = 60;
 	    $postName = 'ifso_settings_schedule_interval';
-        $option = new IfSoSettingsNumberOption(
-            self::SCHEDULE_INTERVAL,
-            $default,
-            $postName
-        );
-        return $option;
+        return new IfSoSettingsNumberOption(self::SCHEDULE_INTERVAL,$default,$postName);
     }
 
     private function create_triggers_visited_on_option(){
 	    $default = false;
 	    $postName = 'ifso_settings_triggers_visited_on';
-        $option = new IfSoSettingsYesNoOption(
-            self::TRIGGERS_VISITED_ON,
-            $default,
-            $postName
-        );
-        return $option;
+        return new IfSoSettingsYesNoOption(self::TRIGGERS_VISITED_ON,$default,$postName);
     }
 
     private function create_triggers_visited_number_option(){
         $default = 100;
         $postName = 'ifso_settings_triggers_visited_number';
-        $option = new IfSoSettingsNumberOption(
-            self::TRIGGERS_VISITED_NUMBER,
-            $default,
-            $postName
-        );
-        return $option;
+        return new IfSoSettingsNumberOption(self::TRIGGERS_VISITED_NUMBER,$default,$postName);
     }
 
     private function create_ajax_loader_type_option(){
 	    $default = 0;
 	    $postName = 'ifso_settings_ajax_loader_animation_type';
-        $option = new IfSoSettingsStringOption(
-            self::AJAX_LOADER_ANIMATION_TYPE,
-            $default,
-            $postName
-        );
-        return $option;
+        return new IfSoSettingsStringOption(self::AJAX_LOADER_ANIMATION_TYPE,$default,$postName);
     }
 
     private function create_tmce_force_wrapper_option(){
 	    $default = false;
 	    $postName = 'ifso_settings_tmce_force_wrapper';
-        $option = new IfSoSettingsYesNoOption(
-            self::TINYMCE_FORCE_WRAPPER,
-            $default,
-            $postName
-        );
-        return $option;
+        return new IfSoSettingsYesNoOption(self::TINYMCE_FORCE_WRAPPER,$default,$postName);
     }
 
     private function create_enable_visit_count_option(){
 	    $default  = true;
 	    $postName =  "ifso_settings_enable_visit_count";
-        $option = new IfSoSettingsYesNoOption(
-            self::ENABLE_VISIT_COUNT,
-            $default,
-            $postName
-        );
-        return  $option;
+        return new IfSoSettingsYesNoOption(self::ENABLE_VISIT_COUNT,$default,$postName);
     }
 
 
     private function create_render_standalone_via_ajax_option() {
         $default  = false;
         $postName =  "ifso_settings_render_standalone_via_ajax";
-        $option = new IfSoSettingsYesNoOption(
-            self::RENDER_STANDALONE_VIA_AJAX,
-            $default,
-            $postName
-        );
-        return  $option;
+        return new IfSoSettingsYesNoOption(self::RENDER_STANDALONE_VIA_AJAX,$default,$postName);
     }
 
     private function create_show_abtesting_notice_option() {
         $default = true;
         $postName = 'ifso_settings_show_ab_testing_notice';
-        $option = new IfSoSettingsYesNoOption(
-            self::SHOW_AB_TESTING_ADMIN_NOTICE,
-            $default,
-            $postName
-        );
-        return $option;
+        return new IfSoSettingsYesNoOption(self::SHOW_AB_TESTING_ADMIN_NOTICE,$default,$postName);
     }
 
     private function create_analytics_cookie_expiration_option(){
         $default = 0;
         $postName = 'ifso_settings_cookie_expiration';
-        $option = new IfSoSettingsNumberOption(
-            self::ANALYTICS_COOKIE_EXPIRATION,
-            $default,
-            $postName
-        );
-        return $option;
+        return new IfSoSettingsNumberOption(self::ANALYTICS_COOKIE_EXPIRATION,$default,$postName);
+    }
+
+    private function create_disable_analytics_on_reject_cookie_option(){
+        $default = false;
+        $postName = 'ifso_settings_disable_analytics_on_reject_cookie';
+        return new IfSoSettingsYesNoOption(self::DISABLE_ANALYTICS_ON_REJECT_COOKIES,$default,$postName);
     }
 
 	public static function get_instance() {
@@ -425,6 +322,7 @@ class PluginSettingsService {
             $this->renderStandaloneViaAjax->apply($_POST);
             $this->showABTestingNotice->apply($_POST);
             $this->analyticsCookieExpiration->apply($_POST);
+            $this->disableAnalyticsOnRejectCookies->apply($_POST);
 
             foreach ($this->extraOptions as $extension){
                 foreach($extension as $option){

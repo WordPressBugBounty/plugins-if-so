@@ -253,16 +253,19 @@ class ExtendedShortcodes {
         if(wp_doing_ajax() || !is_admin()){
             add_shortcode('ifso_conversion', function($atts) {
                 $analytics_service = AnalyticsService::get_instance();
-                $allowed_triggers = (isset($atts['triggers']) && strtolower($atts['triggers'])!='all') ? explode(',',$atts['triggers'])  : false;
+                $allowed_triggers = (isset($atts['triggers']) && strtolower($atts['triggers'])!=='all') ? explode(',',$atts['triggers'])  : false;
                 $disallowed_triggers = (isset($atts['exclude'])) ? explode(',',$atts['exclude'])  : [];
                 $conversion_type = (isset($atts['conversion'])) ? $atts['conversion'] : null;
+                $ajax = (isset($atts['ajax']) &&  in_array(strtolower($atts['ajax']),['yes','no'])) ?
+                    strtolower($atts['ajax'])!=='no' : $analytics_service->useAjax;
+                $ajax = apply_filters('ifso_conversion_use_ajax',$ajax,$conversion_type);
                 if(isset($atts['do_once_per'])){
                     $once_per_time = strtolower($atts['do_once_per']) === 'session' ? 0 : intval($atts['do_once_per']);
                     $name = !empty($atts['name']) ? esc_attr($atts['name']) : 'default-conversion';
                     $name = !$conversion_type!==null ?  $conversion_type : $name;
                 }
                 if($analytics_service->isOn && $analytics_service->allow_counting){
-                    if($analytics_service->useAjax){
+                    if($ajax){
                         $once_per_attrs = isset($once_per_time) ? "once_per_time='{$once_per_time}' ifso_name='{$name}'" : "";
                         $conversion_type_attr = !empty($conversion_type) ? "conversion_type='{$conversion_type}' " : '';
                         $el = "<div class='ifso-conversion-complete' {$conversion_type_attr} {$once_per_attrs} ".

@@ -24,7 +24,7 @@ class CookieConsent{
     private static $instance;
     private $cookie_types = [
         'necessary'=>[],
-        'statistics'=>['_ifso_last_viewed','ifso_viewing_triggers'],
+        'statistics'=>['_ifso_last_viewed'],
         'marketing'=>[],
         'preferences'=>['ifso_page_visits','ifso_recurrence_data','ifso_visit_counts','ifsoGroup','ifso_geo_data','ifso_viewed_triggers','ifso_group_name']
     ];
@@ -125,27 +125,29 @@ class CookieConsent{
         return $cookie_type;
     }
 
-    private function is_cookie_allowed($cname,$ctype=null){
+    public function is_category_allowed($category){
         $ret = true;
         if($this->cookie_consent_manager_type!==false){
-            $cookie_type = apply_filters('ifso_cookie_category',
-                ($ctype===null) ? $this->get_cookie_type($cname) : $ctype,$cname);
-            $cached_val = $this->get_cached_cookie_permission($cookie_type);
+            $cached_val = $this->get_cached_cookie_permission($category);
             if($cached_val!==null)
                 return $cached_val;
-
             if($this->cookie_consent_manager_type === 'cookiebot')
-                $ret = $this->cookiebot_is_category_allowed($cookie_type);
+                $ret = $this->cookiebot_is_category_allowed($category);
             elseif($this->cookie_consent_manager_type === 'complianz')
-                $ret = $this->complianz_is_category_allowed($cookie_type);
+                $ret = $this->complianz_is_category_allowed($category);
             elseif($this->cookie_consent_manager_type === 'hu-compliance')
-                $ret = $this->hu_compliance_is_category_allowed($cookie_type);
-            elseif($this->cookie_consent_manager_type==='custom')
-                $ret = apply_filters('ifso_is_cookie_category_allowed',$cookie_type);
-
-            $this->cache_cookie_permission($cookie_type,$ret);
+                $ret = $this->hu_compliance_is_category_allowed($category);
+            elseif($this->cookie_consent_manager_type === 'custom')
+                $ret = apply_filters('ifso_is_cookie_category_allowed',$category);
+            $this->cache_cookie_permission($category,$ret);
         }
         return $ret;
+    }
+
+    public function is_cookie_allowed($cname,$ctype=null){
+        $cookie_type = apply_filters('ifso_cookie_category',
+            ($ctype===null) ? $this->get_cookie_type($cname) : $ctype,$cname);
+        return $this->is_category_allowed($cookie_type);
     }
 
     public function set_cookie($name,$value='',$expires=0,$path='/',$type=null){

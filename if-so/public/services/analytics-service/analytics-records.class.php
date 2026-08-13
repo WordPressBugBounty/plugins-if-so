@@ -131,6 +131,7 @@ class AnalyticsRecords{
     }
 
     public function create_view_event($trigger_id,$version_uid,$isRecurrence){
+        if(empty($trigger_id) || empty($version_uid)) return;
         $this->wpdb->insert($this->views_events_table_name,['trigger_id'=>$trigger_id,'version_uid'=>$version_uid,'is_recurrence'=>$isRecurrence]);
     }
 

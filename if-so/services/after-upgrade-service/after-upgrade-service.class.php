@@ -130,6 +130,7 @@ class AfterUpgradeService {
         $start_time = microtime(true);
         $trigger_rules_meta_key = 'ifso_trigger_rules';
         $default_analytics_meta_key = 'ifso_default_analytics';
+        $needs_rerun = false;
         $triggers_data = $wpdb->get_results("SELECT post_id, meta_value FROM $wpdb->postmeta WHERE meta_key = '{$trigger_rules_meta_key}'" );
         $default_analytics_data = $wpdb->get_results("SELECT post_id, meta_value FROM $wpdb->postmeta WHERE meta_key = '{$default_analytics_meta_key}'",OBJECT_K );
         foreach ($triggers_data as $trigger_data) {
@@ -138,6 +139,7 @@ class AfterUpgradeService {
             $need_update = false;
             $tdata = json_decode($trigger_data->meta_value);
             $pid = $trigger_data->post_id;
+            $max_versions_per_pass = apply_filters('ifso_analytics_import_max_versions_per_pass',25000);
             $add_default_data = (!empty($default_analytics_data[$pid]) && !empty(json_decode($default_analytics_data[$pid]->meta_value)));
             if($add_default_data)
                 $tdata[] = (object) array_merge(['version_uid'=>'default'],json_decode($default_analytics_data[$pid]->meta_value,true));
@@ -154,28 +156,49 @@ class AfterUpgradeService {
                         $need_update = true;
                     }
                     if(!empty($vdata->views)){
-                        for($i=0;$i<$vdata->views;$i++)
+                        $create_views_number = min($vdata->views,$max_versions_per_pass);
+                        for($i=0;$i<$create_views_number;$i++)
                             $views_import[] = ['trigger_id'=>$pid,'version_uid'=>$vdata->version_uid];
-                        unset($vdata->views);
+                        if($create_views_number < $vdata->views){
+                            $vdata->views = $vdata->views - $create_views_number;
+                            $needs_rerun = true;
+                        }
+                        else unset($vdata->views);
                         $need_update = true;
                     }
                     if(!empty($vdata->recurrence_views)){
-                        for($i=0;$i<$vdata->recurrence_views;$i++)
+                        $create_views_number = min($vdata->recurrence_views,$max_versions_per_pass);
+                        for($i=0;$i<$create_views_number;$i++)
                             $views_import[] = ['trigger_id'=>$pid,'version_uid'=>$vdata->version_uid,'is_recurrence'=>true];
-                        unset($vdata->recurrence_views);
+                        if($create_views_number < $vdata->recurrence_views){
+                            $vdata->recurrence_views = $vdata->recurrence_views - $create_views_number;
+                            $needs_rerun = true;
+                        }
+                        else unset($vdata->recurrence_views);
                         $need_update = true;
                     }
                 }
-                if($add_default_data) unset($tdata[count($tdata)-1]);
+                if($add_default_data){
+                    $key_default = count($tdata)-1;
+                    if(isset($tdata[$key_default]->views) || isset($tdata[$key_default]->recurrence_views)) {
+                        $new_default_data = $tdata[$key_default];
+                        unset($new_default_data->version_uid);
+                    }
+                    unset($tdata[$key_default]);
+                }
                 if($need_update)
                     $wpdb->update($wpdb->postmeta,['meta_value'=>json_encode($tdata)],['post_id'=>$pid,'meta_key'=>$trigger_rules_meta_key]);
                 \IfSo\PublicFace\Services\AnalyticsService\AnalyticsService::get_instance()->records->import_events($convs_import,true);
                 \IfSo\PublicFace\Services\AnalyticsService\AnalyticsService::get_instance()->records->import_events($views_import,false);
-                $wpdb->delete($wpdb->postmeta,['meta_key'=>$default_analytics_meta_key,'post_id'=>$pid]);
+                if(!empty($new_default_data))
+                    $wpdb->update($wpdb->postmeta,['meta_value'=>json_encode($new_default_data)],['meta_key'=>$default_analytics_meta_key,'post_id'=>$pid]);
+                else
+                    $wpdb->delete($wpdb->postmeta,['meta_key'=>$default_analytics_meta_key,'post_id'=>$pid]);
+                $new_default_data = null;
             }
-            if(microtime(true) - $start_time >= $max_exec_time) return false;
+            if(microtime(true) - $start_time >= apply_filters('ifso_analytics_import_max_exec_time',$max_exec_time)) return false;
         }
-        return true;
+        return (!$needs_rerun);
     }
 
 }

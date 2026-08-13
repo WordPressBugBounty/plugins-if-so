@@ -39,6 +39,7 @@
     $renderStandaloneViaAjax = $settingsServiceInstance->renderStandaloneViaAjax->get();
     $showABTestingNotice = $settingsServiceInstance->showABTestingNotice->get();
     $analyticsCookieExpiration = $settingsServiceInstance->analyticsCookieExpiration->get();
+    $disableAnalyticsOnRejectCookie = $settingsServiceInstance->disableAnalyticsOnRejectCookies->get();
 ?>
 <style>
     .ifso-settings-form .form-table tbody tr[valign] td+td{
@@ -220,15 +221,29 @@
                         </tr>
                         <tr valign="top">
                             <td class="ifso-settings-td" scope="row" valign="baseline">
-                                <b><?php _e('Use Ajax for analytics calls', 'if-so'); ?></b>
+                                <b><?php _e('Require cookie consent for analytics view tracking', 'if-so'); ?></b>
+                            </td>
+                            <td valign="baseline">
+                                <input
+                                    type="checkbox"
+                                    <?php echo ($disableAnalyticsOnRejectCookie ? "CHECKED" : ""); ?>
+                                    name="ifso_settings_disable_analytics_on_reject_cookie"
+                                    class="ifso_settings_page_option" />
+                                <i><?php _e('Check this box if you are using one of the supported cookie consent plugins and want to prevent If-So from counting version views before cookie consent has been granted.', 'if-so'); ?>
+                                <?php _e('This option is suggested if you are using If-So for A/B testing, as it improves the reliability of the results.');?> <a href="https://www.if-so.com/faq-items/cookie-compliance-compatiblity/?utm_source=Plugin&utm_medium=settings&utm_campaign=analytics" target="_blank">Learn more.</a></i>
+                            </td>
+                        </tr>
+                        <tr valign="top">
+                            <td class="ifso-settings-td" scope="row" valign="baseline">
+                                <b><?php _e('Use Ajax for conversion tracking', 'if-so'); ?></b>
                             </td>
                             <td valign="baseline">
                                 <input
                                     type="checkbox"
                                     <?php echo ($ajaxAnalytics ? "CHECKED" : ""); ?>
-                                    name="ifso_settings_pages_analytics_with_ajax"
+                                    name="ifso_settings_pages_analytics_use_ajax"
                                     class="ifso_settings_page_option" />
-                                <i><?php _e('When this box is checked data collection will be performed using Ajax. Uncheck the box to perform collection during the rendering of the page. Keep this box checked if you are using the Gutenberg editor.', 'if-so'); ?> <a href="https://www.if-so.com/help/documentation/analytics/?utm_source=Plugin&utm_medium=settings&utm_campaign=analyticsAjax-learnMore#anc_ajax-vs-rendering" target="_blank"><?php _e('Learn more.', 'if-so');?></a></i>
+                                <i><?php _e('Check this box to track built-in analytics conversions using Ajax requests. This option is required in order to use conversions on cached pages. ');?></i>
                             </td>
                         </tr>
                         <tr valign="top">
