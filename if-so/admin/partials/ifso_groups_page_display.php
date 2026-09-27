@@ -1,4 +1,5 @@
 <?php
+if ( ! defined( 'ABSPATH' ) ) exit;
 $groups_service = IfSo\PublicFace\Services\GroupsService\GroupsService::get_instance();
 $groups_list = $groups_service->get_groups();
 $extra_tabs = apply_filters('ifso_groups_page_display_extra_tabs',[]);
@@ -191,7 +192,7 @@ $extra_tabs = apply_filters('ifso_groups_page_display_extra_tabs',[]);
 
                     $delme = admin_url('admin-ajax.php?action=ifso_groups_req&ifso_groups_action=remove_group&group_name=' . urlencode($group) . '&_wpnonce=' . wp_create_nonce('ifso-groups-action-nonce'));
                     echo "<tr>
-                                <td> {$group}</td>
+                                <td>{$group}</td>
                                 <td>{$occurences}</td>
                                 <td class=\"shortcode-cell-code\">{$shortcodeCellHTML}</td>
                                 <td><a class='delete' href='{$delme}'>Delete Audience</a></td>

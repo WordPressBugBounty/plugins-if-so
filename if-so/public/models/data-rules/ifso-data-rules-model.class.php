@@ -86,7 +86,6 @@ class DataRulesModel {
     }
 
     public static function get_free_conditions(){
-        $free_conditions  = array("Device", "User-Behavior", "Geolocation", "UserIp", "Time-Date");
-        return $free_conditions;
+        return ["Device", "User-Behavior", "Geolocation", "UserIp", "Time-Date"];
     }
 }

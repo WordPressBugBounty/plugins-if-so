@@ -1,6 +1,7 @@
 <?php
-    $ui_type = (!empty($_REQUEST['ui_type']) && $_REQUEST['ui_type']==='adder') ? 'adder' : 'finder';
-    $type = (!empty($_REQUEST['type'])) ? sanitize_text_field($_REQUEST['type']) : '';
+if ( ! defined( 'ABSPATH' ) ) exit;
+$ui_type = (!empty($_REQUEST['ui_type']) && $_REQUEST['ui_type']==='adder') ? 'adder' : 'finder';
+$type = (!empty($_REQUEST['type'])) ? sanitize_text_field($_REQUEST['type']) : '';
 ?>
 <style>
     html{

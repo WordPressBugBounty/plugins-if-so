@@ -106,14 +106,17 @@ class If_So_Admin_Settings {
     }
 
 	private function edd_ifso_is_in_activations_process() {
-		if ( isset( $_GET['sl_activation'] ) && ! empty( $_GET['message'] ) ) {
+		if ( isset( $_GET['sl_activation'] ) && !empty( $_GET['message'] ) ) {
 			return true;
 		} else {
 			return false;
 		}
 	}
 
-	private function edd_ifso_get_error_message($license_type='pro') {
+	/**
+	 * For displaying activation errors message next to the license field
+	 */
+    private function edd_ifso_get_error_message($license_type='pro') {
 		if ( !$this->edd_ifso_is_in_activations_process() )
 			return false;
 
@@ -126,47 +129,34 @@ class If_So_Admin_Settings {
 					$message = stripslashes(urldecode( $_GET['message'] ));
                     $message = filter_var($message,FILTER_SANITIZE_FULL_SPECIAL_CHARS);     //REMOVE XSS
 					$match = '/\!\!\!LINKSTART\!\!\!(.+)\!\!\!LINKEND\!\!\!\!\!\!LINKTEXT\!\!\!(.+)\!\!\!LINKTEXTEND\!\!\!/';
-					$replace = '<a href="${1}" target="_blank">${2}</a>';	//Look for a specifically encoded link and turn it into an <a> tag in the dashboard
-					$message = preg_replace($match,$replace,$message);
-
-					return $message;
-					
-					break;
-				
+                    return preg_replace_callback($match,function($match){
+                        return '<a href="' . esc_url($match[1]) . '" target="_blank">' . $match[2] . '</a>';
+                    },$message);
 				case 'true':
 				default:
 					break;
-
 		}
 		return true;
 	}
 
 	/**
-	 * This is a means of catching errors from the activation method above and displaying it to the customer
+	 * For displaying activation errors message in an admin notice (top of the page)
 	 */
 	public function edd_ifso_admin_notices() {
 		if ( isset( $_GET['sl_activation'] ) && ! empty( $_GET['message'] ) ) {
-
 			switch( $_GET['sl_activation'] ) {
-
 				case 'false':
 					$message = stripslashes(urldecode($_GET['message']));
                     $message = filter_var($message,FILTER_SANITIZE_FULL_SPECIAL_CHARS);     //REMOVE XSS
 					$match = '/\!\!\!LINKSTART\!\!\!(.+)\!\!\!LINKEND\!\!\!\!\!\!LINKTEXT\!\!\!(.+)\!\!\!LINKTEXTEND\!\!\!/';
-					$replace = '<a href="${1}" target="_blank">${2}</a>';	//Look for a specifically encoded link and turn it into an <a> tag in the dashboard
-					$message = preg_replace($match,$replace,$message);
-					?>
-					<div class="error">
-						<p><?php echo $message; ?></p>
-					</div>
-					<?php
+					$message = preg_replace_callback($match,function($match){
+                        return '<a href="' . esc_url($match[1]) . '" target="_blank">' . $match[2] . '</a>';
+                    },$message);
+                    echo '<div class="error"><p>' . wp_kses_post($message) . '</p></div>';
 					break;
-
 				case 'true':
-				default:
-					// Developers can put a custom success message here for when activation is successful if they way.
+				default:    //"success" message
 					break;
-
 			}
 		}
 	}
@@ -323,7 +313,7 @@ class If_So_Admin_Settings {
 				}
 				
 				if(!empty($triggers_array)) $triggers = implode('<br/>', $triggers_array);
-				echo $triggers;
+				echo wp_kses_post($triggers);
 				break;
 			case 'shortcode' :
 				$shortcode = sprintf( '[ifso id="%1$d"]', $post_id);
@@ -732,7 +722,7 @@ class If_So_Admin_Settings {
 				'triggers-visited-id' => isset($group_item['triggers-visited-id']) ? $group_item['triggers-visited-id'] : null,
 				'post-category-operator' => isset($group_item['post-category-operator']) ? $group_item['post-category-operator'] : null,
 				'post-category-compare' => isset($group_item['post-category-compare']) ? $group_item['post-category-compare'] : null,
-                'version_name' => !empty($group_item['version_name']) ? $group_item['version_name'] : null,
+                'version_name' => !empty($group_item['version_name']) ? sanitize_text_field($group_item['version_name']) : null,
                 'version_uid' => !empty($group_item['version_uid']) ? $group_item['version_uid'] : uniqid($index),
 			);
 

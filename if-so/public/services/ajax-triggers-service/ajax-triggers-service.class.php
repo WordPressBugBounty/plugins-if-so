@@ -127,13 +127,13 @@ class AjaxTriggersService{
                 else{
                     $res = new \stdClass();
                     foreach($triggers as $tr){
-                        $tr_json = json_encode($tr);
                         if(is_numeric($tr))
                             $res->$tr = $triggers_service->handle(['id'=>$tr],$http_request);
                         elseif(is_array($tr) && is_numeric($tr['id'])){
                             $allowed_attrs = $this->get_atts_for_ajax();
                             $tr = array_filter($tr,function ($key) use ($allowed_attrs){return $key==='id' || in_array($key,$allowed_attrs);},ARRAY_FILTER_USE_KEY);
-                            $res->$tr_json = $triggers_service->handle($tr,$http_request);
+                            $tr_key = hash('md5',json_encode($tr));
+                            $res->$tr_key = $triggers_service->handle($tr,$http_request);
                         }
                     }
                 }

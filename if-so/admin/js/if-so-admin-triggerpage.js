@@ -326,7 +326,6 @@
 		$(document).on( 'change', '.rule-wrap select', function() {	//Version condition changed
 			var selectedOption = $(this).find(':selected');
 			var switchWrap = $(this).closest('.rule-wrap');
-			var ruleToolbarWrap = switchWrap.find('.rule-toolbar-wrap');
 			var nextFieldAttr = selectedOption.data('next-field');
 			var resetFieldsDataAttr = selectedOption.data('reset');
 			var closestLeftPanel = $(this).closest('.col-md-3');
@@ -348,7 +347,7 @@
 			//Reset recurrence field
 			if(selectedOption.val()==='AB-Testing')
 				switchWrap.find('.recurrence-selection .recurrence-option input[value="always"]').click();
-			else
+			else if(selectedOption.parent().attr('data-field') !== 'ab-testing-selection')
 				switchWrap.find('.recurrence-selection .recurrence-option input[value="none"]').click();
 
 			if (typeof nextFieldAttr === 'undefined') return;

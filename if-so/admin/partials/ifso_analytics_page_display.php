@@ -1,5 +1,7 @@
 <?php
 namespace IfSo\PublicFace\Services\AnalyticsService;
+if ( ! defined( 'ABSPATH' ) ) exit;
+$esc_html = function($text){return esc_html($text);};
 $date_format = 'Y-m-d';
 $today = date($date_format);
 $report_type = !empty($_REQUEST['report_type']) ? $_REQUEST['report_type'] : 'conversions';
@@ -49,10 +51,11 @@ $get_hamburger_menu = function($view_url,$edit_url,$inject_menu_content='')use($
 };
 
 function get_conversion_meta_el_attributes($conv){
+    $conv_safe = (object) array_map(function($el){return esc_attr($el);},get_object_vars($conv));
     $conv_urls_json = json_encode(AnalyticsService::get_instance()->records->get_conversion_urls($conv->id));
-    $once_per_attr = isset($conv->once_per) ? "once_per='{$conv->once_per}'" : '';
-    $trigger_filter_attr = !empty($conv->trigger_filter) ? "data-trigger_filter='{$conv->trigger_filter}'" : '';
-    return "data-urls='{$conv_urls_json}' conv_id='{$conv->id}' conv_name='{$conv->name}' {$once_per_attr} {$trigger_filter_attr}";
+    $once_per_attr = isset($conv_safe->once_per) ? "once_per='{$conv_safe->once_per}'" : '';
+    $trigger_filter_attr = !empty($conv_safe->trigger_filter) ? "data-trigger_filter='{$conv_safe->trigger_filter}'" : '';
+    return "data-urls='{$conv_urls_json}' conv_id='{$conv_safe->id}' conv_name='{$conv_safe->name}' {$once_per_attr} {$trigger_filter_attr}";
 }
 function get_ifso_conversion_form_inputs($conv_action,$html_or_qs=true){
     $ret = '';
@@ -70,7 +73,7 @@ function get_trigger_data($tid,$trigger_posts){
     $view_trigger_url = get_post_permalink($tid);
     $tname = $trigger_posts[array_search($tid,array_column($trigger_posts,'ID'))]->post_title;
     $trigger_status = get_post_status($tid);
-    return ['edit_url'=>$edit_trigger_url,'view_url'=>$view_trigger_url,'name'=>$tname,'status'=>$trigger_status];
+    return ['edit_url'=>$edit_trigger_url,'view_url'=>$view_trigger_url,'name'=>esc_html($tname),'status'=>$trigger_status];
 }
 function calculate_conversion_rate($conversions,$views){
     return (int)$conversions===0 || (int)$views===0 ? 0 : round((float)$conversions / (float)$views * 100,1);
@@ -104,7 +107,7 @@ function conversion_trigger_filter_allows_trigger($conv,$tid){
                 $conv_urls_string = '';
                 foreach($conv_urls as $urlckey => $conv_url){
                     $xmore = ($urlckey===0 && count($conv_urls)>1) ? "<span class='xmore edit_conversion_btn'>(+" . count($conv_urls)-1 . " more)</span>" : '';
-                    $conv_urls_string.="<span class='conversion_url'>{$conv_url->url}{$xmore}</span>";
+                    $conv_urls_string.="<span class='conversion_url'>" . esc_url($conv_url->url) ."{$xmore}</span>";
                     break;
                 }
                 $meta_el_attrs = get_conversion_meta_el_attributes($conv);
@@ -115,7 +118,7 @@ function conversion_trigger_filter_allows_trigger($conv,$tid){
                 $btns_nongeneral = ($conv->id!==0) ? " | <button class='reset_conversion_btn'>Reset</button> | <button class='delete_conversion_btn'>Delete</button>" : '';
                 $buttons = "<div class='conversion_action_buttons'><button class='edit_conversion_btn'>Edit</button>{$btns_nongeneral}</div>";
                 echo "<tr class='conversion_meta_wrap' {$meta_el_attrs}>
-                        <td>{$conv->id}</td><td>{$conv->name}</td><td class='conv_urls'>{$conv_urls_string}</td><td>{$created_at}</td>
+                        <td>{$conv->id}</td><td>{$esc_html($conv->name)}</td><td class='conv_urls'>{$conv_urls_string}</td><td>{$created_at}</td>
                         <td>{$earliest}</td><td>{$latest}</td><td>{$count}</td><td>{$buttons}</td>
                     </tr>";
             }
@@ -168,7 +171,7 @@ function conversion_trigger_filter_allows_trigger($conv,$tid){
             <span>Conversions: </span> &nbsp;&nbsp;<?php
             foreach($conversions as $conv){
                 $checked = (!$conversion_events_filter || in_array($conv->id, $conversion_events_filter)) ? 'checked' : '';
-                echo "<input value='{$conv->id}' {$checked} type='checkbox' name='ifso_conversion_filter[]'><label>{$conv->name}</label> ";
+                echo "<input value='{$conv->id}' {$checked} type='checkbox' name='ifso_conversion_filter[]'><label>{$esc_html($conv->name)}</label> ";
             }
             ?>
         </p>
@@ -182,7 +185,7 @@ function conversion_trigger_filter_allows_trigger($conv,$tid){
                 $meta_el_attrs = get_conversion_meta_el_attributes($conv);
                 $count = !empty($conv_event_counts[$conv_key]) ? $conv_event_counts[$conv_key]->count : 0;
                 $expand_el = '<span class="conversion_report_extend_btn">❯</span>';
-                echo "<div class='conversion_meta_wrap' {$meta_el_attrs}>{$expand_el}{$conv->name} | Total Conversions: {$count}{$buttons_html}</div>";
+                echo "<div class='conversion_meta_wrap' {$meta_el_attrs}>{$expand_el}{$esc_html($conv->name)} | Total Conversions: {$count}{$buttons_html}</div>";
                 $conversion_report = [];
                 $conversion_events_counts = filter_events_with_nonexistant_triggers(
                     $analytics_db->get_conversion_events_counts_by_trigger($conv->id,null,$start_date,$end_date),$trigger_posts);
@@ -218,7 +221,7 @@ function conversion_trigger_filter_allows_trigger($conv,$tid){
                         foreach($trigger_report as $version){
                             $views = $recurrence_views ? (int)$version['views'] + (int)$version['recurr_views'] : (int)$version['views'];
                             $cRate = calculate_conversion_rate($version['conversions'],$views);
-                            echo "<tr><td>{$version['symbol']}</td><td>{$version['name']}</td>
+                            echo "<tr><td>{$version['symbol']}</td><td>{$esc_html($version['name'])}</td>
                                 <td>{$views}</td><td>{$version['conversions']}</td><td>$cRate%</td></tr>";
                         }
                     ?>
@@ -266,7 +269,7 @@ function conversion_trigger_filter_allows_trigger($conv,$tid){
                 if($trigger_status_filter && $trigger_status_filter!==$tdata['status'])continue;
                 $conv_name_headings = '';
                 foreach($displayed_conversions as $cid)
-                    $conv_name_headings .= "<th colspan='2'>{$conversions[$cid]->name}</th>";
+                    $conv_name_headings .= "<th colspan='2'>{$esc_html($conversions[$cid]->name)}</th>";
                 $tname_element = !empty($tdata['name']) ? "<b class='trigger_name'>{$tdata['name']}</b>" : '';
                 $hamburger_menu = $get_hamburger_menu($tdata['view_url'],$tdata['edit_url']);
                 echo "<div class='trigger_analytics_report_wrap'><div class='trigger_analytics_report_meta' trigger_id='{$tid}' id='trigger-{$tid}'>
@@ -283,7 +286,7 @@ function conversion_trigger_filter_allows_trigger($conv,$tid){
                             if($vdata['conversions'] === 0 ) $vdata['conversions'] = [];
                             $views = $recurrence_views ? (int)$vdata['views'] + (int)$vdata['recurr_views'] : (int)$vdata['views'];
                             echo "<tr>";
-                            echo "<td>{$vdata['symbol']}</td><td>{$vdata['name']}</td><td>{$views}</td>";
+                            echo "<td>{$vdata['symbol']}</td><td>{$esc_html($vdata['name'])}</td><td>{$views}</td>";
                             foreach($displayed_conversions as $cid){
                                 $convNumber = !empty($vdata['conversions'][$cid]) ? $vdata['conversions'][$cid] : 0;
                                 $cRate = calculate_conversion_rate($convNumber,$views);
@@ -376,7 +379,7 @@ function conversion_trigger_filter_allows_trigger($conv,$tid){
                     <div class="conversion_greybox_contents trigger_filter"></div>
                 </div>
                 <select><?php echo array_reduce($trigger_posts,function($total,$trigger_post){
-                        $total .= "<option value='{$trigger_post->ID}'>{$trigger_post->post_title} (ID : {$trigger_post->ID})</option>";
+                        $total .= "<option value='{$trigger_post->ID}'>" . esc_html($trigger_post->post_title) . " (ID : {$trigger_post->ID})</option>";
                         return $total;
                     },'<option value="">Select a trigger</option>'); ?></select>
             </div>

@@ -115,10 +115,10 @@ class AnalyticsAjaxHandler {
         if(empty($_REQUEST['conversion_name'])) return;
         if(!empty($_REQUEST['conv_id'])){
             $conv_id = $_REQUEST['conv_id'];
-            $this->analytics_service->records->update_conversion_name($conv_id,$_REQUEST['conversion_name']);
+            $this->analytics_service->records->update_conversion_name($conv_id,sanitize_text_field($_REQUEST['conversion_name']));
         }
         else
-            $conv_id = $this->analytics_service->records->create_conversion($_REQUEST['conversion_name']);
+            $conv_id = $this->analytics_service->records->create_conversion(sanitize_text_field($_REQUEST['conversion_name']));
         if(isset($_REQUEST['conversion_url_arr'])) $set_conversion_urls($conv_id,$_REQUEST['conversion_url_arr']);
         $extra_fields = ['once_per'=>null];
         if(!empty($_REQUEST['conversion_once_per']) || $_REQUEST['conversion_once_per']==='0')

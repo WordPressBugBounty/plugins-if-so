@@ -90,10 +90,10 @@ class TriggerImportService{
         }
     }
 
-    private function create_js_post_rdr($isSucessfull){
+    private function create_js_post_rdr($isSucessful){
         ?>
             <form id="rdrform" action="<?php echo esc_url($_SERVER['HTTP_REFERER']); ?>" method="POST">
-                <input type="hidden" name="ifsoTriggerImported" value="<?php echo $isSucessfull; ?>">
+                <input type="hidden" name="ifsoTriggerImported" value="<?php echo esc_attr($isSucessful); ?>">
             </form>
             <script>
                 document.getElementById('rdrform').submit();

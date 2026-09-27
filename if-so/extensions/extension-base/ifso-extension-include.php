@@ -1,4 +1,5 @@
 <?php
+if ( ! defined( 'ABSPATH' ) ) exit;
 //Extension base classes
 require_once (__DIR__ . '/extension-base.class.php');
 require_once (__DIR__ . '/conditions-extension-base.class.php');

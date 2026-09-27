@@ -1,4 +1,5 @@
 <?php
+if ( ! defined( 'ABSPATH' ) ) exit;
 if(!current_user_can('administrator') || !check_admin_referer('trigger-scan','_ifsononce'))
     wp_die();
 $postid = (!empty($_REQUEST['postid'])) ? $_REQUEST['postid'] : null;
@@ -17,7 +18,7 @@ $render_table_contents = function($posts){
     foreach ($posts as $post){
         $chopped_link = str_replace($site_url,'',$post['link']);
         echo "<tr>";
-        echo "<td>{$post['title']}</td>";
+        echo '<td>' . esc_html($post['title']) . '</td>';
         echo "<td><a target='_blank' href='{$post['link']}'>{$chopped_link}</a></td>";
         echo "<td><a target='_blank' href='{$post['edit']}'><img src='{$edit_post_icon_url}'></a></td>";
         echo "</tr>";
@@ -102,22 +103,22 @@ $render_table_contents = function($posts){
 
     <h1 class="main-title">Trigger & Conversion Post Locator</h1>
     <span style="padding:8px 12px;border:1px solid #1E0546;color: #1E0546;border-radius:4px;display: inline-block;">
-        Trigger ID : <?php echo is_numeric($postid) ?  $postid : 'ALL'; ?>
+        Trigger ID : <?php echo is_numeric($postid) ?  esc_html($postid) : 'ALL'; ?>
     </span>
     <p class="yellow-noticebox">Note! The results include only If-So shortcodes contained within the post content and the If-So "Show on all pages" field. (Shortcodes entered using PHP in the website's template files and shortcodes entered into meta fields are not listed.)</p>
     <h2 class="ifso-scan-table-heading"style="margin:0;">If-So Trigger occurrences</h2>
     <p class="ifso-scan-table-subheading">Trigger occurrences were found in <?php echo count($posts['triggers']); ?> post<?php echo (count($posts['triggers'])===1) ? '' : 's';?></p>
 <?php if(!empty($posts['triggers'])){ ?>
     <table id="ifso-trigger-scan-table" class="ifso-scan-table">
-        <?php echo $render_table_contents($posts['triggers']) ?>
+        <?php $render_table_contents($posts['triggers']) ?>
     </table>
 <?php } ?>
     <h2 class="ifso-scan-table-heading" style="margin:40px 0 0 0;">Conversions Occurrences</h2>
     <p class="ifso-scan-table-subheading">Conversion shortcode associated with this trigger were found in <?php echo count($posts['conversions']); ?> post<?php echo (count($posts['conversions'])===1) ? '' : 's';?></p>
 <?php if(!empty($posts['conversions'])){ ?>
     <table id="ifso-conversion-scan-table" class="ifso-scan-table">
-        <?php echo $render_table_contents($posts['conversions']); ?>
+        <?php $render_table_contents($posts['conversions']); ?>
     </table>
-<?php } if($postid!==null){?><p><a href="<?php echo $scan_all_triggers; ?>">Look for pages containing any if-so trigger shortcode</a></p><?php } ?>
+<?php } if($postid!==null){?><p><a href="<?php echo esc_url($scan_all_triggers); ?>">Look for pages containing any if-so trigger shortcode</a></p><?php } ?>
 <?php
 exit();

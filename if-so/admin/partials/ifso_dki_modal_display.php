@@ -1,5 +1,5 @@
 <?php
-
+if ( ! defined( 'ABSPATH' ) ) exit;
 use IfSo\Extensions\IFSOExtendedShortcodes\ExtendedShortcodes\UIModel;
 
 require_once IFSO_PLUGIN_BASE_DIR . 'extensions/ifso-extended-shortcodes/models/extended-shortcodes-ui-model.class.php';

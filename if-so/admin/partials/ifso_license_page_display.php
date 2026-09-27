@@ -64,7 +64,7 @@
                                         if ( $error_message ) {
                                 ?>
                                             <span class="description license-error-message">
-                                                <?php echo $error_message; ?>
+                                                <?php echo wp_kses_post($error_message); ?>
                                             </span>
                                 <?php
                                         }
@@ -98,9 +98,9 @@
                 ?>
                 <!-- License key expiratiaton date -->
                 <?php if ($status === 'valid' && $expires === 'lifetime') { ?>
-                <div class="license_expires_message"></span><?php echo $lifetime_license_message;?></div>
+                <div class="license_expires_message"></span><?php echo esc_html($lifetime_license_message);?></div>
                 <?php } else if ( $status === 'valid' && $expires !== false ) { ?>
-                <div class="license_expires_message"><?php echo $expires_license_message;?> <span class="expire_date"><?php echo date_i18n( 'F j, Y', strtotime( $expires, current_time( 'timestamp' ) ) ); ?>.</span></div>
+                <div class="license_expires_message"><?php echo esc_html($expires_license_message);?> <span class="expire_date"><?php echo date_i18n( 'F j, Y', strtotime( $expires, current_time( 'timestamp' ) ) ); ?>.</span></div>
                 <?php } ?>
             </form>
 
@@ -131,7 +131,7 @@
                                 $error_message = $this->edd_ifso_get_error_message('geo');
                                 if ( $error_message ) {
                                     ?>
-                                    <span class="description license-error-message"><?php echo $error_message; ?></span>
+                                    <span class="description license-error-message"><?php echo wp_kses_post($error_message); ?></span>
                                     <?php
                                 }
                             } else {

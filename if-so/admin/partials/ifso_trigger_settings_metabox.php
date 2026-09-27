@@ -1,6 +1,7 @@
 <?php
 use IfSo\Admin\Services\InterfaceModService\InterfaceModService;
 use IfSo\Services\PluginSettingsService;
+use IfSo\PublicFace\Models\DataRulesModel\DataRulesModel;
 
 if ( ! defined( 'ABSPATH' ) ) exit;
 
@@ -9,7 +10,7 @@ if(empty(get_option('ifso_updated_analytics_db')))
 
 // get trigger rules data
 $data = array();
-global $data_versions, $available_pages, $post_status, $languages, $data_rules, $displayClosedFeature, $freeTriggers, $isLicenseValid, $allowedTriggersForRecurrence, $notAllowedTriggersForGroups,  $timezones, $removePagesVisitedCookie,$enableVisitCount,$triggersVisitedOn;
+global $data_versions,$available_pages,$post_status,$languages,$data_rules,$isLicenseValid,$allowedTriggersForRecurrence,$notAllowedTriggersForGroups,$timezones,$removePagesVisitedCookie,$enableVisitCount,$triggersVisitedOn,$broken_trigger_types;
 
 require_once(IFSO_PLUGIN_BASE_DIR. 'public/models/data-rules/ifso-data-rules-model.class.php'); //including the model to get the trigger type list from it
 
@@ -17,10 +18,7 @@ require_once(IFSO_PLUGIN_BASE_DIR. 'public/models/data-rules/ifso-data-rules-mod
 
 // Default Content + correspnding Default Metadata
 $data_default = get_post_meta( $post->ID, 'ifso_trigger_default', true );
-$data_default_metadata_json =
-                get_post_meta( $post->ID,
-                              'ifso_trigger_default_metadata',
-                               true );
+$data_default_metadata_json = get_post_meta( $post->ID, 'ifso_trigger_default_metadata', true );
 $data_default_metadata = (!empty($data_default_metadata_json)) ? json_decode($data_default_metadata_json, true) : [];
 
 // Rules + Versions
@@ -28,7 +26,6 @@ $data_rules_json = get_post_meta( $post->ID, 'ifso_trigger_rules', true );
 $data_rules = json_decode($data_rules_json, true);
 
 $data_versions = get_post_meta( $post->ID, 'ifso_trigger_version', false );
-global $broken_trigger_types;
 $broken_trigger_types = check_for_broken_trigger_types();
 
 // TODO seperate to different file
@@ -237,15 +234,8 @@ $post_status = get_post_status();
 /* IfSo License Begin */
 $status  = get_option( 'edd_ifso_license_status' );
 $geoStatus = get_option('edd_ifso_geo_license_status');
-
-$isLicenseValid = ($status !== false && $status == 'valid') ? true : false;
-$isGeoLicenseValid = ($geoStatus !== false && $geoStatus == 'valid') ? true : false;
-
-$displayClosedFeature = " *";
-
-if ($isLicenseValid) $displayClosedFeature = "";
-
-$freeTriggers = ["Device", "User-Behavior", "Geolocation", "UserIp", "Time-Date"];
+$isLicenseValid = ($status !== false && $status === 'valid');
+$isGeoLicenseValid = ($geoStatus !== false && $geoStatus === 'valid');
 
 $allowedTriggersForRecurrence = apply_filters('ifso_allow_triggers_for_recurrence_filter',  //To allow adding recurrence to custom conditions
                                                 array("AB-Testing",
@@ -262,23 +252,16 @@ $notAllowedTriggersForGroups = array("Device");
 
 require_once(IFSO_PLUGIN_BASE_DIR . 'services/plugin-settings-service/plugin-settings-service.class.php');
 
-$settingsServiceInstance
-    = PluginSettingsService\PluginSettingsService::get_instance();
+$settingsServiceInstance = PluginSettingsService\PluginSettingsService::get_instance();
 
-$pagesVisitedOption = 
-    $settingsServiceInstance->pagesVisitedOption->get();
+$pagesVisitedOption = $settingsServiceInstance->pagesVisitedOption->get();
 $pagesVisitedDurationValue = $pagesVisitedOption->get_duration_value();
 $pagesVisitedDurationType = $pagesVisitedOption->get_duration_type();
 $removePagesVisitedCookie = $settingsServiceInstance->removePageVisitsCookie->get();
 $triggersVisitedOn = $settingsServiceInstance->triggersVisitedOn->get();
 $enableVisitCount  = $settingsServiceInstance->enableVisitCount->get();
 global $pagesVisitedDurationVisualTime;
-$pagesVisitedDurationVisualTime = 
-    $pagesVisitedDurationValue . ' ' . $pagesVisitedDurationType;
-
-?>
-
-<?php
+$pagesVisitedDurationVisualTime = $pagesVisitedDurationValue . ' ' . $pagesVisitedDurationType;
 
 function check_for_broken_trigger_types(){
     global $data_rules;
@@ -326,8 +309,6 @@ function get_rule_item($index, $rule=array(), $is_template = false) {
            $available_pages,
            $languages,
            $data_rules,
-           $displayClosedFeature, 
-           $freeTriggers, 
            $isLicenseValid,
            $allowedTriggersForRecurrence,
            $notAllowedTriggersForGroups,
@@ -347,24 +328,21 @@ function get_rule_item($index, $rule=array(), $is_template = false) {
     }
     else {
         $current_version_index = $index; //+1; // Removed the +1
-        $current_version_count = $current_version_index+1;
         $current_datetime_count = "";
         $current_version_count_char = InterfaceModService::get_instance()->generate_version_symbol($current_version_index);
-
-        if ($index == 0) {
-            // First one!
+        if($index == 0)
             $current_instructions = __("Select a condition. The content will be displayed only if it is met", 'if-so');
-        } else if ($index == 1) {
-            // Start by singulars
+        elseif($index == 1)
             $current_instructions = __("Select a condition. The content will be displayed only if it is met and if version A is not realized", 'if-so');
-        } else {
-            // Start by many
-            $prevChar = InterfaceModService::get_instance()->generate_version_symbol($current_version_index);
+        else{
+            $prevChar = InterfaceModService::get_instance()->generate_version_symbol($current_version_index-1);
             $current_instructions = __("Select a condition. The content will be displayed only if it is met and if versions A-".$prevChar." are not realized", 'if-so');
         }
     }
     $groups_service = IfSo\PublicFace\Services\GroupsService\GroupsService::get_instance();
     $groups_list = $groups_service->get_groups();
+    $freeTriggers = DataRulesModel::get_free_conditions();
+    $displayClosedFeature = $isLicenseValid ? '' : " *";
 ?>
     <li data-repeater-list="group-version" class="rule-item reapeater-item reapeater-item-cloned <?php echo (!$is_template) ? 'reapeater-item-cloned-loaded' : ''; ?>">
         <div class="row rule-wrap">
@@ -1028,7 +1006,7 @@ function get_rule_item($index, $rule=array(), $is_template = false) {
                         <option value=""><?php _e('Select page', 'if-so'); ?></option>
                         <?php if(!empty($available_pages)): ?>
                             <?php foreach($available_pages as $available_page): ?>
-                                <option value="<?php echo $available_page->ID; ?>" <?php echo (isset($rule['page']) && $rule['page'] == $available_page->ID) ? 'SELECTED' : ''; ?>><?php echo $available_page->post_title; ?></option>
+                                <option value="<?php echo $available_page->ID; ?>" <?php echo (isset($rule['page']) && $rule['page'] == $available_page->ID) ? 'SELECTED' : ''; ?>><?php echo esc_html($available_page->post_title); ?></option>
                             <?php endforeach; ?>
                         <?php endif; ?>
                     </select>
@@ -1305,7 +1283,7 @@ function get_rule_item($index, $rule=array(), $is_template = false) {
                             $triggers = get_posts(['post_type'=>'ifso_triggers','posts_per_page'=>-1]);
                             foreach($triggers as $trigger){
                                 $selected = (!empty($rule['triggers-visited-id']) && (int) $rule['triggers-visited-id'] === $trigger->ID) ? 'SELECTED' : '';
-                                $option =  "<option value='{$trigger->ID}' {$selected}>{$trigger->post_title} (ID: {$trigger->ID})</option>";
+                                $option =  "<option value='{$trigger->ID}' {$selected}>" . esc_html($trigger->post_title) . " (ID: {$trigger->ID})</option>";
                                 echo $option;
                             }
                         ?>

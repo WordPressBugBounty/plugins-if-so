@@ -3,7 +3,7 @@ Contributors: ifso
 Donate link: https://www.if-so.com/?utm_source=wordpress&utm_medium=readme&utm_campaign=v2&utm_content=donate
 Tags: elementor conditions, geolocation, display conditions, A/B Testing, conditional logic
 Requires at least: 5.6
-Tested up to: 7.0.2
+Tested up to: 7.1
 Stable tag: 1.10.1
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
