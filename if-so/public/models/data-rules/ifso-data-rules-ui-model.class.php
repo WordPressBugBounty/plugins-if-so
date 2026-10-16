@@ -471,7 +471,7 @@ class DataRulesUiModel{
                     case 'Groups':
                         if ($rule === 'group-name') {
                             $groups_service = \IfSo\PublicFace\Services\GroupsService\GroupsService::get_instance();
-                            $groups_list = $groups_service->get_groups();
+                            $groups_list = $groups_service->get_groups_escaped();
                             $options_list = array_map(function ($groupName) {
                                 return new ConditionUIOption($groupName);
                             }, $groups_list);

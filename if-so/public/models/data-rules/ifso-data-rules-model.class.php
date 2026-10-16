@@ -57,22 +57,21 @@ class DataRulesModel {
      *
      * @return array
      */
-    public function trim_version_data_rules($source){   //remove useless fields from the data rules of the version
-       // if(isset($source['trigger_type']) && !empty($source['trigger_type'])){
-            $type =  $source['trigger_type'];
-            $allowed = (!empty($type)) ? $this->get_condition_fields($type) : [];
-            $general_allowed = $this->get_condition_fields('general');
-            $ret = $source;
-            //if($allowed){
-                foreach($ret as $conditionName => $conditionTitle){
-                    if(!in_array($conditionName,$allowed) && !in_array($conditionName,$general_allowed)){
-                        unset($ret[$conditionName]);
-                    }
-                }
-           // }
-            return $ret;
-      //  }
-       // return false;
+    public function trim_and_sanitize_version_data_rules($source){   //remove useless fields from the data rules of the version
+        $type =  $source['trigger_type'];
+        $allowed = (!empty($type)) ? $this->get_condition_fields($type) : [];
+        $general_allowed = $this->get_condition_fields('general');
+        $ret = $source;
+        foreach($ret as $fieldName => $fieldValue){
+            if(!in_array($fieldName,$allowed) && !in_array($fieldName,$general_allowed)){
+                unset($ret[$fieldName]);
+            }
+            elseif(!empty($fieldValue)){
+                if(gettype($fieldValue)==='string' && strlen($fieldValue)>1)
+                    $ret[$fieldName] = sanitize_textarea_field($fieldValue);
+            }
+        }
+        return $ret;
     }
 
     public function get_trigger_types(){

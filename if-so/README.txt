@@ -4,7 +4,7 @@ Donate link: https://www.if-so.com/?utm_source=wordpress&utm_medium=readme&utm_c
 Tags: elementor conditions, geolocation, display conditions, A/B Testing, conditional logic
 Requires at least: 5.6
 Tested up to: 7.1
-Stable tag: 1.10.1
+Stable tag: 1.10.2
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -180,6 +180,16 @@ Yes. If-So operates independently of your theme architecture. It works flawlessl
 
 
 == Changelog ==
+
+= 1.10.3 =
+* Security fixes
+* Bug fixes
+* Refactoring
+
+= 1.10.2 =
+* Security fixes
+* UI & Microcopy Improvements
+
 
 = 1.10.1 =
 * Built-in Analytics & Cookie consent improvements: Added an option to prevent tracking views before consent is granted

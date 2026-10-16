@@ -722,14 +722,14 @@ class If_So_Admin_Settings {
 				'triggers-visited-id' => isset($group_item['triggers-visited-id']) ? $group_item['triggers-visited-id'] : null,
 				'post-category-operator' => isset($group_item['post-category-operator']) ? $group_item['post-category-operator'] : null,
 				'post-category-compare' => isset($group_item['post-category-compare']) ? $group_item['post-category-compare'] : null,
-                'version_name' => !empty($group_item['version_name']) ? sanitize_text_field($group_item['version_name']) : null,
+                'version_name' => !empty($group_item['version_name']) ? $group_item['version_name'] : null,
                 'version_uid' => !empty($group_item['version_uid']) ? $group_item['version_uid'] : uniqid($index),
 			);
 
             $new_version_rules = apply_filters('ifso_custom_conditions_new_rule_data_extension',$new_version_rules,$group_item);    //For custom triggers extension
 
 			//Remove all the fields that are irrelevant to this version
-			$new_version_rules = $data_rules_model->trim_version_data_rules($new_version_rules);
+			$new_version_rules = $data_rules_model->trim_and_sanitize_version_data_rules($new_version_rules);
 
 			$trigger_data['rules'][] = $new_version_rules;
 			$trigger_data['versions'][] = $group_item['repeatable_editor_content'];

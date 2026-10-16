@@ -110,10 +110,10 @@
 	$geo_int_monthly_queries = get_monthly_queries($geoData);
 	$geo_queries_used = get_used_queries($geoData);
 	$separateRealizations = get_pro_and_geo_realizations($geoData);
-	$pro_license_type = (isset($geoData['pro_license_type']) && !empty($geoData['pro_license_type'])) ? $geoData['pro_license_type'] : false;
-	$geo_license_type = (isset($geoData['geo_license_type']) && !empty($geoData['geo_license_type'])) ? $geoData['geo_license_type'] : false;
-	$pro_license_bank = (isset($geoData['product_bank']) && !empty($geoData['product_bank'])) ? number_format($geoData['product_bank']) : 0;
-	$geo_license_bank = (isset($geoData['geo_bank']) && !empty($geoData['geo_bank'])) ? number_format($geoData['geo_bank']) : 0;
+	$pro_license_type = !empty($geoData['pro_license_type']) ? $geoData['pro_license_type'] : false;
+	$geo_license_type = !empty($geoData['geo_license_type']) ? $geoData['geo_license_type'] : false;
+	$pro_license_bank = !empty($geoData['product_bank']) ? number_format($geoData['product_bank']) : 0;
+	$geo_license_bank = !empty($geoData['geo_bank']) ? number_format($geoData['geo_bank']) : 0;
     $extra_tabs = apply_filters('ifso_geo_page_display_extra_tabs',[]);
     $possible_notif_thresholds = GeolocationService\GeolocationService::get_instance()->get_possible_notification_thresholds();
 
@@ -662,7 +662,7 @@
                                     <?php _e('Email'); ?>
                                 </th>
                                 <td>
-                                <input id name="user-email-box" type="email" class="emailBox" value = "<?php echo get_notification_data()['user_email'];?>" >
+                                <input id name="user-email-box" type="email" class="emailBox" value="<?php echo esc_attr(get_notification_data()['user_email']);?>" >
                                 </td>
                             </tr>
 
@@ -798,9 +798,9 @@
                                     <?php _e('Your Subscriptions'); ?>
                                 </p>
                                 <p class="geo-info-card-content">
-                                    <?php echo (($pro_license_type && $pro_license_type!='free' || $pro_license_type=='free' && !$geo_license_type ) ?
+                                    <?php echo wp_kses_post((($pro_license_type && $pro_license_type!=='free' || $pro_license_type=='free' && !$geo_license_type ) ?
                                             '<span class="geo-pro-subscription-span"><span class="subsctiption-name">' .  ucwords($pro_license_type) . '</span>' . " ({$separateRealizations['pro']}/{$pro_license_bank} sessions)</span>" : '') .
-                                            (($geo_license_type) ? '<span class="geo-subscription-span"><span class="subsctiption-name">' . ucwords($geo_license_type) . '</span>'  . " ({$separateRealizations['geo']}/{$geo_license_bank} sessions)</span>" : '');?>
+                                            (($geo_license_type) ? '<span class="geo-subscription-span"><span class="subsctiption-name">' . ucwords($geo_license_type) . '</span>'  . " ({$separateRealizations['geo']}/{$geo_license_bank} sessions)</span>" : ''));?>
                                 </p>
                                 <a class="geo-info-card-link" target="_blank" href="https://www.if-so.com/plans/geolocation-plans/?utm_source=Plugin&utm_medium=message&utm_campaign=geolocation&utm_term=info-tab&utm_content=a">
                                     <?php _e('Upgrade','if-so'); ?>

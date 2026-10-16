@@ -266,22 +266,19 @@ class ExtendedShortcodes {
                 }
                 if($analytics_service->isOn && $analytics_service->allow_counting){
                     if($ajax){
-                        $once_per_attrs = isset($once_per_time) ? "once_per_time='{$once_per_time}' ifso_name='{$name}'" : "";
-                        $conversion_type_attr = !empty($conversion_type) ? "conversion_type='{$conversion_type}' " : '';
-                        $el = "<div class='ifso-conversion-complete' {$conversion_type_attr} {$once_per_attrs} ".
+                        $once_per_attrs = isset($once_per_time) ? "once_per_time='" . esc_attr($once_per_time) . "' ifso_name='" . esc_attr($name) ."'" : "";
+                        $conversion_type_attr = !empty($conversion_type) ?  'conversion_type="' . esc_attr($conversion_type) . '"' : '';
+                        return "<div class='ifso-conversion-complete' {$conversion_type_attr} {$once_per_attrs} ".
                             ($allowed_triggers ? 'allowed_triggers="' . esc_attr(implode(',',$allowed_triggers)) . '"' : '')  .
                             ($disallowed_triggers ? 'disallowed_triggers="' . esc_attr(implode(',',$disallowed_triggers)) . '"' : '') .
                             ' style="display:none;height:0;"></div>';  //public javascript file catches uses this div as trigger for conversion to fire
-                        return $el;
                     }
                     else{
-                        if(!empty($_COOKIE[$analytics_service->last_viewed_version_cookie_name])){
-                            $viewed_arr = $analytics_service->get_last_viewed_versions();
-                            if(is_array($viewed_arr)){
-                                if(isset($once_per_time))
-                                    $analytics_service->do_conversion($conversion_type,$viewed_arr,$allowed_triggers,$disallowed_triggers,$once_per_time,$name);
-                                $analytics_service->do_conversion($conversion_type,$viewed_arr,$allowed_triggers,$disallowed_triggers);
-                            }
+                        $viewed_arr = $analytics_service->get_last_viewed_versions();
+                        if(!empty($viewed_arr) && is_array($viewed_arr)){
+                            if(isset($once_per_time))
+                                $analytics_service->do_conversion($conversion_type,$viewed_arr,$allowed_triggers,$disallowed_triggers,$once_per_time,$name);
+                            $analytics_service->do_conversion($conversion_type,$viewed_arr,$allowed_triggers,$disallowed_triggers);
                         }
                     }
                 }
@@ -330,15 +327,15 @@ class ExtendedShortcodes {
             $redirect_to = !empty($atts['login_redirect']) ? $atts['login_redirect'] : $current_url;
 
             if(!is_user_logged_in()){
-                $link_text = !empty($atts['login_text']) ? esc_html($atts['login_text']) : 'Log In';
-                $link_url = esc_url(wp_login_url($redirect_to));
+                $link_text = !empty($atts['login_text']) ? $atts['login_text'] : 'Log In';
+                $link_url = wp_login_url($redirect_to);
             }
             else{
-                $link_text = !empty($atts['logout_text']) ? esc_html($atts['logout_text']) : 'Log Out';
-                $link_url = esc_url(wp_logout_url($redirect_to));
+                $link_text = !empty($atts['logout_text']) ? $atts['logout_text'] : 'Log Out';
+                $link_url = wp_logout_url($redirect_to);
             }
 
-            return "<a class='ifso_loginout_link' href='{$link_url}'>{$link_text}</a>";
+            return '<a class="ifso_loginout_link" href="' . esc_url($link_url) . '">' . esc_html($link_text) . '</a>';
         });
     }
 
@@ -466,7 +463,8 @@ class ExtendedShortcodes {
                     $url = add_query_arg($ajaxTriggersService->get_current_request()->getParams(),$url);
 
                 if(!empty($atts['exclude_admins']) && $atts['exclude_admins']==='yes' && current_user_can('administrator'))
-                    return "<p style='color:#6A6DD4;background:#F7F7FC;border: 1px solid #6A6DD4;padding:10px 8px;border-radius:4px;'>Redirect skipped because you're logged in as an admin. Intended redirect URL: <a href='{$url}' target='_blank'>{$url}</a>. To see the regular behavior, open the page in a new incognito window or set the exclude_admins parameter in the redirect shortcode to \"no\".</p>";
+                    return "<p style='color:#6A6DD4;background:#F7F7FC;border: 1px solid #6A6DD4;padding:10px 8px;border-radius:4px;'>Redirect skipped because you're logged in as an admin.
+                                Intended redirect URL: <a href='" . esc_url($url) ."' target='_blank'>" . esc_attr($url) . "</a>. To see the regular behavior, open the page in a new incognito window or set the exclude_admins parameter in the redirect shortcode to \"no\".</p>";
 
                 if($type!=='js'){
                     $code = (is_numeric($type)) ? (int)$type : 301;
@@ -494,13 +492,13 @@ class ExtendedShortcodes {
             if(AjaxTriggersService::get_instance()->is_inside_ajax_triggers_request()){
                 if(shortcode_exists('ifso_modal'))
                     return '<style>.modal-active.tiny-modal-overlay{background:#fff;}.modalContent{text-align: center}</style>' .
-                            do_shortcode("[ifso_modal closebtn='none']{$message}[/ifso_modal]");
+                            do_shortcode("[ifso_modal closebtn='none']" . esc_html($message) . "[/ifso_modal]");
             }
             else{
                 ob_start();
                 add_action('wp_footer',function()use($message){
                     ob_end_clean();
-                    echo "<style>*{visibility:hidden;}</style><div class='ifso_block_site_content_message' style='position: absolute;top:50%;left:50%;transform:translate(-50%,-50%);visibility:visible'>{$message}</div>";
+                    echo "<style>*{visibility:hidden;}</style><div class='ifso_block_site_content_message' style='position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);visibility:visible'>" . esc_html($message) . '</div>';
                 },PHP_INT_MAX);
             }
         });

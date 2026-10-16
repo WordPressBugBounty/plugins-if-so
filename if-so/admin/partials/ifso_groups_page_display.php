@@ -173,11 +173,11 @@ $extra_tabs = apply_filters('ifso_groups_page_display_extra_tabs',[]);
                         $versions = "<span>{$versionsText}</span>";
                         $occurences .= $link . '<br>&nbsp;&nbsp;&nbsp;&nbsp;' . $versions .  '<br>';
                     }
-
-                    $addShortcode = "[ifso-audience type=\"add\" audience=\"{$group}\"]";
+                    $group_escaped = esc_html($group);
+                    $addShortcode = "[ifso-audience type=\"add\" audience=\"{$group_escaped}\"]";
                     $shortcodeCellHTML = <<<EOD
                             <code>
-                                <span>[ifso-audience type="add" audience="$group"]</span>
+                                {$addShortcode}
                                 <copyAudienceShortcodeButton onclick="
                                     let shortcode = this.parentElement.querySelector(':scope > span').textContent
                                     navigator.clipboard.writeText(shortcode).then(() => {
@@ -192,7 +192,7 @@ $extra_tabs = apply_filters('ifso_groups_page_display_extra_tabs',[]);
 
                     $delme = admin_url('admin-ajax.php?action=ifso_groups_req&ifso_groups_action=remove_group&group_name=' . urlencode($group) . '&_wpnonce=' . wp_create_nonce('ifso-groups-action-nonce'));
                     echo "<tr>
-                                <td>{$group}</td>
+                                <td>{$group_escaped}</td>
                                 <td>{$occurences}</td>
                                 <td class=\"shortcode-cell-code\">{$shortcodeCellHTML}</td>
                                 <td><a class='delete' href='{$delme}'>Delete Audience</a></td>

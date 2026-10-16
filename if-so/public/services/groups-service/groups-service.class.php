@@ -52,13 +52,17 @@ class GroupsService{
         return $groupsList;
     }
 
+    public function get_groups_escaped(){
+        return map_deep($this->get_groups(),function($el){return esc_html($el);});
+    }
+
     public function add_group($name){
         if(isset($name) && !empty($name)){
             if(preg_match('/[\,]|[\']|[\"]/',$name))
                 throw new \Exception('illegal-group-name');
             $ret = $this->get_groups();
             if(array_search($name,$ret) === false){
-                $ret[]= esc_html($name);
+                $ret[]= sanitize_text_field($name);
                 update_option($this->groups_data_option_name,json_encode($ret));
             }
             else throw new \Exception('already-exists');
